@@ -67,9 +67,11 @@ public class IndexController
 	public static String current_date;
 	public boolean show_speed = true;
 	public boolean match_file_change = false;
+	public boolean Speed_file_change = false;
 	public static long time_elapsed = 0;
 	public static long last_setup_time_stamp = 0;
 	public static long last_match_time_stamp = 0;
+	public static long last_Speed_time_stamp = 0;
 	
 	List<ForeignLanguageData> foreignLanguage = new ArrayList<ForeignLanguageData>();
 	List<MatchAllData> cricket_matches = new ArrayList<MatchAllData>();
@@ -189,7 +191,8 @@ public class IndexController
 
 			last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + selectedMatch).lastModified();
 			last_setup_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + selectedMatch).lastModified();
-			
+			last_Speed_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
+
 			session_configuration = new Configuration(selectedMatch, select_broadcaster, vizIPAddress, vizPortNumber,
 					vizScene, vizLanguage, vizSecondaryIPAddress, vizSecondaryPortNumber, vizSecondaryScene, vizSecondaryLanguage, 
 					vizTertiaryIPAddress, vizTertiaryPortNumber, vizTertiaryScene, vizTertiaryLanguage); 
@@ -351,11 +354,31 @@ public class IndexController
 		case "READ-MATCH-AND-POPULATE":
 
 			match_file_change = false;
+			Speed_file_change = false;
 			if(last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 					+ session_match.getMatch().getMatchFileName()).lastModified()) {
 				session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
 						CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 				match_file_change = true;
+			}
+			
+			if(last_Speed_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified()) {
+				session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
+						CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+				Speed_file_change = true;
+			}
+			
+			if(Speed_file_change == true) {
+				
+				switch (session_selected_broadcaster) {
+				case "FRUIT":
+					this_fruit.updateSpeed(session_selected_scenes.get(0), session_match,show_speed, CricketFunctions.processPrintWriter(session_configuration).get(0));
+					break;
+				}
+				last_Speed_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
+				
+				return JSONObject.fromObject(session_match).toString();
+				
 			}
 //			if(last_setup_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY 
 //					+ session_match.getMatch().getMatchFileName()).lastModified()) {

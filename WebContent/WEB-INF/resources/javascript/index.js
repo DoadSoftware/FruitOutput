@@ -82,26 +82,9 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 		case 'RE_READ':
 			processCricketProcedures('RE_READ_DATA');
 			break;
-		case 'SPEED':
-			processCricketProcedures('SHOW_SPEED');
+		case 'FRUIT':
+			processCricketProcedures('POPULATE-FRUIT');
 			break;
-		case 38:
-			processCricketProcedures('TICKER_LT_OUT');
-			break;
-		case 40:
-			processCricketProcedures('TICKER_LT_IN');
-			break;
-		case 33:
-			switch ($('#selected_broadcaster').val().toUpperCase()){
-				case 'ACC': case 'MAHARAJA_T20':
-					processCricketProcedures('ANIMATE-SHRINK_OUT');
-					break;
-				case 'RPL': case 'RSWS':
-					processCricketProcedures('ANIMATE-TICKER_OUT');
-					break;
-			}
-			break;
-		
 		case 32:
 			processCricketProcedures('CLEAR-ALL');
 			break;
@@ -359,7 +342,14 @@ function processCricketProcedures(whatToProcess)
 	case 'READ-MATCH-AND-POPULATE':
 		valueToProcess = $('#matchFileTimeStamp').val();
 		break;
-		
+	case 'POPULATE-FRUIT':
+		switch ($('#selected_broadcaster').val().toUpperCase()) {
+		case 'FRUIT':
+			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum';
+			break;
+			
+		}
+		break;
 	case 'POPULATE-FF-SCORECARD': 
 		switch ($('#selected_broadcaster').val().toUpperCase()) {
 		case 'ACC_NEPAL':
@@ -434,28 +424,19 @@ function processCricketProcedures(whatToProcess)
 					//alert(data.status);
 				//}
 				break;
-			
-			case 'POPULATE-FF-SCORECARD': case 'POPULATE-FF-BOWLINGCARD': case 'POPULATE-FF-MATCHSUMMARY': case 'POPULATE-LT-POWERPLAY': case 'POPULATE-MANHATTAN':
+			case 'POPULATE-FRUIT':
 			//if (data.status.toUpperCase() == 'SUCCESSFUL') {
-					if(document.getElementById('which_keypress').value == 0){
-								alert('You Have Not Selected Inning Cannot Populate Data')
-					}
-					else{
-						if(confirm('Animate In?') == true){
+					if(confirm('Animate In?') == true){
 							$('#select_graphic_options_div').empty();
 							document.getElementById('select_graphic_options_div').style.display = 'none';
 							$("#captions_div").show();
 							
 				        	switch(whatToProcess) {
-							case 'POPULATE-FF-SCORECARD': 
-								processCricketProcedures('ANIMATE-IN-SCORECARD');
-								break;
-							case 'POPULATE-FF-BOWLINGCARD':
-								processCricketProcedures('ANIMATE-IN-BOWLINGCARD');					
+							case 'POPULATE-FRUIT':
+								processCricketProcedures('ANIMATE-IN-FRUIT');
 								break;
 							}
 						}
-					}
 				//} else {
 					//alert(data.status);
 				//}
