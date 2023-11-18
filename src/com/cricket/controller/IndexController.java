@@ -66,8 +66,6 @@ public class IndexController
 	public static String session_selected_second_broadcaster;
 	public static String current_date;
 	public boolean show_speed = true;
-	public boolean match_file_change = false;
-	public boolean Speed_file_change = false;
 	public static long time_elapsed = 0;
 	public static long last_setup_time_stamp = 0;
 	public static long last_match_time_stamp = 0;
@@ -311,6 +309,7 @@ public class IndexController
 			}
 			
 		case "RE_READ_DATA":
+			
 			File files[] = new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY).listFiles(new FileFilter() {
 				@Override
 			    public boolean accept(File pathname) {
@@ -318,9 +317,13 @@ public class IndexController
 			        return name.endsWith(".json") && pathname.isFile();
 			    }
 			});
+			
 			cricket_matches = CricketFunctions.getTournamentMatches(files, cricketService);
 			session_statistics = cricketService.getAllStats();
-			return JSONObject.fromObject(null).toString();
+			session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
+					CricketUtil.SETUP, session_match));
+			
+			return JSONObject.fromObject(session_match).toString();
 			
 		case "SHOW_SPEED":
 			
@@ -331,17 +334,20 @@ public class IndexController
 			}
 			
 			return String.valueOf(show_speed);
+			
 		case "NAMESUPER_GRAPHICS-OPTIONS": case "L3_MATCH-PROMO_GRAPHICS-OPTIONS": case "BUG_DB_GRAPHICS-OPTIONS": case "MOST_GRAPHICS-OPTIONS": 
 		case "MOST1_GRAPHICS-OPTIONS": case "MOST1_WICKETS_GRAPHICS-OPTIONS": case "MOST_LEADERBOARD_GRAPHICS-OPTIONS":
 		case "LEADERBOARD_GRAPHICS-OPTIONS": case "WICKETS_GRAPHICS-OPTIONS": case "FOURS_GRAPHICS-OPTIONS": case "SIXES_GRAPHICS-OPTIONS":
 		case "BUG_DB2_GRAPHICS-OPTIONS": case "POPULATE-LASTX": case "HOWOUT_BOTH_GRAPHICS-OPTIONS": case "BATSMANSTATS_BOTH_GRAPHICS-OPTIONS":
 		case "THIS_SESSION_GRAPHICS-OPTIONS": case "LT_POINTERS_GRAPHICS-OPTIONS": case "FF_POINTERS_GRAPHICS-OPTIONS": case "POINTER_GRAPHICS-OPTIONS":
 		case "MATCH_GRAPHICS-OPTIONS":
+			
 			switch (session_selected_broadcaster) {
 			case "FRUIT":
 				return (String) this_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, cricket_matches, 
 						CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess, session_statistics);
 			}
+			
 		case "PROMPT_GRAPHICS-OPTIONS": case "TEAM_FIXTURES_GRAPHICS-OPTIONS": case "TEAM_SQUAD_GRAPHICS-OPTIONS":
 			switch (session_selected_broadcaster) {
 			case "FRUIT":
@@ -353,62 +359,31 @@ public class IndexController
 			return JSONArray.fromObject(CricketFunctions.processAllFixtures(cricketService)).toString();
 		case "READ-MATCH-AND-POPULATE":
 
-			match_file_change = false;
-			Speed_file_change = false;
 			if(last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
-					+ session_match.getMatch().getMatchFileName()).lastModified()) {
+				+ session_match.getMatch().getMatchFileName()).lastModified()
+				|| last_Speed_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified()) {
+				
 				session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-						CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
-				match_file_change = true;
+					CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 			}
-			
-			if(last_Speed_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified()) {
-				session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-						CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
-				Speed_file_change = true;
-			}
-			
-			if(Speed_file_change == true) {
-				
-				switch (session_selected_broadcaster) {
-				case "FRUIT":
-					this_fruit.updateSpeed(session_selected_scenes.get(0), session_match,show_speed, CricketFunctions.processPrintWriter(session_configuration).get(0));
-					break;
+
+			switch (session_selected_broadcaster) {
+			case "FRUIT":
+				if(last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+						+ session_match.getMatch().getMatchFileName()).lastModified()) {
+					this_fruit.updateSpeed(session_selected_scenes.get(0), session_match,show_speed, 
+						CricketFunctions.processPrintWriter(session_configuration).get(0));
+					last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+							+ session_match.getMatch().getMatchFileName()).lastModified();
 				}
-				last_Speed_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
-				
-				return JSONObject.fromObject(session_match).toString();
-				
-			}
-//			if(last_setup_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY 
-//					+ session_match.getMatch().getMatchFileName()).lastModified()) {
-//				session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-//					CricketUtil.SETUP, session_match));
-//				match_file_change = true;
-//			}
-//			session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-//					CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
-			
-			if(match_file_change == true) {
-				
-				switch (session_selected_broadcaster) {
-				case "FRUIT":
-					this_fruit.updateInfobar(session_selected_scenes.get(0), session_match,show_speed, CricketFunctions.processPrintWriter(session_configuration).get(0));
-					break;
+				if(last_Speed_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified()) {
+					session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
+						CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+					last_Speed_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
 				}
-				last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
-						+ session_match.getMatch().getMatchFileName()).lastModified();
-				last_setup_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY 
-						+ session_match.getMatch().getMatchFileName()).lastModified();
-				
-				return JSONObject.fromObject(session_match).toString();
-				
-			} else {
-				
-				return JSONObject.fromObject(session_match).toString();
-			
+				break;
 			}
-			
+
 		default:
 			switch (session_selected_broadcaster) {
 			case "FRUIT":

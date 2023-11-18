@@ -15,20 +15,21 @@
   <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"/>"/>  
   <link href="<c:url value="/webjars/font-awesome/6.0.0/css/all.css"/>" rel="stylesheet">
   <script type="text/javascript">
-	  
   
   $(document).on("keydown", function(e){
 	  
-	//if(session_selected_broadcaster != ' '){
-		if(e.altKey && e.key === 'f'){
-		  e.preventDefault()
+	  if(e.altKey && e.key === 'f'){
+		  e.preventDefault();
 		  processUserSelectionData('LOGGER_FORM_KEYPRESS','FRUIT');
+	  }else if(e.altKey && e.key == 'r'){
+		  e.preventDefault();
+		  processUserSelectionData('LOGGER_FORM_KEYPRESS','RE_READ_DATA');
 	  }else if(e.altKey && e.key === 't'){
-		  e.preventDefault()
+		  e.preventDefault();
 		  processUserSelectionData('LOGGER_FORM_KEYPRESS','TEAM');
 	  }else if(e.key === "F1" || e.key === "F2" || e.key === "F3" || e.key === "F4" || e.key === "F5" || e.key === "F6" ||  e.key === "F7" || e.key === "F8" ||
-				e.key === "F9" || e.key === "F10" || e.key === "F11" || e.key === "F12" || e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === " " ||
-				e.key === "PageUp" || e.key === "PageDown" || e.key === "1") {
+			e.key === "F9" || e.key === "F10" || e.key === "F11" || e.key === "F12" || e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === " " ||
+			e.key === "PageUp" || e.key === "PageDown" || e.key === "1") {
 	      // Suppress default behaviour 
 	      // e.g. F1 in Chrome on Windows usually opens Windows help
 	      e.preventDefault()

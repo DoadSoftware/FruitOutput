@@ -380,7 +380,7 @@ function processCricketProcedures(whatToProcess)
 			case 'GET-CONFIG-DATA':
 				initialiseForm('UPDATE-CONFIG',data);
 				break;
-			case 'READ-MATCH-AND-POPULATE':
+			case 'READ-MATCH-AND-POPULATE': case 'RE_READ_DATA':
 				if(data){
 					session_match = data;
 					initialiseForm('UPDATE-MATCH-ON-OUTPUT-FORM',data);
