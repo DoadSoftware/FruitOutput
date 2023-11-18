@@ -9,6 +9,7 @@ public class Infobar {
 	
 	private boolean infobar_on_screen;
 	private boolean powerplay_on_screen;
+	private boolean bowler_last;
 	private String directer_section;
 	private String middle_section;
 	private String full_section;
@@ -207,6 +208,12 @@ public class Infobar {
 	}
 	public void setLast_x_ball_value(String last_x_ball_value) {
 		this.last_x_ball_value = last_x_ball_value;
+	}
+	public boolean isBowler_last() {
+		return bowler_last;
+	}
+	public void setBowler_last(boolean bowler_last) {
+		this.bowler_last = bowler_last;
 	}
 	
 }
