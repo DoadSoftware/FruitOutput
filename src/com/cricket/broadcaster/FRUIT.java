@@ -571,9 +571,9 @@ public class FRUIT extends Scene{
 		switch (session_selected_broadcaster.toUpperCase()) {
 		case "FRUIT":
 			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFowTeamName1 " + 
-	    			match.getMatch().getInning().get(0).getBatting_team().getTeamName2() + ";");
+	    			match.getMatch().getInning().get(0).getBatting_team().getTeamName4() + ";");
 			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFowTeamName2 " + 
-					match.getMatch().getInning().get(1).getBatting_team().getTeamName2() + ";");
+					match.getMatch().getInning().get(1).getBatting_team().getTeamName4() + ";");
 			
 			if(is_this_updating == false) {
 				for (int i = 1; i <= 10; i++)
@@ -1106,6 +1106,26 @@ public class FRUIT extends Scene{
 								infobar.setBowler_last(true);
 								
 							}
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler1" + " " + "1" + ";");
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler2" + " " + "0" + ";");
+							
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlerName1 " + boc.getPlayer().getTicker_name() + ";");
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFigure1 " + boc.getWickets() + "-" + boc.getRuns() + ";");
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers1 " + CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()) + ";");
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tDots1 " + boc.getDots() + ";");
+							
+							if(boc.getEconomyRate() == null) {
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + "-" + ";");
+							}else {
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + boc.getEconomyRate() + ";");
+							}
+							if(infobar.getLast_bowler() == null || infobar.getLast_bowler().getPlayerId() != boc.getPlayerId()) {
+								//processAnimation(print_writer, "BowlerChangeIn", "START", session_selected_broadcaster,1);
+							}
+							infobar.setLast_bowler(boc);
+							infobar.setLast_bottom_right_top_section(CricketUtil.BOWLER);
+						}
+						else if(boc.getStatus().toUpperCase().equalsIgnoreCase("LASTBOWLER")) {
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler1" + " " + "1" + ";");
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler2" + " " + "0" + ";");
 							
