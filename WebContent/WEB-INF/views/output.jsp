@@ -59,17 +59,6 @@
             <!--   <h3 class="mb-0">${licence_expiry_message}</h3>  -->
            </div>
           <div class="card-body">
-          
-          	<!--  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-			    <button style="background-color:#2E008B;color:#FEFEFE;" class="btn btn-sm" type="button"
-			  		name="cancel_match_setup_btn" id="cancel_match_setup_btn" onclick="processUserSelection(this)">
-		  		<i class="fas fa-window-close"></i> Back</button>
-	         </div>
-	         <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-	         	<h3 class="mb-0" id="expiry_message">${licence_expiry_message}</h3>
-	         </div> -->
-	         
-	         
 			  <div id="select_graphic_options_div" style="display:none;">
 			  </div>
 			  <div id="lastxball_div" style="display:none;">
@@ -85,19 +74,6 @@
 			    <label id="inning1_battingcard1_lbl" class="col-sm-4 col-form-label text-left">${curr_player}</label>
 			    <label id="inning1_battingcard2_lbl" class="col-sm-4 col-form-label text-left">${curr_player2}</label>
 			    <label id="inning1_bowlingcard_lbl" class="col-sm-4 col-form-label text-left">${curr_bowler}</label>
-			    
-			    <c:if test="${(session_selected_broadcaster == 'DOAD_LLC')}">
-			    <label id="speed_lbl" class="col-sm-4 col-form-label text-left">Show Speed: YES</label>
-			    </c:if>
-  				
-  				
-  				<div class="left">
-  				 <c:if test="${(session_selected_second_broadcaster == 'DOAD_LLC')}">
-  					<label>SPEED </label>
-  					<input type = "text" name = "speedtext" id="speedtext"/>
-  					<button style="background-color:#ffeb2b;color:#000000;" class="btn btn-sm" type="button"
-			  			name="animate_in_speed" id="animate_in_speed" onclick="processUserSelection(this)"> Animate-In Speed </button>
-  				 </c:if>
   				</div>
   				
   				<div class="left">

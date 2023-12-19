@@ -27,7 +27,7 @@ public class Infobar {
 	private String last_ident_section;
 	private String last_speed_value;
 	private String last_x_ball_value;
-	
+
 	
 	private String bottom_left_section;
 	private String last_bottom_left_section;

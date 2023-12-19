@@ -62,7 +62,7 @@ public class IndexController
 //	public static Doad this_doad;
 	public static FRUIT this_fruit;
 	//	public static DoadVizMulti this_multi;
-	public static String expiry_date = "2023-11-30";
+	public static String expiry_date = "2024-11-30";
 	public static String session_selected_second_broadcaster;
 	public static String current_date;
 	public boolean show_speed = true;
@@ -70,6 +70,7 @@ public class IndexController
 	public static long last_setup_time_stamp = 0;
 	public static long last_match_time_stamp = 0;
 	public static long last_Speed_time_stamp = 0;
+	public static long last_Review_time_stamp = 0;
 	
 	List<ForeignLanguageData> foreignLanguage = new ArrayList<ForeignLanguageData>();
 	List<MatchAllData> cricket_matches = new ArrayList<MatchAllData>();
@@ -190,7 +191,7 @@ public class IndexController
 			last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + selectedMatch).lastModified();
 			last_setup_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + selectedMatch).lastModified();
 			last_Speed_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
-			
+			last_Review_time_stamp=new File(CricketUtil.REVIEWS).lastModified();
 			session_configuration = new Configuration(selectedMatch, select_broadcaster, vizIPAddress, vizPortNumber,
 					vizScene, vizLanguage, vizSecondaryIPAddress, vizSecondaryPortNumber, vizSecondaryScene, vizSecondaryLanguage, 
 					vizTertiaryIPAddress, vizTertiaryPortNumber, vizTertiaryScene, vizTertiaryLanguage); 
@@ -290,8 +291,7 @@ public class IndexController
 		@ModelAttribute("session_selected_scenes") List<Scene> session_selected_scenes,
 		@RequestParam(value = "whatToProcess", required = false, defaultValue = "") String whatToProcess,
 		@RequestParam(value = "valueToProcess", required = false, defaultValue = "") String valueToProcess) 
-					throws IOException, IllegalAccessException, InvocationTargetException, JAXBException, InterruptedException, CloneNotSupportedException, 
-					ParseException, URISyntaxException 
+					throws Exception 
 	{
 		switch (whatToProcess.toUpperCase()) {
 		case "GET-CONFIG-DATA":
@@ -383,6 +383,13 @@ public class IndexController
 					this_fruit.updateSpeed(session_selected_scenes.get(0), session_match,show_speed, 
 							CricketFunctions.processPrintWriter(session_configuration).get(0));
 					last_Speed_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
+				}
+				if(last_Review_time_stamp!=new File(CricketUtil.REVIEWS).lastModified()) {
+					session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
+							CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+						this_fruit.updateSpeed(session_selected_scenes.get(0), session_match,show_speed, 
+								CricketFunctions.processPrintWriter(session_configuration).get(0));
+					last_Review_time_stamp=new File(CricketUtil.REVIEWS).lastModified();
 				}
 				
 				break;
