@@ -19,6 +19,7 @@ function initialiseForm(whatToProcess,dataToProcess)
 		document.getElementById('configuration_file_name').value = $('#select_configuration_file option:selected').val();
 		document.getElementById('select_cricket_matches').value = dataToProcess.filename;
 		document.getElementById('select_broadcaster').value = dataToProcess.broadcaster;
+		document.getElementById('speed_select').value = dataToProcess.speedUnit;
 		document.getElementById('which_scene').value = dataToProcess.primaryScene;
 		document.getElementById('vizIPAddress').value = dataToProcess.primaryIpAddress;
 		document.getElementById('vizPortNumber').value = dataToProcess.primaryPortNumber;

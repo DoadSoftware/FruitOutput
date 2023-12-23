@@ -86,10 +86,7 @@
 			  	<c:if test="${(session_selected_broadcaster != ' ')}">
   					<button style="background-color:#f44336;color:#FEFEFE;" class="btn btn-sm" type="button"
 			  			name="clearall_graphic_btn" id="clearall_graphic_btn" onclick="processUserSelection(this)"> Clear All (SpaceBar) </button>
-  				</c:if>
-
-
-			  	
+  				</c:if>			  	
 			  	<c:if test="${(session_selected_broadcaster == 'FRUIT')}">
 			  	<label class="col-sm-4 col-form-label text-left">Fruit: Alt + f </label>
 			  	</c:if>			  	
@@ -103,6 +100,7 @@
 </div>
 <input type="hidden" id="which_keypress" name="which_keypress" value="${session_match.setup.which_key_press}"/>
 <input type="hidden" name="selected_broadcaster" id="selected_broadcaster" value="${session_selected_broadcaster}"/>
+<input type="hidden" name="speed_select" id="speed_select" value="${selected_speed}"/>
 <input type="hidden" name="selected_which_layer" id="selected_which_layer" value="${selected_layer}"/>
 <input type="hidden" name="selected_which_scene" id="selected_which_scene" value="${selected_scene}"/>
 <input type="hidden" name="selected_match_max_overs" id="selected_match_max_overs" value="${session_match.setup.maxOvers}"/>

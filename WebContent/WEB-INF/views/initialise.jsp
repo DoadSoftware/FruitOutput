@@ -70,12 +70,24 @@
 			    </div>
 			  </div>
 			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-			    <label for="select_second_broadcaster" class="col-sm-4 col-form-label text-left">Select 2nd Broadcaster </label>
+			    <label for="select_second_broadcaster" class="col-sm-4 col-form-label text-left"> Select Second Broadcaster </label>
 			    <div class="col-sm-6 col-md-6">
 			      <select id="select_second_broadcaster" name="select_second_broadcaster" class="browser-default custom-select custom-select-sm"
 			      		onchange="processUserSelection(this)">
 			      		<option value=" "> </option>
-			      		<option value="DOAD_LLC">LCC</option>
+			      		<option value="LLC">LLC</option>
+			      		
+			      </select>
+			    </div>
+			  </div>
+			   <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+			    <label for="speed_select" class="col-sm-4 col-form-label text-left"> Select Speed </label>
+			    <div class="col-sm-6 col-md-6">
+			      <select id="speed_select" name="speed_select" value="${session_configuration.speedUnit}" class="browser-default custom-select custom-select-sm"
+			      		onchange="processUserSelection(this)">
+			      		<option value=" "> </option>
+			      		<option value="KPH">KPH</option>
+			      		<option value="MPH">MPH</option>
 			      </select>
 			    </div>
 			  </div>

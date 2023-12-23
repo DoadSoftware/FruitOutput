@@ -39,8 +39,14 @@ public class Infobar {
 	
 	List<BattingCard> last_batsmen;
 	
-	BowlingCard last_bowler;
+	BowlingCard last_bowler,second_last_bowler;
 	
+	public BowlingCard getSecond_last_bowler() {
+		return second_last_bowler;
+	}
+	public void setSecond_last_bowler(BowlingCard second_last_bowler) {
+		this.second_last_bowler = second_last_bowler;
+	}
 	public boolean isInfobar_on_screen() {
 		return infobar_on_screen;
 	}
@@ -116,8 +122,8 @@ public class Infobar {
 	public List<BattingCard> getLast_batsmen() {
 		return last_batsmen;
 	}
-	public void setLast_batsmen(List<BattingCard> last_batsmen) {
-		this.last_batsmen = last_batsmen;
+	public void setLast_batsmen(List<BattingCard> currentBatsmen) {
+		this.last_batsmen = currentBatsmen;
 	}
 	public BowlingCard getLast_bowler() {
 		return last_bowler;
