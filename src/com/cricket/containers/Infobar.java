@@ -1,5 +1,6 @@
 package com.cricket.containers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.cricket.model.BattingCard;
@@ -28,6 +29,7 @@ public class Infobar {
 	private String last_speed_value;
 	private String last_x_ball_value;
 
+	List<BowlingCard> two_bowler = new ArrayList<BowlingCard>();
 	
 	private String bottom_left_section;
 	private String last_bottom_left_section;
@@ -220,6 +222,12 @@ public class Infobar {
 	}
 	public void setBowler_last(boolean bowler_last) {
 		this.bowler_last = bowler_last;
+	}
+	public List<BowlingCard> getTwo_bowler() {
+		return two_bowler;
+	}
+	public void setTwo_bowler(List<BowlingCard> two_bowler) {
+		this.two_bowler = two_bowler;
 	}
 	
 }

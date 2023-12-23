@@ -190,7 +190,7 @@ public class IndexController
 			//last_Speed_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
 			//last_Review_time_stamp=new File(CricketUtil.REVIEWS).lastModified();
 			
-			session_configuration = new Configuration(selectedMatch, session_selected_broadcaster, speed_select,vizIPAddress, vizPortNumber,
+			session_configuration = new Configuration(selectedMatch,null, session_selected_broadcaster,null, speed_select,vizIPAddress, vizPortNumber,
 					vizScene, vizLanguage, vizSecondaryIPAddress, vizSecondaryPortNumber, vizSecondaryScene, vizSecondaryLanguage, 
 					vizTertiaryIPAddress, vizTertiaryPortNumber, vizTertiaryScene, vizTertiaryLanguage); 
 			
