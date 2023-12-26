@@ -20,13 +20,8 @@ function initialiseForm(whatToProcess,dataToProcess)
 		document.getElementById('select_cricket_matches').value = dataToProcess.filename;
 		document.getElementById('select_broadcaster').value = dataToProcess.broadcaster;
 		document.getElementById('speed_select').value = dataToProcess.speedUnit;
-		document.getElementById('which_scene').value = dataToProcess.primaryScene;
 		document.getElementById('vizIPAddress').value = dataToProcess.primaryIpAddress;
 		document.getElementById('vizPortNumber').value = dataToProcess.primaryPortNumber;
-		document.getElementById('vizSecondaryIPAddress').value = dataToProcess.secondaryIpAddress;
-		document.getElementById('vizSecondaryPortNumber').value = dataToProcess.secondaryPortNumber;
-		document.getElementById('vizTertiaryIPAddress').value = dataToProcess.tertiaryIpAddress;
-		document.getElementById('vizTertiaryPortNumber').value = dataToProcess.tertiaryPortNumber;
 		break;
 	case 'initialise':
 		processUserSelection($('#select_broadcaster'));
@@ -123,19 +118,10 @@ function processUserSelection(whichInput)
 	case 'cancel_graphics_btn':
 		$('#select_graphic_options_div').empty();
 		document.getElementById('select_graphic_options_div').style.display = 'none';
-		$('#lastxball_div').empty();
-		document.getElementById('lastxball_div').style.display = 'none';
 		$("#captions_div").show();
 		$("#cancel_match_setup_btn").show();
 		break;
 	case 'load_scene_btn':
-		/*if(checkEmpty($('#vizIPAddress'),'IP Address Blank') == false
-			|| checkEmpty($('#vizPortNumber'),'Port Number Blank') == false) {
-			return false;
-		}*/
-		//document.initialise_form.method = 'post';
-		//document.initialise_form.action = 'initialise';
-	   	//document.initialise_form.submit();
       	document.initialise_form.submit();
 		break;
 	}

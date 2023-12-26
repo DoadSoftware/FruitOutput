@@ -69,17 +69,6 @@
 			      </select>
 			    </div>
 			  </div>
-			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-			    <label for="select_second_broadcaster" class="col-sm-4 col-form-label text-left"> Select Second Broadcaster </label>
-			    <div class="col-sm-6 col-md-6">
-			      <select id="select_second_broadcaster" name="select_second_broadcaster" class="browser-default custom-select custom-select-sm"
-			      		onchange="processUserSelection(this)">
-			      		<option value=" "> </option>
-			      		<option value="LLC">LLC</option>
-			      		
-			      </select>
-			    </div>
-			  </div>
 			   <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 			    <label for="speed_select" class="col-sm-4 col-form-label text-left"> Select Speed </label>
 			    <div class="col-sm-6 col-md-6">
@@ -88,24 +77,6 @@
 			      		<option value=" "> </option>
 			      		<option value="KPH">KPH</option>
 			      		<option value="MPH">MPH</option>
-			      </select>
-			    </div>
-			  </div>
-			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-			    <label for="which_layer" class="col-sm-4 col-form-label text-left">Which Layer </label>
-			    <div class="col-sm-6 col-md-6">
-			      <select id="which_layer" name="which_layer" class="browser-default custom-select custom-select-sm"
-			      		onchange="processUserSelection(this)">
-			          <option value="Front_layer">FRONT</option>
-			      </select>
-			    </div>
-			  </div>
-			  <div class="col-xs-6 form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-			    <label for="which_scene" class="col-sm-4 col-form-label text-left" >Which Scene </label>
-			    <div class="col-sm-2 col-md-3">
-			      <select id="which_scene" name="which_scene" class="browser-default custom-select custom-select-sm"
-			      		onchange="processUserSelection(this)">
-			          <option value="/Default/GPCL/ScoreBug">INFOBAR</option>
 			      </select>
 			    </div>
 			  </div>
@@ -132,60 +103,6 @@
 				    <label for="vizLanguage" class="col-sm-4 col-form-label text-left">1st Language</label>			    
 				      <select id="vizLanguage" name="vizLanguage" 
 				      		class="browser-default custom-select custom-select-sm">
-				          <option value="english">English</option>
-				          <option value="hindi">Hindi</option>
-				          <option value="telugu">Telugu</option>
-				          <option value="tamil">Tamil</option>
-				      </select>
-			      </td>
-			    </tr>
-			    <tr>
-			      <td>
-				    <label for="vizSecondaryIPAddress" class="col-sm-4 col-form-label text-left">2nd IP</label>				    
-		             <input type="text" id="vizSecondaryIPAddress" name="vizSecondaryIPAddress" value="${session_configuration.secondaryIpAddress}"
-		             	class="form-control form-control-sm floatlabel"></input>
-			      </td>
-			      <td>
-				    <label for="vizSecondaryPortNumber" class="col-sm-4 col-form-label text-left">2nd Port</label>				    
-		             <input type="text" id="vizSecondaryPortNumber" name="vizSecondaryPortNumber" value="${session_configuration.secondaryPortNumber}"
-		             	class="form-control form-control-sm floatlabel"></input>
-			      </td>
-			      <td>
-				    <label for="vizSecondaryScene" class="col-sm-4 col-form-label text-left">2nd Scene</label>				    
-		             <input type="text" id="vizSecondaryScene" name="vizSecondaryScene" value="${session_configuration.secondaryScene}"
-		             	class="form-control form-control-sm floatlabel"></input>
-			      </td>
-			      <td>
-				    <label for="vizSecondaryLanguage" class="col-sm-4 col-form-label text-left">2nd Language</label>			    
-				      <select id="vizSecondaryLanguage" name="vizSecondaryLanguage" 
-				      		class="browser-default custom-select custom-select-sm">
-				          <option value="english">English</option>
-				          <option value="hindi">Hindi</option>
-				          <option value="telugu">Telugu</option>
-				          <option value="tamil">Tamil</option>
-				      </select>
-			      </td>
-			    </tr>
-			    <tr>
-			      <td>
-				    <label for="vizTertiaryIPAddress" class="col-sm-4 col-form-label text-left">3rd IP</label>				    
-		             <input type="text" id="vizTertiaryIPAddress" name="vizTertiaryIPAddress" value="${session_configuration.tertiaryIpAddress}"
-		             	class="form-control form-control-sm floatlabel"></input>
-			      </td>
-			      <td>
-				    <label for="vizTertiaryPortNumber" class="col-sm-4 col-form-label text-left">3rd Port</label>				    
-		             <input type="text" id="vizTertiaryPortNumber" name="vizTertiaryPortNumber" value="${session_configuration.tertiaryPortNumber}"
-		             	class="form-control form-control-sm floatlabel"></input>
-			      </td>
-			      <td>
-				    <label for="vizTertiaryScene" class="col-sm-4 col-form-label text-left">3rd Scene</label>				    
-		             <input type="text" id="vizTertiaryScene" name="vizTertiaryScene" value="${session_configuration.tertiaryScene}"
-		             	class="form-control form-control-sm floatlabel"></input>
-			      </td>
-			      <td>
-				    <label for="vizTertiaryLanguage" class="col-sm-4 col-form-label text-left">3rd Language</label>				    
-				      <select id="vizTertiaryLanguage" name="vizTertiaryLanguage" 
-				      class="browser-default custom-select custom-select-sm">
 				          <option value="english">English</option>
 				          <option value="hindi">Hindi</option>
 				          <option value="telugu">Telugu</option>

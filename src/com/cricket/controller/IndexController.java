@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.cricket.archive.Archive;
 import com.cricket.broadcaster.FRUIT;
 import com.cricket.containers.Infobar;
 import com.cricket.containers.Scene;
@@ -31,21 +30,17 @@ import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
 import com.cricket.model.EventFile;
-import com.cricket.model.ForeignLanguageData;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
 import com.cricket.model.MatchAllData;
 import com.cricket.model.MultiLanguageDatabase;
 import com.cricket.model.Setup;
 import com.cricket.model.Speed;
-import com.cricket.model.Statistics;
-import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 	
 
@@ -57,23 +52,17 @@ public class IndexController
 	CricketService cricketService;
 	public static MatchAllData session_match;
 	public static MultiLanguageDatabase multiLanguage;
-	public static Archive session_archive;
 	
-
 	public static FRUIT this_fruit;
 	public static String expiry_date = "2024-11-30";
-	public static String session_selected_second_broadcaster;
 	public static String current_date;
-	public boolean show_speed = true;
+	public static Speed lastSpeed = new Speed();
 	public static long time_elapsed = 0;
 	public static long last_setup_time_stamp = 0;
 	public static long last_match_time_stamp = 0;
 	public static long last_Speed_time_stamp = 0;
 	public static long last_Review_time_stamp = 0;
 
-	List<MatchAllData> cricket_matches = new ArrayList<MatchAllData>();
-	List<Statistics> session_statistics = new ArrayList<Statistics>();
-	
 	@RequestMapping(value = {"/","/initialise"}, method={RequestMethod.GET,RequestMethod.POST}) 
 	public String initialisePage(ModelMap model, 
 		@ModelAttribute("session_selected_broadcaster") String session_selected_broadcaster, 
@@ -85,14 +74,6 @@ public class IndexController
 		if(current_date == null || current_date.isEmpty()) {
 			current_date = CricketFunctions.getOnlineCurrentDate();
 		}
-		
-		model.addAttribute("session_viz_scenes", new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.SCENES_DIRECTORY).listFiles(new FileFilter() {
-			@Override
-		    public boolean accept(File pathname) {
-		        String name = pathname.getName().toLowerCase();
-		        return name.endsWith(".via") && pathname.isFile();
-		    }
-		}));
 
 		model.addAttribute("match_files", new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY).listFiles(new FileFilter() {
 			@Override
@@ -110,33 +91,7 @@ public class IndexController
 		        return name.endsWith(".xml") && pathname.isFile();
 		    }
 		}));
-		
-		File files[] = new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY).listFiles(new FileFilter() {
-			@Override
-		    public boolean accept(File pathname) {
-		        String name = pathname.getName().toLowerCase();
-//		        System.out.println("Files : " + name);
-		        return name.endsWith(".json") && pathname.isFile();
-		    }
-		});
 
-		if(cricket_matches == null || cricket_matches.size()<=0) {
-//			session_match = new Match();
-			cricket_matches = CricketFunctions.getTournamentMatches(files, cricketService);
-		}
-		if(session_statistics == null || session_statistics.size()<=0) {
-			session_statistics = cricketService.getAllStats();
-		}
-////		
-		if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + CricketUtil.COMMENTATOR_XML).exists()) {
-			session_configuration = (Configuration)JAXBContext.newInstance(Configuration.class).createUnmarshaller().unmarshal(
-					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + CricketUtil.COMMENTATOR_XML));
-		} else {
-			session_configuration = new Configuration();
-			JAXBContext.newInstance(Configuration.class).createMarshaller().marshal(session_configuration, 
-					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + CricketUtil.COMMENTATOR_XML));
-		}
-		
 		model.addAttribute("session_configuration",session_configuration);
 		model.addAttribute("session_selected_scenes",session_selected_scenes);
 		
@@ -150,23 +105,12 @@ public class IndexController
 			@ModelAttribute("session_selected_broadcaster") String session_selected_broadcaster, 
 			@RequestParam(value = "configuration_file_name", required = false, defaultValue = "") String configuration_file_name,
 			@RequestParam(value = "select_broadcaster", required = false, defaultValue = "") String select_broadcaster,
-			@RequestParam(value = "select_second_broadcaster", required = false, defaultValue = "") String select_second_broadcaster,
-			@RequestParam(value = "which_layer", required = false, defaultValue = "") String which_layer,
-			@RequestParam(value = "which_scene", required = false, defaultValue = "") String which_scene,
 			@RequestParam(value = "speed_select", required = false, defaultValue = "") String speed_select,
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch,
 			@RequestParam(value = "vizIPAddress", required = false, defaultValue = "") String vizIPAddress,
 			@RequestParam(value = "vizPortNumber", required = false, defaultValue = "") int vizPortNumber,
 			@RequestParam(value = "vizSceneName", required = false, defaultValue = "") String vizScene,
-			@RequestParam(value = "vizLanguage", required = false, defaultValue = "") String vizLanguage,
-			@RequestParam(value = "vizSecondaryIPAddress", required = false, defaultValue = "") String vizSecondaryIPAddress,
-			@RequestParam(value = "vizSecondaryPortNumber", required = false, defaultValue = "") int vizSecondaryPortNumber,
-			@RequestParam(value = "vizSecondaryScene", required = false, defaultValue = "") String vizSecondaryScene,
-			@RequestParam(value = "vizSecondaryLanguage", required = false, defaultValue = "") String vizSecondaryLanguage,
-			@RequestParam(value = "vizTertiaryIPAddress", required = false, defaultValue = "") String vizTertiaryIPAddress,
-			@RequestParam(value = "vizTertiaryPortNumber", required = false, defaultValue = "") int vizTertiaryPortNumber,
-			@RequestParam(value = "vizTertiaryScene", required = false, defaultValue = "") String vizTertiaryScene,
-			@RequestParam(value = "vizTertiaryLanguage", required = false, defaultValue = "") String vizTertiaryLanguage) 
+			@RequestParam(value = "vizLanguage", required = false, defaultValue = "") String vizLanguage) 
 					throws UnknownHostException, IllegalAccessException, InvocationTargetException, ParseException, 
 					IOException, InterruptedException, JAXBException, URISyntaxException
 	{
@@ -183,57 +127,37 @@ public class IndexController
 		}else {
 		
 			session_selected_broadcaster = select_broadcaster;
-			session_selected_second_broadcaster = select_second_broadcaster;
 			
 			last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + selectedMatch).lastModified();
 			last_setup_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + selectedMatch).lastModified();
 			//last_Speed_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
 			//last_Review_time_stamp=new File(CricketUtil.REVIEWS).lastModified();
 			
-			session_configuration = new Configuration(selectedMatch,null, session_selected_broadcaster,null, speed_select,vizIPAddress, vizPortNumber,
-					vizScene, vizLanguage, vizSecondaryIPAddress, vizSecondaryPortNumber, vizSecondaryScene, vizSecondaryLanguage, 
-					vizTertiaryIPAddress, vizTertiaryPortNumber, vizTertiaryScene, vizTertiaryLanguage); 
+			session_configuration = new Configuration(selectedMatch, session_selected_broadcaster, speed_select, vizIPAddress, vizPortNumber, vizLanguage);
 			
 			JAXBContext.newInstance(Configuration.class).createMarshaller().marshal(session_configuration, 
 					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + configuration_file_name));
 			
+			
 			switch (session_selected_broadcaster) {
 			case "FRUIT":
-				session_selected_scenes.add(new Scene("D:/DOAD_In_House_Everest/Everest_Cricket/Everest_Cric2022/Scenes/Scorebug_Test.sum"
-						,which_layer)); // Front layer
+				this_fruit = new FRUIT();
+				this_fruit.infobar = new Infobar();
+				session_selected_scenes.add(new Scene("D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum","FRONT_LAYER")); // Front layer
 				session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
+				
+				session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_broadcaster);
 				break;
 			}
 			
-			if(!vizIPAddress.trim().isEmpty()) {
-				
-				switch (session_selected_broadcaster) {
-				case "FRUIT":
-					this_fruit = new FRUIT();
-					this_fruit.infobar = new Infobar();
-					session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_broadcaster);
-					break;
-				}
-			}
-
-			model.addAttribute("manual_files", new File(CricketUtil.CRICKET_SERVER_DIRECTORY + "Manual/Data/").listFiles(new FileFilter() {
-				@Override
-			    public boolean accept(File pathname) {
-			        String name = pathname.getName().toLowerCase();
-			        return name.endsWith(".json") && pathname.isFile();
-			    }
-			}));
-			
 			session_match = new MatchAllData();
-			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + 
-					selectedMatch).exists()) {
+			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + selectedMatch).exists()) {
 				session_match.setSetup(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + 
 						selectedMatch), Setup.class));
 				session_match.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + 
 						selectedMatch), Match.class));
 			}
-			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 
-					selectedMatch).exists()) {
+			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 	selectedMatch).exists()) {
 				session_match.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 
 						selectedMatch), EventFile.class));
 			}
@@ -274,9 +198,14 @@ public class IndexController
 			model.addAttribute("session_match", session_match);
 			model.addAttribute("session_configuration", session_configuration);
 			model.addAttribute("session_selected_broadcaster", session_selected_broadcaster);
-			model.addAttribute("session_selected_second_broadcaster", session_selected_second_broadcaster);
 			model.addAttribute("session_selected_scenes",session_selected_scenes);
-			//this_fruit.initialize(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match);
+			
+			this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match);
+			if(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").exists()) {
+				lastSpeed.setSpeedFileModifiedTime(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified());
+			}else {
+				lastSpeed.setSpeedFileModifiedTime(0);
+			}
 			
 			return "output";
 		}
@@ -300,18 +229,8 @@ public class IndexController
 			return JSONObject.fromObject(session_configuration).toString();
 						
 		case "RE_READ_DATA":
-			
-			File files[] = new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY).listFiles(new FileFilter() {
-				@Override
-			    public boolean accept(File pathname) {
-			        String name = pathname.getName().toLowerCase();
-			        return name.endsWith(".json") && pathname.isFile();
-			    }
-			});
-			
-			
-			session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-					CricketUtil.MATCH, session_match));
+			session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,CricketUtil.SETUP + "," + 
+					CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 			
 			return JSONObject.fromObject(session_match).toString();
 			
@@ -322,19 +241,20 @@ public class IndexController
 				if(last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ session_match.getMatch().getMatchFileName()).lastModified()) {
 					session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-							CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
-					this_fruit.updateInfobar(session_selected_scenes.get(0), session_match,show_speed, CricketFunctions.processPrintWriter(session_configuration).get(0));
+						CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+					this_fruit.updateInfobar(session_selected_scenes.get(0), session_match,CricketFunctions.processPrintWriter(session_configuration).get(0));
 					last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 							+ session_match.getMatch().getMatchFileName()).lastModified();
 				}
+				
 				if(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").exists() 
-						&& last_Speed_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified()) {
-						this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),last_Speed_time_stamp);
-						last_Speed_time_stamp=new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
+						&& lastSpeed.getSpeedFileModifiedTime() != new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified()) {
+						this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),lastSpeed);
+						lastSpeed.setSpeedFileModifiedTime(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified());
 					}
 				if(new File(CricketUtil.REVIEWS).exists() &&
 						last_Review_time_stamp!=new File(CricketUtil.REVIEWS).lastModified()) {
-						this_fruit.Review(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match, last_Review_time_stamp);
+						this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match, last_Review_time_stamp);
 						last_Review_time_stamp=new File(CricketUtil.REVIEWS).lastModified();
 				}
 				
@@ -344,7 +264,7 @@ public class IndexController
 		default:
 			switch (session_selected_broadcaster) {
 			case "FRUIT":
-				this_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, cricket_matches, 
+				this_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
 						CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess);
 				break;
 			}

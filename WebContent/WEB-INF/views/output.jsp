@@ -61,14 +61,11 @@
           <div class="card-body">
 			  <div id="select_graphic_options_div" style="display:none;">
 			  </div>
-			  <div id="lastxball_div" style="display:none;">
-			  </div>
 			  <div id="captions_div" class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 			  	<!--  <label class="col-sm-4 col-form-label text-left">${licence_expiry_message} </label> -->
 			    <label class="col-sm-4 col-form-label text-left">Match: ${session_match.match.matchFileName} </label>
 			   
 			    <label class="col-sm-4 col-form-label text-left">Broadcaster: ${session_selected_broadcaster.replace("_"," ")} </label>
-			    <label class="col-sm-4 col-form-label text-left">2nd Broadcaster: ${session_selected_second_broadcaster.replace("_"," ")} </label>
 			    <label id="selected_inning" class="col-sm-4 col-form-label text-left">Current Inning: ${current_inning} </label>
 			    <label id="inning1_totalruns_lbl" class="col-sm-4 col-form-label text-left">${curr_team_total}</label>
 			    <label id="inning1_battingcard1_lbl" class="col-sm-4 col-form-label text-left">${curr_player}</label>
@@ -78,18 +75,13 @@
   				
   				<div class="left">
   				
-  				<c:if test="${(session_selected_broadcaster != ' ')}">
-  					<button style="background-color:#f44336;color:#FEFEFE;" class="btn btn-sm" type="button"
-			  		name="animateout_graphic_btn" id="animateout_graphic_btn" onclick="processUserSelection(this)"> AnimateOut (-) </button>
-  				</c:if>
+  				<label class="col-sm-4 col-form-label text-left">Fruit: Alt + f </label>
   				
-			  	<c:if test="${(session_selected_broadcaster != ' ')}">
-  					<button style="background-color:#f44336;color:#FEFEFE;" class="btn btn-sm" type="button"
+  				<button style="background-color:#f44336;color:#FEFEFE;" class="btn btn-sm" type="button"
+			  		name="animateout_graphic_btn" id="animateout_graphic_btn" onclick="processUserSelection(this)"> AnimateOut (-) </button>
+			  	<button style="background-color:#f44336;color:#FEFEFE;" class="btn btn-sm" type="button"
 			  			name="clearall_graphic_btn" id="clearall_graphic_btn" onclick="processUserSelection(this)"> Clear All (SpaceBar) </button>
-  				</c:if>			  	
-			  	<c:if test="${(session_selected_broadcaster == 'FRUIT')}">
-			  	<label class="col-sm-4 col-form-label text-left">Fruit: Alt + f </label>
-			  	</c:if>			  	
+  					  	
   				</div>
 			  </div>
 	       </div>
@@ -101,8 +93,6 @@
 <input type="hidden" id="which_keypress" name="which_keypress" value="${session_match.setup.which_key_press}"/>
 <input type="hidden" name="selected_broadcaster" id="selected_broadcaster" value="${session_selected_broadcaster}"/>
 <input type="hidden" name="speed_select" id="speed_select" value="${selected_speed}"/>
-<input type="hidden" name="selected_which_layer" id="selected_which_layer" value="${selected_layer}"/>
-<input type="hidden" name="selected_which_scene" id="selected_which_scene" value="${selected_scene}"/>
 <input type="hidden" name="selected_match_max_overs" id="selected_match_max_overs" value="${session_match.setup.maxOvers}"/>
 <input type="hidden" id="matchFileTimeStamp" name="matchFileTimeStamp" value="${session_match.setup.matchFileTimeStamp}"></input>
 </form:form>
