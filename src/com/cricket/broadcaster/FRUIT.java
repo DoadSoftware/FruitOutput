@@ -2044,7 +2044,7 @@ public class FRUIT extends Scene{
 	public void populateSpeed(PrintWriter printWriter, long last_Speed_time_stamp) throws Exception {
 			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue " +"  "
                 + ";");
-			if(!new File(CricketUtil.REVIEWS).exists()){
+			if(!new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").exists()){
 				printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue " +" "+ ";");
 			}else {
 				String data = CricketFunctions.readFileAsString(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt");
