@@ -26,11 +26,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.cricket.broadcaster.FRUIT;
 import com.cricket.containers.Infobar;
 import com.cricket.containers.Scene;
-import com.cricket.model.BattingCard;
-import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
 import com.cricket.model.EventFile;
-import com.cricket.model.Inning;
 import com.cricket.model.Match;
 import com.cricket.model.MatchAllData;
 import com.cricket.model.MultiLanguageDatabase;
@@ -78,7 +75,6 @@ public class IndexController
 			@Override
 		    public boolean accept(File pathname) {
 		        String name = pathname.getName().toLowerCase();
-//		        System.out.println("Files name : " + name);
 		        return name.endsWith(".json") && pathname.isFile();
 		    }
 		}));
@@ -140,7 +136,7 @@ public class IndexController
 			case "FRUIT":
 				this_fruit = new FRUIT();
 				this_fruit.infobar = new Infobar();
-				session_selected_scenes.add(new Scene("D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum","FRONT_LAYER")); // Front layer
+				session_selected_scenes.add(new Scene(CricketUtil.Fruit_scene,"FRONT_LAYER")); // Front layer
 				session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
 				
 				session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_broadcaster);
