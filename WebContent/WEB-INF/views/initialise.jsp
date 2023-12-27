@@ -74,9 +74,8 @@
 			    <div class="col-sm-6 col-md-6">
 			      <select id="speed_select" name="speed_select" value="${session_configuration.speedUnit}" class="browser-default custom-select custom-select-sm"
 			      		onchange="processUserSelection(this)">
-			      		<option value=" "> </option>
-			      		<option value="KPH">KPH</option>
-			      		<option value="MPH">MPH</option>
+			      		<option value="KP/H">KP/H</option>
+			      		<option value="MP/H">MP/H</option>
 			      </select>
 			    </div>
 			  </div>

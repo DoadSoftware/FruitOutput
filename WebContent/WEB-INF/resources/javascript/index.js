@@ -29,19 +29,26 @@ function initialiseForm(whatToProcess,dataToProcess)
 	case 'UPDATE-MATCH-ON-OUTPUT-FORM':
 	
 		dataToProcess.match.inning.forEach(function(inn,index,arr){
+			
 			if(inn.isCurrentInning == 'YES'){
 			inn.battingCard.forEach(function(bc,index,arr){
-					if(inn.partnerships != null && inn.partnerships.length > 0) {
-						
+					if(inn.partnerships != null && inn.partnerships.length > 0) {	
 						inn.partnerships.forEach(function(par,index,arr){
-								if(bc.playerId == par.firstBatterNo) {
+							if(bc.playerId == par.firstBatterNo) {
+								
 								if(bc.onStrike == 'YES'){
 									document.getElementById('inning1_battingcard1_lbl').innerHTML = bc.player.surname + '*' + ' ' + bc.runs + '(' + bc.balls + ')' ;
+								}else{
+								document.getElementById('inning1_battingcard1_lbl').innerHTML = bc.player.surname +  ' ' + bc.runs + '(' + bc.balls + ')' ;
+	
 								}
 							}
 						else if(bc.playerId == par.secondBatterNo) {
 							if(bc.onStrike == 'NO'){
 								document.getElementById('inning1_battingcard2_lbl').innerHTML = bc.player.surname + ' ' + bc.runs + '(' + bc.balls + ')';
+							}else{
+							document.getElementById('inning1_battingcard2_lbl').innerHTML = bc.player.surname + '*' + ' ' + bc.runs + '(' + bc.balls + ')';
+	
 							}
 						}
 							});
@@ -165,15 +172,7 @@ function processCricketProcedures(whatToProcess)
 					initialiseForm('UPDATE-MATCH-ON-OUTPUT-FORM',data);
 				}
 				break;
-			case 'SHOW_SPEED':
-				if(data == true){
-					document.getElementById('speed_lbl').innerHTML = 'Show Speed: ' + 'YES';
-				}else if(data == false){
-					document.getElementById('speed_lbl').innerHTML = 'Show Speed: ' + 'NO';
-				}
-				break;
 			case 'POPULATE-FRUIT':
-			//if (data.status.toUpperCase() == 'SUCCESSFUL') {
 					if(confirm('Animate In?') == true){
 							$('#select_graphic_options_div').empty();
 							document.getElementById('select_graphic_options_div').style.display = 'none';

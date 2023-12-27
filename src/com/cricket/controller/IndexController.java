@@ -60,7 +60,6 @@ public class IndexController
 	public static long time_elapsed = 0;
 	public static long last_setup_time_stamp = 0;
 	public static long last_match_time_stamp = 0;
-	public static long last_Speed_time_stamp = 0;
 	public static long last_Review_time_stamp = 0;
 
 	@RequestMapping(value = {"/","/initialise"}, method={RequestMethod.GET,RequestMethod.POST}) 
@@ -130,8 +129,6 @@ public class IndexController
 			
 			last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + selectedMatch).lastModified();
 			last_setup_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + selectedMatch).lastModified();
-			//last_Speed_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified();
-			//last_Review_time_stamp=new File(CricketUtil.REVIEWS).lastModified();
 			
 			session_configuration = new Configuration(selectedMatch, session_selected_broadcaster, speed_select, vizIPAddress, vizPortNumber, vizLanguage);
 			
@@ -165,42 +162,13 @@ public class IndexController
 			session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,CricketUtil.SETUP + "," + 
 					CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));			
 			session_match.getSetup().setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-			
-			
-			for(Inning inn : session_match.getMatch().getInning()) {
-				if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
-					model.addAttribute("current_inning", inn.getInningNumber());
-					model.addAttribute("curr_team_total", inn.getBatting_team().getTeamName3() + "-" + inn.getTotalRuns() + "-" + inn.getTotalWickets() 
-						+ " (" + CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls()) + ")");
-					for(BattingCard bc : inn.getBattingCard()) {
-						if(bc.getOnStrike() != null) {
-							if(bc.getOnStrike().equalsIgnoreCase(CricketUtil.YES)){
-								model.addAttribute("curr_player", bc.getPlayer().getTicker_name().toUpperCase() + "* " + bc.getRuns() + "(" + bc.getBalls() + ")" );
-							}
-							if(bc.getOnStrike().equalsIgnoreCase(CricketUtil.NO)) {
-								model.addAttribute("curr_player2", bc.getPlayer().getTicker_name().toUpperCase() + " " + bc.getRuns() + "(" + bc.getBalls() + ")" );
-							}
-						}
-					}
-					if(inn.getBowlingCard() != null) {
-						for(BowlingCard boc : inn.getBowlingCard()) {
-							if(boc.getStatus().equalsIgnoreCase(CricketUtil.CURRENT + CricketUtil.BOWLER)) {
-								model.addAttribute("curr_bowler", boc.getPlayer().getTicker_name().toUpperCase() + ": " + boc.getWickets() + "-" + boc.getRuns() 
-								+ "(" + CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()) + ")");
-							}else if(boc.getStatus().equalsIgnoreCase(CricketUtil.LAST + CricketUtil.BOWLER)) {
-								model.addAttribute("curr_bowler", boc.getPlayer().getTicker_name().toUpperCase() + ": " + boc.getWickets() + "-" + boc.getRuns() 
-								+ "(" + CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()) + ")");
-							}
-						} 
-					}
-				}
-			}
+
 			model.addAttribute("session_match", session_match);
 			model.addAttribute("session_configuration", session_configuration);
 			model.addAttribute("session_selected_broadcaster", session_selected_broadcaster);
 			model.addAttribute("session_selected_scenes",session_selected_scenes);
 			
-			this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match);
+			this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,session_configuration);
 			if(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").exists()) {
 				lastSpeed.setSpeedFileModifiedTime(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified());
 			}else {
@@ -228,21 +196,25 @@ public class IndexController
 			
 			return JSONObject.fromObject(session_configuration).toString();
 						
-		case "RE_READ_DATA":
+		case "RE_READ_DATA":case "UPDATE-MATCH-ON-OUTPUT-FORM":
 			session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,CricketUtil.SETUP + "," + 
 					CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
-			
 			return JSONObject.fromObject(session_match).toString();
-			
-		
 		case "READ-MATCH-AND-POPULATE":
 			switch (session_selected_broadcaster) {
 			case "FRUIT":
 				if(last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ session_match.getMatch().getMatchFileName()).lastModified()) {
+					
+//					System.out.println("NAME : " + session_match.getSetup().getHomeSquad().get(0).getPlayerId());
+//					session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
+//							CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+					
 					session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-						CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+							CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+					
 					this_fruit.updateInfobar(session_selected_scenes.get(0), session_match,CricketFunctions.processPrintWriter(session_configuration).get(0));
+					
 					last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 							+ session_match.getMatch().getMatchFileName()).lastModified();
 				}
