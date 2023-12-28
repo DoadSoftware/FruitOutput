@@ -42,7 +42,6 @@
   setInterval(() => {
 	  processCricketProcedures('READ-MATCH-AND-POPULATE');		
 	}, 1000);
-  
  	
   </script>
 </head>
