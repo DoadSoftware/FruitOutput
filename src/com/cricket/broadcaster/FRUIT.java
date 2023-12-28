@@ -19,7 +19,6 @@ import com.cricket.containers.Infobar;
 import com.cricket.containers.Scene;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
-
 import net.sf.json.JSONArray;
 
 public class FRUIT extends Scene{
@@ -1083,24 +1082,25 @@ public class FRUIT extends Scene{
 	}
 	
 	public void populateSpeed(PrintWriter printWriter, Speed lastSpeed) throws Exception {
-		Speed data = CricketFunctions.getCurrentSpeed(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt", lastSpeed);
-		if(data!=null) {
-			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue " +data  + ";");
+		if(lastSpeed != null) {
+			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue " + lastSpeed.getSpeedValue()  + ";");
 		}else {
-			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue " +"  " + ";");
+			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue;");
 		}			      
-	   } 	
-	public void populateReview(PrintWriter printWriter, MatchAllData match, long last_Review_time_stamp) throws Exception {
-	    if(session_selected_broadcaster.equalsIgnoreCase("FRUIT")) {
-	    	String data = CricketFunctions.readFileAsString(CricketUtil.REVIEWS);
-	    	if(data==null||data.split(",")[0]==null||data.split(",")[1]==null) {
-	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " + "SUMMARY " + ";");
-	    	}else {
-	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
-	    				"                 " + match.getMatch().getInning().get(0).getBatting_team().getTeamName4() + " : " + 
-	    				data.split(",")[0] + "        " + match.getMatch().getInning().get(0).getBowling_team().getTeamName4() + " : " + data.split(",")[1] + ";");
-	    	}
-	    }
-	}
+	} 	
+//	public Review populateReview(PrintWriter printWriter, MatchAllData match, Review review) throws Exception {
+//		switch (this.session_selected_broadcaster) {
+//		case "ICC-U19-FRUIT":
+//			if(review == null) {
+//	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " + "SUMMARY " + ";");
+//			}else {
+//	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
+//	    				"                 " + match.getMatch().getInning().get(0).getBatting_team().getTeamName4() + " : " + 
+//	    				data.split(",")[0] + String.format("%-8s", match.getMatch().getInning().get(0).getBowling_team().getTeamName4() + " : " + data.split(",")[1]) + ";");
+//			}			      
+//			break;
+//		}
+//	    return null;
+//	}
 	
 }

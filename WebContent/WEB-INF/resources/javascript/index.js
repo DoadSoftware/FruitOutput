@@ -1,4 +1,4 @@
-var session_match,stats;
+var session_match;
 function processWaitingButtonSpinner(whatToProcess) 
 {
 	switch (whatToProcess) {
@@ -26,7 +26,7 @@ function initialiseForm(whatToProcess,dataToProcess)
 	case 'initialise':
 		processUserSelection($('#select_broadcaster'));
 		break;
-	case 'UPDATE-MATCH-ON-OUTPUT-FORM':
+/*	case 'UPDATE-MATCH-ON-OUTPUT-FORM':
 	
 		dataToProcess.match.inning.forEach(function(inn,index,arr){
 			
@@ -71,10 +71,11 @@ function initialiseForm(whatToProcess,dataToProcess)
 					});	
 					}
 		});
-		break;
+		break;*/
 	}
 }
 function processUserSelectionData(whatToProcess,dataToProcess){
+	
 	switch (whatToProcess) {
 	case 'LOGGER_FORM_KEYPRESS':
 		
@@ -110,10 +111,8 @@ function processUserSelection(whichInput)
 	switch ($(whichInput).attr('name')) {
 	
 	case 'select_configuration_file':
-	
 		processCricketProcedures('GET-CONFIG-DATA');
 		break;
-	
 	case 'animateout_graphic_btn':
 		if(confirm('It will Also Delete Your Preview from Directory...\r\n \r\nAre You Sure To Animate Out? ') == true){
 			processCricketProcedures('ANIMATE-OUT');	
@@ -169,7 +168,7 @@ function processCricketProcedures(whatToProcess)
 			case 'READ-MATCH-AND-POPULATE': case 'RE_READ_DATA':
 				if(data){
 					session_match = data;
-					initialiseForm('UPDATE-MATCH-ON-OUTPUT-FORM',data);
+					//initialiseForm('UPDATE-MATCH-ON-OUTPUT-FORM',data);
 				}
 				break;
 			case 'POPULATE-FRUIT':
@@ -193,8 +192,7 @@ function processCricketProcedures(whatToProcess)
 	    }    
 	});
 }
-
-function checkEmpty(inputBox,textToShow) {
+/*function checkEmpty(inputBox,textToShow) {
 
 	var name = $(inputBox).attr('id');
 	
@@ -209,4 +207,4 @@ function checkEmpty(inputBox,textToShow) {
 		return false;
 	}
 	return true;	
-}
+}*/
