@@ -22,15 +22,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import com.cricket.broadcaster.FRUIT;
+import com.cricket.broadcaster.DOAD_FRUIT;
 import com.cricket.containers.Infobar;
 import com.cricket.containers.Scene;
 import com.cricket.model.Configuration;
+import com.cricket.model.Match;
 import com.cricket.model.MatchAllData;
+import com.cricket.model.Review;
 import com.cricket.model.Speed;
 import com.cricket.service.CricketService;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import net.sf.json.JSONObject;
 	
 @Controller
@@ -41,10 +45,11 @@ public class IndexController
 	CricketService cricketService;
 	public static MatchAllData session_match;
 	
-	public static FRUIT this_fruit;
+	public static DOAD_FRUIT this_fruit;
 	public static String expiry_date = "2024-11-30";
 	public static String current_date;
 	public static Speed lastSpeed = new Speed();
+	public static Review lastReview = new Review();
 	public static long time_elapsed = 0;
 	public static long last_match_time_stamp = 0;
 
@@ -121,29 +126,22 @@ public class IndexController
 			
 			
 			switch (session_selected_broadcaster) {
-			case "ICC-U19-FRUIT":
-				this_fruit = new FRUIT();
+			case "DOAD_FRUIT":
+				this_fruit = new DOAD_FRUIT();
 				this_fruit.infobar = new Infobar();
-				session_selected_scenes.add(new Scene(CricketUtil.Fruit_scene,"FRONT_LAYER")); // Front layer
+				session_selected_scenes.add(new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
 				session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
 				session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_broadcaster);
 				break;
 			}
 			
 			session_match = new MatchAllData();
-//			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + selectedMatch).exists()) {
-//				session_match.setSetup(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + 
-//						selectedMatch), Setup.class));
-//				session_match.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + 
-//						selectedMatch), Match.class));
-//			}
-//			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + selectedMatch).exists()) {
-//				session_match.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 
-//						selectedMatch), EventFile.class));
-//			}
+			session_match.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + 
+					selectedMatch), Match.class));
+			
 			session_match.getMatch().setMatchFileName(selectedMatch);
 			session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-				CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));			
+				CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 			session_match.getSetup().setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 			
 			System.out.println("outputPage -> session_match.getSetup() = " + session_match.getSetup());
@@ -158,6 +156,11 @@ public class IndexController
 				lastSpeed.setSpeedFileModifiedTime(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified());
 			}else {
 				lastSpeed.setSpeedFileModifiedTime(0);
+			}
+			if(new File(CricketUtil.REVIEWS).exists()) {
+				lastReview.setLastTimeStamp(new File(CricketUtil.REVIEWS).lastModified());
+			}else {
+				lastReview.setLastTimeStamp(0);
 			}
 			
 			return "output";
@@ -182,17 +185,14 @@ public class IndexController
 			return JSONObject.fromObject(session_configuration).toString();
 						
 		case "RE_READ_DATA":
-		
+			
 			session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
 				CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 			return JSONObject.fromObject(session_match).toString();
 		
 		case "READ-MATCH-AND-POPULATE":
-			
 			switch (session_selected_broadcaster) {
-			case "FRUIT":
-				
-				System.out.println("processCricketProcedures -> session_match.getSetup() = " + session_match.getSetup());
+			case "DOAD_FRUIT":
 				if(last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ session_match.getMatch().getMatchFileName()).lastModified()) {
 					
@@ -212,23 +212,21 @@ public class IndexController
 				lastSpeed = CricketFunctions.getCurrentSpeed(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt", lastSpeed);
 				if(lastSpeed != null) {
 					this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),lastSpeed);
+				}else {
+					this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),lastSpeed);
 				}
-//				if(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").exists() 
-//						&& lastSpeed.getSpeedFileModifiedTime() != new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified()) {
-//						this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),lastSpeed);
-//						lastSpeed.setSpeedFileModifiedTime(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified());
-//				}
-//				lastReview = CricketFunctions.getCurrentSpeed(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt", lastSpeed);
-//				if(new File(CricketUtil.REVIEWS).exists() && last_Review_time_stamp!=new File(CricketUtil.REVIEWS).lastModified()) {
-//					this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match, last_Review_time_stamp);
-//					last_Review_time_stamp=new File(CricketUtil.REVIEWS).lastModified();
-//				}
+				lastReview=CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+				if(lastReview!=null) {
+					this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
+				}else {
+					this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
+				}
 				break;
 			}
 
 		default:
 			switch (session_selected_broadcaster) {
-			case "FRUIT":
+			case "DOAD_FRUIT":
 				this_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
 					CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess);
 				break;

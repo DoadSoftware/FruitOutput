@@ -11,6 +11,7 @@ import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
 import com.cricket.model.Player;
+import com.cricket.model.Review;
 import com.cricket.model.Speed;
 import com.cricket.service.CricketService;
 import com.cricket.model.Inning;
@@ -21,21 +22,21 @@ import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
 import net.sf.json.JSONArray;
 
-public class FRUIT extends Scene{
+public class DOAD_FRUIT extends Scene{
 
 	private String status;
 	private String slashOrDash = "-";
 	public Infobar infobar = new Infobar();
-	public String session_selected_broadcaster = "FRUIT";
+	public String session_selected_broadcaster = "DOAD_FRUIT";
 	public String which_graphics_onscreen = "";
 	public int Whichside = 1,previous_bowler = 0;
 	public int Whichinn = 1;
 	
-	public FRUIT() {
+	public DOAD_FRUIT() {
 		super();
 	}
 
-	public FRUIT(String scene_path, String which_Layer) {
+	public DOAD_FRUIT(String scene_path, String which_Layer) {
 		super(scene_path, which_Layer);
 	}
 
@@ -746,7 +747,7 @@ public class FRUIT extends Scene{
 						
 					}else if(inn.getInningNumber() == 2) {
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
-								"RRR: " + CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(match), 0, CricketFunctions.getRequiredBalls(match), 2) + ";");
+								"RRR: " + CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(match), 0, CricketFunctions.getRequiredBalls(match), 2,match) + ";");
 					}
 					if(inn.getPartnerships() != null) {
 						if(inn.getPartnerships().size() > 0) {
@@ -1088,19 +1089,19 @@ public class FRUIT extends Scene{
 			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue;");
 		}			      
 	} 	
-//	public Review populateReview(PrintWriter printWriter, MatchAllData match, Review review) throws Exception {
-//		switch (this.session_selected_broadcaster) {
-//		case "ICC-U19-FRUIT":
-//			if(review == null) {
-//	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " + "SUMMARY " + ";");
-//			}else {
-//	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
-//	    				"                 " + match.getMatch().getInning().get(0).getBatting_team().getTeamName4() + " : " + 
-//	    				data.split(",")[0] + String.format("%-8s", match.getMatch().getInning().get(0).getBowling_team().getTeamName4() + " : " + data.split(",")[1]) + ";");
-//			}			      
-//			break;
-//		}
-//	    return null;
-//	}
+	public Review populateReview(PrintWriter printWriter, MatchAllData match, Review review) throws Exception {
+		switch (this.session_selected_broadcaster) {
+		case "DOAD_DOAD_FRUIT":
+			if(review == null) {
+	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " + "SUMMARY " + ";");
+			}else {
+	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
+	    				String.format("%-16s", match.getMatch().getInning().get(0).getBatting_team().getTeamName4()) + " : " + 
+	    				review.getReviewStatus().split(",")[0] + String.format("%-8s", match.getMatch().getInning().get(0).getBowling_team().getTeamName4() + " : " + review.getReviewStatus().split(",")[1]) + ";");
+			}			      
+			break;
+		}
+	    return null;
+	}
 	
 }

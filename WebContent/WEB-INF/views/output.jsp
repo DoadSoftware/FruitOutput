@@ -20,7 +20,7 @@
 	  
 	  if(e.altKey && e.key === 'f'){
 		  e.preventDefault();
-		  processUserSelectionData('LOGGER_FORM_KEYPRESS','FRUIT');
+		  processUserSelectionData('LOGGER_FORM_KEYPRESS','DOAD_FRUIT');
 	  }else if(e.altKey && e.key == 'r'){
 		  e.preventDefault();
 		  processUserSelectionData('LOGGER_FORM_KEYPRESS','RE_READ_DATA');
@@ -62,26 +62,21 @@
 			  <div id="select_graphic_options_div" style="display:none;">
 			  </div>
 			  <div id="captions_div" class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-			  	<!--  <label class="col-sm-4 col-form-label text-left">${licence_expiry_message} </label> -->
 			    <label class="col-sm-4 col-form-label text-left">Match: ${session_match.match.matchFileName} </label>
-			   
 			    <label class="col-sm-4 col-form-label text-left">Broadcaster: ${session_selected_broadcaster.replace("_"," ")} </label>
-			    <label id="selected_inning" class="col-sm-4 col-form-label text-left">Current Inning: ${current_inning} </label>
-			    <label id="inning1_totalruns_lbl" class="col-sm-4 col-form-label text-left">${curr_team_total}</label>
-			    <label id="inning1_battingcard1_lbl" class="col-sm-4 col-form-label text-left">${curr_player}</label>
-			    <label id="inning1_battingcard2_lbl" class="col-sm-4 col-form-label text-left">${curr_player2}</label>
-			    <label id="inning1_bowlingcard_lbl" class="col-sm-4 col-form-label text-left">${curr_bowler}</label>
+			   <!--  <label id="selected_inning" class="col-sm-4 col-form-label text-left">Speed : ${selected_speed} </label> -->
+  			  </div>
+  				<div class="left">
+  				<label class="col-sm-3 col-form-label text-left"> Fruit: (Alt + f) </label>
+  				<label class="col-sm-3 col-form-label text-left" style = "margin-left: 73px;"> AnimateOut: (-) </label>
+  				<label class="col-sm-3 col-form-label text-left" style = "margin-left: 70px;"> Clear All: (SpaceBar) </label>
   				</div>
   				
-  				<div class="left">
-  				
-  				<label class="col-sm-4 col-form-label text-left">Fruit: Alt + f </label>
-  				
-  				<button style="background-color:#f44336;color:#FEFEFE;" class="btn btn-sm" type="button"
-			  		name="animateout_graphic_btn" id="animateout_graphic_btn" onclick="processUserSelection(this)"> AnimateOut (-) </button>
-			  	<button style="background-color:#f44336;color:#FEFEFE;" class="btn btn-sm" type="button"
-			  			name="clearall_graphic_btn" id="clearall_graphic_btn" onclick="processUserSelection(this)"> Clear All (SpaceBar) </button>
-  					  	
+  				<div class="left" style = "margin-left: 5px; font-size: 21px;">
+	  				<label id="team1Details" class="col-sm-4 col-form-label text-left"> 
+				    	${session_match.match.inning[0].batting_team.teamName4} </label>
+				    <label id="team2Details" class="col-sm-4 col-form-label text-left"> 
+				    	${session_match.match.inning[1].batting_team.teamName4} </label>
   				</div>
 			  </div>
 	       </div>
@@ -89,7 +84,6 @@
        </div>
     </div>
   </div>
-</div>
 <input type="hidden" id="which_keypress" name="which_keypress" value="${session_match.setup.which_key_press}"/>
 <input type="hidden" name="selected_broadcaster" id="selected_broadcaster" value="${session_selected_broadcaster}"/>
 <input type="hidden" name="speed_select" id="speed_select" value="${selected_speed}"/>

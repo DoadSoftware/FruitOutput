@@ -22,56 +22,28 @@ function initialiseForm(whatToProcess,dataToProcess)
 		document.getElementById('speed_select').value = dataToProcess.speedUnit;
 		document.getElementById('vizIPAddress').value = dataToProcess.primaryIpAddress;
 		document.getElementById('vizPortNumber').value = dataToProcess.primaryPortNumber;
+		
+		break;
+	case 'TEAMS_SCORE':
+		if(session_match.match.inning[0].totalWickets >= 10){
+			document.getElementById('team1Details').innerHTML = session_match.match.inning[0].batting_team.teamName4 
+			+ ' : ' + session_match.match.inning[0].totalRuns;
+		}else {
+			document.getElementById('team1Details').innerHTML = session_match.match.inning[0].batting_team.teamName4 
+				+ ' : ' + session_match.match.inning[0].totalRuns + ' - ' + session_match.match.inning[0].totalWickets;
+		}
+		
+		if(session_match.match.inning[1].totalWickets >= 10){
+			document.getElementById('team2Details').innerHTML = session_match.match.inning[1].batting_team.teamName4 
+			+ ' : ' + session_match.match.inning[1].totalRuns;
+		}else {
+			document.getElementById('team2Details').innerHTML = session_match.match.inning[1].batting_team.teamName4 
+				+ ' : ' + session_match.match.inning[1].totalRuns + ' - ' + session_match.match.inning[1].totalWickets;
+		}
 		break;
 	case 'initialise':
 		processUserSelection($('#select_broadcaster'));
 		break;
-/*	case 'UPDATE-MATCH-ON-OUTPUT-FORM':
-	
-		dataToProcess.match.inning.forEach(function(inn,index,arr){
-			
-			if(inn.isCurrentInning == 'YES'){
-			inn.battingCard.forEach(function(bc,index,arr){
-					if(inn.partnerships != null && inn.partnerships.length > 0) {	
-						inn.partnerships.forEach(function(par,index,arr){
-							if(bc.playerId == par.firstBatterNo) {
-								
-								if(bc.onStrike == 'YES'){
-									document.getElementById('inning1_battingcard1_lbl').innerHTML = bc.player.surname + '*' + ' ' + bc.runs + '(' + bc.balls + ')' ;
-								}else{
-								document.getElementById('inning1_battingcard1_lbl').innerHTML = bc.player.surname +  ' ' + bc.runs + '(' + bc.balls + ')' ;
-	
-								}
-							}
-						else if(bc.playerId == par.secondBatterNo) {
-							if(bc.onStrike == 'NO'){
-								document.getElementById('inning1_battingcard2_lbl').innerHTML = bc.player.surname + ' ' + bc.runs + '(' + bc.balls + ')';
-							}else{
-							document.getElementById('inning1_battingcard2_lbl').innerHTML = bc.player.surname + '*' + ' ' + bc.runs + '(' + bc.balls + ')';
-	
-							}
-						}
-							});
-						
-					}
-					document.getElementById('inning1_totalruns_lbl').innerHTML = inn.batting_team.teamName4 + '-' + parseInt(inn.totalRuns) + '-' 
-										+ parseInt(inn.totalWickets) + '('+ parseInt(inn.totalOvers) + '.' + parseInt(inn.totalBalls) + ')' ;
-				
-			});
-			}
-			if(inn.isCurrentInning == 'YES'){
-			inn.bowlingCard.forEach(function(boc,index,arr){
-						if(boc.status == 'CURRENTBOWLER'){
-							document.getElementById('inning1_bowlingcard_lbl').innerHTML = boc.player.surname + ' ' + boc.wickets 
-										+ '-' + boc.runs + '(' + boc.overs + '.' + boc.balls + ')';
-						}else if(boc.status == 'LASTBOWLER'){
-							document.getElementById('inning1_bowlingcard_lbl').innerHTML = boc.player.surname + ' ' + boc.wickets 
-										+ '-' + boc.runs + '(' + boc.overs + '.' + boc.balls + ')';
-						}
-					});	
-					}
-		});
-		break;*/
 	}
 }
 function processUserSelectionData(whatToProcess,dataToProcess){
@@ -80,14 +52,14 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 	case 'LOGGER_FORM_KEYPRESS':
 		
 		switch (dataToProcess) {
-		case 'FRUIT':
+		case 'DOAD_FRUIT':
 			processCricketProcedures('POPULATE-FRUIT');
 			break;
-		case 32:
+		case 32: //Space Bar
 			processCricketProcedures('CLEAR-ALL');
 			break;
 		
-		case 189:
+		case 189: //Minus
 			if(confirm('It will Also Delete Your Preview from Directory...\r\n \r\nAre You Sure To Animate Out? ') == true){
 				processCricketProcedures('ANIMATE-OUT');
 			}
@@ -113,20 +85,6 @@ function processUserSelection(whichInput)
 	case 'select_configuration_file':
 		processCricketProcedures('GET-CONFIG-DATA');
 		break;
-	case 'animateout_graphic_btn':
-		if(confirm('It will Also Delete Your Preview from Directory...\r\n \r\nAre You Sure To Animate Out? ') == true){
-			processCricketProcedures('ANIMATE-OUT');	
-		}
-		break;
-	case 'clearall_graphic_btn':
-		processCricketProcedures('CLEAR-ALL');
-		break;
-	case 'cancel_graphics_btn':
-		$('#select_graphic_options_div').empty();
-		document.getElementById('select_graphic_options_div').style.display = 'none';
-		$("#captions_div").show();
-		$("#cancel_match_setup_btn").show();
-		break;
 	case 'load_scene_btn':
       	document.initialise_form.submit();
 		break;
@@ -140,19 +98,16 @@ function processCricketProcedures(whatToProcess)
 	case 'GET-CONFIG-DATA':
 		valueToProcess = $('#select_configuration_file option:selected').val();
 		break;
-		
 	case 'READ-MATCH-AND-POPULATE':
 		valueToProcess = $('#matchFileTimeStamp').val();
 		break;
 	case 'POPULATE-FRUIT':
 		switch ($('#selected_broadcaster').val().toUpperCase()) {
-		case 'FRUIT':
+		case 'DOAD_FRUIT':
 			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum';
 			break;
-			
 		}
 		break;
-	
 	}
 
 	$.ajax({    
@@ -168,21 +123,21 @@ function processCricketProcedures(whatToProcess)
 			case 'READ-MATCH-AND-POPULATE': case 'RE_READ_DATA':
 				if(data){
 					session_match = data;
-					//initialiseForm('UPDATE-MATCH-ON-OUTPUT-FORM',data);
+					initialiseForm('TEAMS_SCORE',null);
 				}
 				break;
 			case 'POPULATE-FRUIT':
-					if(confirm('Animate In?') == true){
-							$('#select_graphic_options_div').empty();
-							document.getElementById('select_graphic_options_div').style.display = 'none';
-							$("#captions_div").show();
-							
-				        	switch(whatToProcess) {
-							case 'POPULATE-FRUIT':
-								processCricketProcedures('ANIMATE-IN-FRUIT');
-								break;
-							}
-						}
+				if(confirm('Animate In?') == true){
+					$('#select_graphic_options_div').empty();
+					document.getElementById('select_graphic_options_div').style.display = 'none';
+					$("#captions_div").show();
+					
+		        	switch(whatToProcess) {
+					case 'POPULATE-FRUIT':
+						processCricketProcedures('ANIMATE-IN-FRUIT');
+						break;
+					}
+				}
 				break;
         	}
 			processWaitingButtonSpinner('END_WAIT_TIMER');
@@ -192,19 +147,3 @@ function processCricketProcedures(whatToProcess)
 	    }    
 	});
 }
-/*function checkEmpty(inputBox,textToShow) {
-
-	var name = $(inputBox).attr('id');
-	
-	document.getElementById(name + '-validation').innerHTML = '';
-	document.getElementById(name + '-validation').style.display = 'none';
-	$(inputBox).css('border','');
-	if(document.getElementById(name).value.trim() == '') {
-		$(inputBox).css('border','#E11E26 2px solid');
-		document.getElementById(name + '-validation').innerHTML = textToShow + ' required';
-		document.getElementById(name + '-validation').style.display = '';
-		document.getElementById(name).focus({preventScroll:false});
-		return false;
-	}
-	return true;	
-}*/

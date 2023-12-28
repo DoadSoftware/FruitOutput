@@ -65,7 +65,7 @@
 			    <div class="col-sm-6 col-md-6">
 			      <select id="select_broadcaster" name="select_broadcaster" class="browser-default custom-select custom-select-sm"
 			      		onchange="processUserSelection(this)">
-			      		<option value="FRUIT">FRUIT</option>
+			      		<option value="DOAD_FRUIT">DOAD_FRUIT</option>
 			      </select>
 			    </div>
 			  </div>
