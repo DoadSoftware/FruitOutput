@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
@@ -24,7 +23,6 @@ import net.sf.json.JSONArray;
 
 public class DOAD_FRUIT extends Scene{
 
-	private String status;
 	private String slashOrDash = "-";
 	public Infobar infobar = new Infobar();
 	public String session_selected_broadcaster = "DOAD_FRUIT";
@@ -40,28 +38,305 @@ public class DOAD_FRUIT extends Scene{
 		super(scene_path, which_Layer);
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	
-	public Infobar updateInfobar(Scene scene, MatchAllData match,PrintWriter print_writer) throws Exception
+	//updateInfobar -> updateFruit;
+	public void updateFruit(Scene scene, MatchAllData match,PrintWriter print_writer) throws Exception
 	{
-		if(infobar.isInfobar_on_screen() == true) {
-			    populateInfobarTeamScore(print_writer, match, session_selected_broadcaster);
-			    populateInfobarTopLeft(print_writer, match, session_selected_broadcaster);
-			    populateInfobarTopRight(print_writer, match, session_selected_broadcaster);
-				populateComp(print_writer, match, session_selected_broadcaster);
-				populateProjectedAndPhaseBy( print_writer, match, session_selected_broadcaster);
-				populateThisOver(print_writer, match, session_selected_broadcaster);
-				populateFOW(print_writer, match, session_selected_broadcaster);
-				populateBattingCard(true, print_writer, match, session_selected_broadcaster);
-				populateBowlingCard(true, print_writer, match, session_selected_broadcaster);		
+		BattingCard this_bc;
+		
+		for(Inning inn : match.getMatch().getInning()) {
+			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+				
+				//Powerplay
+				if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+					if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+		    			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "0" + ";");
+		    		}
+					if(match.getSetup().getFollowOn().equalsIgnoreCase(CricketUtil.YES)) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "1" + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPowerPlay " + "f/o" + ";");
+					}else {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "0" + ";");
+					}
+			    }else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI) || match.getSetup().getMatchType().equalsIgnoreCase("OD")) {
+			    	if(CricketFunctions.processPowerPlay(CricketUtil.MINI,match).isEmpty()) {
+			    		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "0" + ";");
+			    	}else {
+			    		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "1" + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPowerPlay " + 
+								CricketFunctions.processPowerPlay(CricketUtil.MINI,match) + ";");
+			    	}
+	    			
+	    		}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) 
+	    			|| match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)
+	    			||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
+	    			if(inn.getFirstPowerplayEndOver()>inn.getTotalOvers()) {
+	    				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "1" + ";");
+	    				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPowerPlay " + "P" + ";");
+	    				
+	    			}else {
+	    				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "0" + ";");
+	    			}
+	    			
+	    		}else {
+	    			if(!match.getSetup().getTargetOvers().isEmpty() && Double.valueOf(match.getSetup().getTargetOvers()) == 1) {
+				    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "0" + ";");
+				    }
+	    		}
+				
+				//Team total
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBattingTeamName " + inn.getBatting_team().getTeamName4().toUpperCase() + ";");
+				if(inn.getTotalWickets() >= 10) {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTotalScore " + inn.getTotalRuns() + ";");
+				}
+				else{
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTotalScore " + inn.getTotalRuns() + "-" + inn.getTotalWickets() + ";");
+				}
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers " + CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls())+ ";");
+				
+				
+				if(inn.getTotalPenalties() > 0) {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPenalty " + "1" + ";");
+				}else {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPenalty " + "0" + ";");
+				}
+				
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tExtras " + "EXTRAS: " + inn.getTotalExtras() + ";");
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWideValue " + inn.getTotalWides() + ";");
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tNoBallValue " + inn.getTotalNoBalls() + ";");
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tByeValue " + inn.getTotalByes() + ";");
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLegByelValue " + inn.getTotalLegByes() + ";");
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPenaltyValue " + inn.getTotalPenalties() + ";");
+				
+				if(inn.getInningNumber() == 1) {
+					if(match.getSetup().getTossWinningTeam() == match.getSetup().getHomeTeamId()) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tText " 
+								+ match.getSetup().getHomeTeam().getTeamName1().toUpperCase() + 
+								" ELECTED TO " + match.getSetup().getTossWinningDecision().toUpperCase() + ";");
+					}else {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tText " 
+								+ match.getSetup().getAwayTeam().getTeamName1().toUpperCase() + 
+								" ELECTED TO " + match.getSetup().getTossWinningDecision().toUpperCase() + ";");
+					}
+				}else if(inn.getInningNumber() == 2) {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tText " 
+							+ CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT).toUpperCase() + ";");
+				}
+				
+				//Current Two Batsmen
+				if(inn.getPartnerships() != null && inn.getPartnerships().size() > 0) {
+					
+					this_bc = inn.getBattingCard().stream().filter(batcard -> batcard.getPlayerId() 
+							== inn.getPartnerships().get(inn.getPartnerships().size() - 1).getFirstBatterNo()).findAny().orElse(null);
+					
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterName1 " + this_bc.getPlayer().getTicker_name() + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterRun1 " + this_bc.getRuns() + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterBall1 " + this_bc.getBalls() + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBoundaries1 " + this_bc.getFours() + "/" + 
+						this_bc.getSixes() + ";");
+					
+					if(this_bc.getStrikeRate() != null) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate1 " + this_bc.getStrikeRate() + ";");
+					}else {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate1 " + "-" + ";");
+					}
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMinutes1 " + this_bc.getSeconds()/60 + ";");
+					
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipContribution1 " + 
+							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getFirstBatterRuns() + "(" + 
+							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getFirstBatterBalls() + ")" + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipContribution2 " + 
+							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getSecondBatterRuns() + "(" + 
+							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getSecondBatterBalls() + ")" + ";");
+
+					this_bc = inn.getBattingCard().stream().filter(batcard -> batcard.getPlayerId() 
+							== inn.getPartnerships().get(inn.getPartnerships().size() - 1).getSecondBatterNo()).findAny().orElse(null);
+	
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterName2 " + this_bc.getPlayer().getTicker_name() + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterRun2 " + this_bc.getRuns() + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterBall2 " + this_bc.getBalls() + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBoundaries2 " + this_bc.getFours() + "/" + 
+							this_bc.getSixes() + ";");
+					if(this_bc.getStrikeRate() != null) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate2 " + this_bc.getStrikeRate() + ";");
+					}else {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate2 " + "-" + ";");
+					}
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMinutes2 " + this_bc.getSeconds()/60 + ";");
+
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipRus " + 
+							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getTotalRuns() + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipBalls " + 
+							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getTotalBalls() + ";");
+					
+				}
+				
+				//Run rate
+				if(inn.getInningNumber() == 1) {
+					if(inn.getRunRate() != null) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
+								"RUN RATE : " + inn.getRunRate() + ";");
+					}else {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
+								"RUN RATE : " + "-" + ";");
+					}
+					
+				}else if(inn.getInningNumber() == 2) {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
+							"RRR: " + CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(match), 0, CricketFunctions.getRequiredBalls(match), 2,match) + ";");
+				}
+				
+				//FoW
+				if(inn.getFallsOfWickets() != null && inn.getFallsOfWickets().size() > 0) {
+					
+					this_bc = inn.getBattingCard().stream().filter(batC -> inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() 
+							== batC.getPlayerId()).findAny().orElse(null);
+					
+					if(this_bc != null) {
+						String how_out = this_bc.getPlayer().getTicker_name()+"  "+this_bc.getHowOutText();
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " 
+								+"  "+ this_bc.getPlayer().getTicker_name() + "  " +this_bc.getHowOutText()+ "    ;");
+						if(how_out.length()>31) {
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " 
+									+ this_bc.getPlayer().getTicker_name() +  "    ;");
+						}else {
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " 
+									+ this_bc.getPlayer().getTicker_name() + "  " +this_bc.getHowOutText()+ "    ;");
+						}
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketScore " 
+									+" "+ this_bc.getRuns() + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketBalls " 
+									+ this_bc.getBalls() + ";");
+					}
+				}else {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " + "" + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketScore " + "" + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketBalls " + "" + ";");
+				}
+				
+				//Current and last bowlers
+				BowlingCard this_bowC = new BowlingCard();
+				if(inn.getBowlingCard() != null) {
+					this_bowC = inn.getBowlingCard().stream().filter(bowlC -> 
+						bowlC.getStatus().equalsIgnoreCase(CricketUtil.CURRENT + CricketUtil.BOWLER)).findAny().orElse(null);
+					if(this_bowC != null) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler2" + " " + "0" + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler1" + " " + "1" + ";");
+						
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlerName1 " + this_bowC.getPlayer().getTicker_name() +";"); 
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFigure1 " + this_bowC.getWickets() + "-" + this_bowC.getRuns() +";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers1 " + CricketFunctions.OverBalls(this_bowC.getOvers(), boc.getBalls()) +  ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tDots1 " + this_bowC.getDots() + ";");
+						
+						if(this_bowC.getEconomyRate() == null) {
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + "-" + ";");
+						}else {
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + this_bowC.getEconomyRate() + ";");
+						}
+					}
+					this_bowC = inn.getBowlingCard().stream().filter(bowlC -> 
+					bowlC.getStatus().equalsIgnoreCase(CricketUtil.LAST + CricketUtil.BOWLER)).findAny().orElse(null);
+					if(this_bowC != null) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler2" + " " + "0" + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler1" + " " + "1" + ";");
+						
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlerName1 " + this_bowC.getPlayer().getTicker_name() +";"); 
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFigure1 " + this_bowC.getWickets() + "-" + boc.getRuns() +";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers1 " + CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()) +  ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tDots1 " + this_bowC.getDots() + ";");
+						
+						if(this_bowC.getEconomyRate() == null) {
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + "-" + ";");
+						}else {
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + this_bowC.getEconomyRate() + ";");
+						}
+					}
+				}
+					for(BowlingCard boc : inn.getBowlingCard()) {
+						if(boc.getStatus().toUpperCase().equalsIgnoreCase("CURRENTBOWLER")) {
+							
+						}
+						else if(boc.getStatus().toUpperCase().equalsIgnoreCase("LASTBOWLER")) {
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler1" + " " + "0" +";");
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler2" + " " + "0" + ";");
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlerName1 " + boc.getPlayer().getTicker_name()+ ";");
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFigure1 " + boc.getWickets() + "-" + boc.getRuns() + ";");
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers1 " + CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()) +";"); 
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tDots1 " + boc.getDots() + ";");
+							
+							if(boc.getEconomyRate() == null) {
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + "-" + ";");
+							}else {
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + boc.getEconomyRate() + ";");
+							}
+							
+						}
+//							String prev_bowler=CricketFunctions.previousBowler(match, match.getEventFile().getEvents());
+//							if(prev_bowler != "") {
+//								previous_bowler = Integer.valueOf(prev_bowler.split(",")[5]);
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlerName2 " + prev_bowler.split(",")[0] +";");
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFigure2 " + prev_bowler.split(",")[1] + ";");
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers2 " + prev_bowler.split(",")[4] + ";");
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tDots2 " + prev_bowler.split(",")[2] + ";");
+//								
+//								if(prev_bowler.split(",")[3] == "") {
+//									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy2 " + "-" + ";");
+//								}else {
+//									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy2 " + prev_bowler.split(",")[3] + ";");
+//								}
+//								
+//							}
+							
+					}
+				}
+				
+				//Events
+				if((events != null) && (events.size() > 0)) {
+					if(events.get(events.size() - 1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+						for(int i = events.size() - 4; i >= 0; i--) {
+							if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER))) {
+								for(Inning inn : match.getMatch().getInning()) {
+									if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
+										for(BowlingCard boc : inn.getBowlingCard()) {
+											if(boc.getPlayerId() == events.get(i).getEventBowlerNo()) {
+												bowler = boc.getPlayer().getTicker_name() + ',' + boc.getWickets() + '-' + boc.getRuns() + ',' + boc.getDots() + ',' +
+														boc.getEconomyRate() + ',' + OverBalls(boc.getOvers(), boc.getBalls()) + ',' + boc.getPlayerId();
+											}
+										}
+									}
+								}
+								break;
+							}
+						}
+						
+					}else {
+					for(int i = events.size() - 1; i >= 0; i--) {
+						if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER))) {
+							for(Inning inn : match.getMatch().getInning()) {
+								if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
+									for(BowlingCard boc : inn.getBowlingCard()) {
+										if(boc.getPlayerId() == events.get(i).getEventBowlerNo()) {
+											bowler = boc.getPlayer().getTicker_name() + ',' + boc.getWickets() + '-' + boc.getRuns() + ',' + boc.getDots() + ',' +
+													boc.getEconomyRate() + ',' + OverBalls(boc.getOvers(), boc.getBalls()) + ',' + boc.getPlayerId();
+										}
+									}
+								}
+							}
+							break;
+						}
+					}
+				}				
+			}
 		}
-		return infobar;
+		
+	    //populateInfobarTeamScore(print_writer, match, session_selected_broadcaster);
+	    //populateInfobarTopLeft(print_writer, match, session_selected_broadcaster);
+	    populateInfobarTopRight(print_writer, match, session_selected_broadcaster);
+		populateComp(print_writer, match, session_selected_broadcaster);
+		populateProjectedAndPhaseBy( print_writer, match, session_selected_broadcaster);
+		populateThisOver(print_writer, match, session_selected_broadcaster);
+		populateFOW(print_writer, match, session_selected_broadcaster);
+		populateBattingCard(true, print_writer, match, session_selected_broadcaster);
+		populateBowlingCard(true, print_writer, match, session_selected_broadcaster);		
 	}
 	
 	public Object ProcessGraphicOption(String whatToProcess, MatchAllData match, CricketService cricketService,
@@ -214,8 +489,6 @@ public class DOAD_FRUIT extends Scene{
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLegByelValue " + inn.getTotalLegByes() + ";");
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPenaltyValue " + inn.getTotalPenalties() + ";");
 					
-					
-					
 					if(inn.getInningNumber() == 1) {
 						if(match.getSetup().getTossWinningTeam() == match.getSetup().getHomeTeamId()) {
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tText " 
@@ -237,8 +510,7 @@ public class DOAD_FRUIT extends Scene{
 	}
 	public void populateComp(PrintWriter print_writer, MatchAllData match, String session_selected_broadcaster)
 	{	
-		 List<Integer> inningNumbers = Arrays.asList(1, 2);
-		 List<String> arr = CricketFunctions.getScoreTypeData(CricketUtil.TEAM, match, inningNumbers, 0, ",");
+		 List<String> arr = CricketFunctions.getScoreTypeData(CricketUtil.TEAM, match, Arrays.asList(1, 2), 0, ",");
 		 List<List<String>> splitList = arr.stream().map(s -> Arrays.asList(s.split(","))).collect(Collectors.toList());
 		switch (session_selected_broadcaster.toUpperCase()) {
 		case "DOAD_FRUIT":
@@ -732,59 +1004,13 @@ public class DOAD_FRUIT extends Scene{
 	}
 	public void populateInfobarTopLeft(PrintWriter print_writer,MatchAllData match, String broadcaster)
 	{ 
-		populateCurrentBatsmen(print_writer, match, broadcaster);
+		//populateCurrentBatsmen(print_writer, match, broadcaster);
 		
 		for(Inning inn : match.getMatch().getInning()) {
 			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
-					if(inn.getInningNumber() == 1) {
-						if(inn.getRunRate() != null) {
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
-									"RUN RATE : " + inn.getRunRate() + ";");
-						}else {
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
-									"RUN RATE : " + "-" + ";");
-						}
-						
-					}else if(inn.getInningNumber() == 2) {
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
-								"RRR: " + CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(match), 0, CricketFunctions.getRequiredBalls(match), 2,match) + ";");
-					}
-					if(inn.getPartnerships() != null) {
-						if(inn.getPartnerships().size() > 0) {
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipRus " + 
-									inn.getPartnerships().get(inn.getPartnerships().size() - 1).getTotalRuns() + ";");
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipBalls " + 
-									inn.getPartnerships().get(inn.getPartnerships().size() - 1).getTotalBalls() + ";");
-						}
-					}
-				for (BattingCard bc : inn.getBattingCard()) {
-					if(inn.getFallsOfWickets() != null && !inn.getFallsOfWickets().isEmpty()) {
-						if(inn.getFallsOfWickets().size() > 0){
-							if(inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() == bc.getPlayerId()) {
-								String how_out=bc.getPlayer().getTicker_name()+"  "+bc.getHowOutText();
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " 
-										+"  "+ bc.getPlayer().getTicker_name() + "  " +bc.getHowOutText()+ "    ;");
-								if(how_out.length()>31) {
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " 
-											+ bc.getPlayer().getTicker_name() +  "    ;");
-								}else {
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " 
-											+ bc.getPlayer().getTicker_name() + "  " +bc.getHowOutText()+ "    ;");
-								}
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketScore " 
-											+" "+ bc.getRuns() + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketBalls " 
-											+ bc.getBalls() + ";");
-							}
-						}
-					}else {
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " + "" + ";");
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketScore " + "" + ";");
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketBalls " + "" + ";");
-					}			
+				
 		  	}
 		 }
-	  }
 	}
 	private void populateCurrentBatsmen(PrintWriter print_writer, MatchAllData match,String broadcaster) {
 		
@@ -792,48 +1018,7 @@ public class DOAD_FRUIT extends Scene{
 		
 		for(Inning inn : match.getMatch().getInning()) {
 			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
-				if(inn.getPartnerships() != null && inn.getPartnerships().size() > 0) {
-					
-					
-					this_batsman1 = inn.getBattingCard().stream().filter(batcard -> batcard.getPlayerId() 
-							== inn.getPartnerships().get(inn.getPartnerships().size() - 1).getFirstBatterNo()).findAny().orElse(null);
-					
-					this_batsman2 = inn.getBattingCard().stream().filter(batcard -> batcard.getPlayerId() 
-							== inn.getPartnerships().get(inn.getPartnerships().size() - 1).getSecondBatterNo()).findAny().orElse(null);
-					
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterName1 " + this_batsman1.getPlayer().getTicker_name() + ";");
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterRun1 " + this_batsman1.getRuns() + ";");
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterBall1 " + this_batsman1.getBalls() + ";");
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBoundaries1 " + this_batsman1.getFours() + "/" + 
-							this_batsman1.getSixes() + ";");
-					
-					if(this_batsman1.getStrikeRate() != null) {
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate1 " + this_batsman1.getStrikeRate() + ";");
-					}else {
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate1 " + "-" + ";");
-					}
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMinutes1 " + this_batsman1.getSeconds()/60 + ";");
-					
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipContribution1 " + 
-							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getFirstBatterRuns() + "(" + 
-							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getFirstBatterBalls() + ")" + ";");
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipContribution2 " + 
-							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getSecondBatterRuns() + "(" + 
-							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getSecondBatterBalls() + ")" + ";");
-					
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterName2 " + this_batsman2.getPlayer().getTicker_name() + ";");
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterRun2 " + this_batsman2.getRuns() + ";");
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBatterBall2 " + this_batsman2.getBalls() + ";");
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBoundaries2 " + this_batsman2.getFours() + "/" + 
-							this_batsman2.getSixes() + ";");
-					if(this_batsman2.getStrikeRate() != null) {
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate2 " + this_batsman2.getStrikeRate() + ";");
-					}else {
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate2 " + "-" + ";");
-					}
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMinutes2 " + this_batsman2.getSeconds()/60 + ";");
-					
-				}
+				
 			}
 		}
 		
@@ -842,57 +1027,6 @@ public class DOAD_FRUIT extends Scene{
 	{
 		for(Inning inn : match.getMatch().getInning()) {
 			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
-				if(inn.getBowlingCard() != null) {
-					for(BowlingCard boc : inn.getBowlingCard()) {
-						if(boc.getStatus().toUpperCase().equalsIgnoreCase("CURRENTBOWLER")) {
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler2" + " " + "0" + ";");
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler1" + " " + "1" + ";");
-							
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlerName1 " + boc.getPlayer().getTicker_name() +";"); 
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFigure1 " + boc.getWickets() + "-" + boc.getRuns() +";");
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers1 " + CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()) +  ";");
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tDots1 " + boc.getDots() + ";");
-							
-							if(boc.getEconomyRate() == null) {
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + "-" + ";");
-							}else {
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + boc.getEconomyRate() + ";");
-							}
-							
-						}
-						else if(boc.getStatus().toUpperCase().equalsIgnoreCase("LASTBOWLER")) {
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler1" + " " + "0" +";");
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBowler2" + " " + "0" + ";");
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlerName1 " + boc.getPlayer().getTicker_name()+ ";");
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFigure1 " + boc.getWickets() + "-" + boc.getRuns() + ";");
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers1 " + CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()) +";"); 
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tDots1 " + boc.getDots() + ";");
-							
-							if(boc.getEconomyRate() == null) {
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + "-" + ";");
-							}else {
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy1 " + boc.getEconomyRate() + ";");
-							}
-							
-						}
-							String prev_bowler=CricketFunctions.previousBowler(match, match.getEventFile().getEvents());
-							if(prev_bowler != "") {
-								previous_bowler = Integer.valueOf(prev_bowler.split(",")[5]);
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlerName2 " + prev_bowler.split(",")[0] +";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFigure2 " + prev_bowler.split(",")[1] + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers2 " + prev_bowler.split(",")[4] + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tDots2 " + prev_bowler.split(",")[2] + ";");
-								
-								if(prev_bowler.split(",")[3] == "") {
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy2 " + "-" + ";");
-								}else {
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tEconomy2 " + prev_bowler.split(",")[3] + ";");
-								}
-								
-							}
-							
-					}
-				}
 			}
 		}
 	}

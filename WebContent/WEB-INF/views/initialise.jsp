@@ -84,30 +84,15 @@
 			  <tbody>
 			    <tr>
 			      <td>
-				    <label for="vizIPAddress" class="col-sm-4 col-form-label text-left">1st IP</label>				    
+				    <label for="vizIPAddress" class="col-sm-4 col-form-label text-left">Viz/Everest IP</label>				    
 		             <input type="text" id="vizIPAddress" name="vizIPAddress" value="${session_configuration.primaryIpAddress}"
 		             	class="form-control form-control-sm floatlabel"></input>
 			      </td>
 			      <td>
-				    <label for="vizPortNumber" class="col-sm-4 col-form-label text-left">1st Port</label>				    
+				    <label for="vizPortNumber" class="col-sm-4 col-form-label text-left">Viz/Everest Port</label>				    
 		             <input type="text" id="vizPortNumber" name="vizPortNumber" value="${session_configuration.primaryPortNumber}"
 		             	class="form-control form-control-sm floatlabel"></input>
 			      </td>
-			      <td>
-				    <label for="vizSceneName" class="col-sm-4 col-form-label text-left">1st Scene</label>				    
-		             <input type="text" id="vizSceneName" name="vizSceneName" value="${session_configuration.primaryScene}"
-		             	class="form-control form-control-sm floatlabel"></input>
-			      <!-- </td>
-			      <td>
-				    <label for="vizLanguage" class="col-sm-4 col-form-label text-left">1st Language</label>			    
-				      <select id="vizLanguage" name="vizLanguage" 
-				      		class="browser-default custom-select custom-select-sm">
-				          <option value="english">English</option>
-				          <option value="hindi">Hindi</option>
-				          <option value="telugu">Telugu</option>
-				          <option value="tamil">Tamil</option>
-				      </select>
-			      </td> -->
 			    </tr>
 			  </tbody>
 		    </table>
