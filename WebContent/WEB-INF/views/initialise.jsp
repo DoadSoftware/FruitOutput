@@ -97,7 +97,7 @@
 				    <label for="vizSceneName" class="col-sm-4 col-form-label text-left">1st Scene</label>				    
 		             <input type="text" id="vizSceneName" name="vizSceneName" value="${session_configuration.primaryScene}"
 		             	class="form-control form-control-sm floatlabel"></input>
-			      </td>
+			      <!-- </td>
 			      <td>
 				    <label for="vizLanguage" class="col-sm-4 col-form-label text-left">1st Language</label>			    
 				      <select id="vizLanguage" name="vizLanguage" 
@@ -107,7 +107,7 @@
 				          <option value="telugu">Telugu</option>
 				          <option value="tamil">Tamil</option>
 				      </select>
-			      </td>
+			      </td> -->
 			    </tr>
 			  </tbody>
 		    </table>

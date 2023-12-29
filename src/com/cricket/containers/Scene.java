@@ -69,9 +69,11 @@ public class Scene {
 	public void scene_load(PrintWriter print_writer, String broadcaster) throws InterruptedException
 	{
 		switch (broadcaster.toUpperCase()) {
-		case "FRUIT":	
+		case "DOAD_FRUIT":	
 			switch(this.which_layer.toUpperCase()) {
 			case "FRONT_LAYER":
+				System.out.println(this.which_layer);
+
 				print_writer.println("LAYER1*EVEREST*SINGLE_SCENE LOAD " + this.scene_path + ";");
 				
 				print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*In STOP;");

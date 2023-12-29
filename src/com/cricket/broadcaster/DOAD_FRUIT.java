@@ -72,7 +72,7 @@ public class DOAD_FRUIT extends Scene{
 		
 		case "POPULATE-FRUIT": 
 			switch (session_selected_broadcaster.toUpperCase()) {
-			case "FRUIT":
+			case "DOAD_FRUIT":
 				switch(whatToProcess.toUpperCase()) {
 				case "POPULATE-FRUIT":
 					//scenes.get(0).setScene_path(valueToProcess.split(",")[0]);
@@ -93,7 +93,7 @@ public class DOAD_FRUIT extends Scene{
 			}
 		case "ANIMATE-IN-FRUIT": case "ANIMATE-OUT": case "CLEAR-ALL": 
 			switch (session_selected_broadcaster.toUpperCase()) {
-			case "FRUIT":
+			case "DOAD_FRUIT":
 				switch (whatToProcess.toUpperCase()) {
 				
 				case "ANIMATE-IN-FRUIT":
@@ -125,7 +125,7 @@ public class DOAD_FRUIT extends Scene{
 	public Infobar populateInfobar(Infobar infobar,PrintWriter print_writer,String viz_scene, MatchAllData match, String session_selected_broadcaster) throws Exception 
 	{
 		switch (session_selected_broadcaster.toUpperCase()) {
-		case "FRUIT":
+		case "DOAD_FRUIT":
 			if (match == null) {
 				this.status = "ERROR: Match is null";
 			} else if (match.getMatch().getInning() == null) {
@@ -152,7 +152,7 @@ public class DOAD_FRUIT extends Scene{
 	{
 		
 		switch (session_selected_broadcaster.toUpperCase()) {
-		case "FRUIT":
+		case "DOAD_FRUIT":
 			for(Inning inn : match.getMatch().getInning()) {
 				if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
 					if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
@@ -241,7 +241,7 @@ public class DOAD_FRUIT extends Scene{
 		 List<String> arr = CricketFunctions.getScoreTypeData(CricketUtil.TEAM, match, inningNumbers, 0, ",");
 		 List<List<String>> splitList = arr.stream().map(s -> Arrays.asList(s.split(","))).collect(Collectors.toList());
 		switch (session_selected_broadcaster.toUpperCase()) {
-		case "FRUIT":
+		case "DOAD_FRUIT":
 			
 			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue1 " + match.getMatch().getInning().get(0).getTotalFours() + ";");
 			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue2 " + match.getMatch().getInning().get(0).getTotalSixes() + ";");
@@ -315,7 +315,7 @@ public class DOAD_FRUIT extends Scene{
 	public void populateProjectedAndPhaseBy(PrintWriter print_writer, MatchAllData match, String session_selected_broadcaster)
 	{
 		switch (session_selected_broadcaster.toUpperCase()) {
-		case "FRUIT":
+		case "DOAD_FRUIT":
 				
 				List<Integer> inningNumbers = Arrays.asList(1, 2);
 				List<String> arr1 =CricketFunctions.getFirstPowerPlayScores(match, inningNumbers, match.getEventFile().getEvents());
@@ -397,7 +397,7 @@ public class DOAD_FRUIT extends Scene{
 	public void populateThisOver(PrintWriter print_writer, MatchAllData match, String session_selected_broadcaster)
 	{
 		switch (session_selected_broadcaster.toUpperCase()) {
-		case "FRUIT":
+		case "DOAD_FRUIT":
 			List<String> Ovr = new ArrayList<String>();
 			for(Inning inn : match.getMatch().getInning()) {
 				if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
@@ -442,7 +442,7 @@ public class DOAD_FRUIT extends Scene{
 	public void populateFOW( PrintWriter print_writer, MatchAllData match, String session_selected_broadcaster)
 	{
 		switch (session_selected_broadcaster.toUpperCase()) {
-		case "FRUIT":
+		case "DOAD_FRUIT":
 			for(Inning inn : match.getMatch().getInning()) {
 				if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
 					if(inn.getInningNumber() == 1) {
@@ -483,7 +483,7 @@ public class DOAD_FRUIT extends Scene{
 	public void populateBattingCard(boolean is_this_updating, PrintWriter print_writer, MatchAllData match, String session_selected_broadcaster) throws Exception
 	{
 		switch (session_selected_broadcaster.toUpperCase()) {
-		case "FRUIT":
+		case "DOAD_FRUIT":
 			boolean player_found = false;
 			if(is_this_updating == false) {
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectHomePlayerNumber " + 
@@ -610,7 +610,7 @@ public class DOAD_FRUIT extends Scene{
 	public void populateBowlingCard(boolean is_this_updating, PrintWriter print_writer, MatchAllData match, String session_selected_broadcaster) throws IOException
 	{
 		switch (session_selected_broadcaster.toUpperCase()) {
-		case "FRUIT":
+		case "DOAD_FRUIT":
 			boolean player_found = false;
 			if(is_this_updating == false) {
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayerNumber " + 
@@ -900,7 +900,7 @@ public class DOAD_FRUIT extends Scene{
 	public void processAnimation(PrintWriter print_writer, String animationName,String animationCommand, String which_broadcaster,int which_layer)
 	{
 		switch(which_broadcaster.toUpperCase()) {
-		case "FRUIT":
+		case "DOAD_FRUIT":
 			switch(which_layer) {
 			case 1:
 				print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*" + animationName + " " + animationCommand + ";");
@@ -918,7 +918,7 @@ public class DOAD_FRUIT extends Scene{
 	public void populateDuckWorthLewis(PrintWriter print_writer,String viz_scene,String balls,MatchAllData match,String session_selected_broadcaster) throws InterruptedException 
 	{
 		switch (session_selected_broadcaster.toUpperCase()) {
-			case "FRUIT":
+			case "DOAD_FRUIT":
 				print_writer.println("LAYER2*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFirstName " + match.getMatch().getInning().get(1).getBatting_team().getTeamName1() + " " 
 						+ match.getMatch().getInning().get(1).getTotalRuns() + "-" + match.getMatch().getInning().get(1).getTotalWickets() + ";");
 				
@@ -937,7 +937,7 @@ public class DOAD_FRUIT extends Scene{
 				print_writer.println("LAYER2*EVEREST*STAGE*DIRECTOR*Out SHOW 0.0;");
 				print_writer.println("LAYER1*EVEREST*GLOBAL SNAPSHOT_PATH C:/Temp/Preview.png;");
 				print_writer.println("LAYER1*EVEREST*GLOBAL SNAPSHOT 1920 1080;");
-				TimeUnit.SECONDS.sleep(1);
+				//TimeUnit.SECONDS.sleep(1);
 				print_writer.println("LAYER2*EVEREST*STAGE*DIRECTOR*Out SHOW 0.0;");
 				print_writer.println("LAYER2*EVEREST*STAGE*DIRECTOR*In SHOW 0.0;");
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Infobar*CONTAINER SET ACTIVE 1;");
@@ -949,7 +949,7 @@ public class DOAD_FRUIT extends Scene{
 	public void populateDuckWorthLewisEquation(PrintWriter print_writer,String viz_scene,String balls,MatchAllData match,String session_selected_broadcaster) throws InterruptedException 
 	{
 		switch (session_selected_broadcaster.toUpperCase()) {
-			case "FRUIT":
+			case "DOAD_FRUIT":
 				int runs = 0;
 				String team = "",ahead_behind = "";
 				
@@ -998,7 +998,7 @@ public class DOAD_FRUIT extends Scene{
 				print_writer.println("LAYER2*EVEREST*STAGE*DIRECTOR*Out SHOW 0.0;");
 				print_writer.println("LAYER1*EVEREST*GLOBAL SNAPSHOT_PATH C:/Temp/Preview.png;");
 				print_writer.println("LAYER1*EVEREST*GLOBAL SNAPSHOT 1920 1080;");
-				TimeUnit.SECONDS.sleep(1);
+				//TimeUnit.SECONDS.sleep(1);
 				print_writer.println("LAYER2*EVEREST*STAGE*DIRECTOR*Out SHOW 0.0;");
 				print_writer.println("LAYER2*EVEREST*STAGE*DIRECTOR*In SHOW 0.0;");
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Infobar*CONTAINER SET ACTIVE 1;");
@@ -1083,25 +1083,26 @@ public class DOAD_FRUIT extends Scene{
 	}
 	
 	public void populateSpeed(PrintWriter printWriter, Speed lastSpeed) throws Exception {
-		if(lastSpeed != null) {
+		
+		if(CricketFunctions.getCurrentSpeed(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt", lastSpeed) != null) {
 			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue " + lastSpeed.getSpeedValue()  + ";");
 		}else {
 			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue;");
 		}			      
 	} 	
-	public Review populateReview(PrintWriter printWriter, MatchAllData match, Review review) throws Exception {
+	public void populateReview(PrintWriter printWriter, MatchAllData match, Review review) throws Exception {
 		switch (this.session_selected_broadcaster) {
-		case "DOAD_DOAD_FRUIT":
-			if(review == null) {
+		case "DOAD_FRUIT":
+			Review rev=CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, review);
+			if(rev == null) {
 	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " + "SUMMARY " + ";");
 			}else {
 	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
 	    				String.format("%-16s", match.getMatch().getInning().get(0).getBatting_team().getTeamName4()) + " : " + 
-	    				review.getReviewStatus().split(",")[0] + String.format("%-8s", match.getMatch().getInning().get(0).getBowling_team().getTeamName4() + " : " + review.getReviewStatus().split(",")[1]) + ";");
+	    				rev.getReviewStatus().split(",")[0] + String.format("%-8s", match.getMatch().getInning().get(0).getBowling_team().getTeamName4() + " : " + rev.getReviewStatus().split(",")[1]) + ";");
 			}			      
 			break;
 		}
-	    return null;
 	}
 	
 }

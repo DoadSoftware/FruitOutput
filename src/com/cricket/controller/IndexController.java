@@ -134,8 +134,6 @@ public class IndexController
 				CricketUtil.SETUP + "," + CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 			session_match.getSetup().setMatchFileTimeStamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 			
-			System.out.println("outputPage -> session_match.getSetup() = " + session_match.getSetup());
-
 			model.addAttribute("session_match", session_match);
 			model.addAttribute("session_configuration", session_configuration);
 			model.addAttribute("session_selected_broadcaster", session_selected_broadcaster);
@@ -159,6 +157,8 @@ public class IndexController
 			}else {
 				lastSpeed.setSpeedFileModifiedTime(0);
 			}
+			System.out.println(new Date(lastSpeed.getSpeedFileModifiedTime()));
+		//	lastSpeed = CricketFunctions.getCurrentSpeed(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt", lastSpeed);
 			if(new File(CricketUtil.REVIEWS).exists()) {
 				lastReview.setLastTimeStamp(new File(CricketUtil.REVIEWS).lastModified());
 			}else {
@@ -196,31 +196,29 @@ public class IndexController
 			
 			switch (session_selected_broadcaster) {
 			case "DOAD_FRUIT":
-				
 				if(session_match.getMatch() != null && last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ session_match.getMatch().getMatchFileName()).lastModified()) {
 					
 					session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
 							CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
-					
-					if(!session_configuration.getPrimaryScene().isEmpty()) {
-						this_fruit.updateInfobar(session_selected_scenes.get(0), session_match,CricketFunctions.processPrintWriter(session_configuration).get(0));
-					}
+					this_fruit.updateInfobar(session_selected_scenes.get(0), session_match,CricketFunctions.processPrintWriter(session_configuration).get(0));
+
+//					if(!session_configuration.getPrimaryScene().isEmpty()) {
+//						this_fruit.updateInfobar(session_selected_scenes.get(0), session_match,CricketFunctions.processPrintWriter(session_configuration).get(0));
+//					}
 					last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ session_match.getMatch().getMatchFileName()).lastModified();
 				}
-				lastSpeed = CricketFunctions.getCurrentSpeed(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt", lastSpeed);
+				
 				if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
-					if(lastSpeed != null) {
+					
+					if(lastSpeed.getSpeedFileModifiedTime() != new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified()) {
 						this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),lastSpeed);
-					}else {
-						this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),lastSpeed);
+						lastSpeed.setSpeedFileModifiedTime(new File(CricketUtil.CRICKET_DIRECTORY + "Speed/SPEED.txt").lastModified());
 					}
-					lastReview=CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
-					if(lastReview!=null) {
+					if(lastReview.getLastTimeStamp() != new File(CricketUtil.REVIEWS).lastModified()) {
 						this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
-					}else {
-						this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
+						lastReview.setLastTimeStamp(new File(CricketUtil.REVIEWS).lastModified());
 					}
 				}
 				break;
@@ -228,6 +226,12 @@ public class IndexController
 			return JSONObject.fromObject(session_match).toString();
 
 		default:
+			switch (session_selected_broadcaster) {
+			case "DOAD_FRUIT":
+				this_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
+					CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess);
+				break;
+			}
 			return JSONObject.fromObject(null).toString();
 		}
 	}
