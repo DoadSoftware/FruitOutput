@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.cricket.broadcaster.DOAD_FRUIT;
-import com.cricket.containers.Infobar;
 import com.cricket.containers.Scene;
 import com.cricket.model.Configuration;
 import com.cricket.model.Match;
@@ -130,17 +129,14 @@ public class IndexController
 			model.addAttribute("session_configuration", session_configuration);
 			model.addAttribute("session_selected_broadcaster", select_broadcaster);
 			model.addAttribute("session_selected_scenes",session_selected_scenes);
-			System.out.println("b1  "+select_broadcaster);
+
 			switch (select_broadcaster) {
 			case "DOAD_FRUIT":
 				this_fruit = new DOAD_FRUIT();
-				this_fruit.infobar = new Infobar();
-				//if(!vizIPAddress.isEmpty()) {
-					session_selected_scenes.add(new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
-					session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
-					session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), select_broadcaster);
-					this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,session_configuration);
-				//}
+				session_selected_scenes.add(new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
+				session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
+				session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), select_broadcaster);
+				this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,session_configuration);
 				break;
 			}
 			
@@ -148,7 +144,6 @@ public class IndexController
 				lastSpeed.setSpeedFileModifiedTime(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY 
 					+ CricketUtil.SPEED_TXT).lastModified());
 			}
-			System.out.println("outputPage: lastSpeed = " + lastSpeed);
 			if(new File(CricketUtil.REVIEWS).exists()) {
 				lastReview.setLastTimeStamp(new File(CricketUtil.REVIEWS).lastModified());
 			}else {
@@ -183,6 +178,7 @@ public class IndexController
 			return JSONObject.fromObject(session_match).toString();
 		
 		case "READ-MATCH-AND-POPULATE":
+			
 			System.out.println("b2  "+session_configuration.getBroadcaster());
 
 			switch (session_configuration.getBroadcaster()) {
@@ -224,8 +220,6 @@ public class IndexController
 			
 			switch (session_configuration.getBroadcaster()) {
 			case "DOAD_FRUIT":
-				System.out.println(session_configuration.getBroadcaster());
-
 				this_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
 					CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess);
 				break;

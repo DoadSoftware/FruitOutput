@@ -5,28 +5,23 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
+import com.cricket.model.Event;
 import com.cricket.model.Player;
 import com.cricket.model.Review;
 import com.cricket.model.Speed;
 import com.cricket.service.CricketService;
 import com.cricket.model.Inning;
 import com.cricket.model.MatchAllData;
-import com.cricket.containers.Infobar;
 import com.cricket.containers.Scene;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
-import net.sf.json.JSONArray;
 
 public class DOAD_FRUIT extends Scene{
 
-	public Infobar infobar = new Infobar();
 	public String session_selected_broadcaster = "DOAD_FRUIT";
 	public String which_graphics_onscreen = "";
 	public int previous_bowler = 0;
@@ -39,48 +34,18 @@ public class DOAD_FRUIT extends Scene{
 		super(scene_path, which_Layer);
 	}
 
-	public void updateFruit(Scene scene, MatchAllData match,PrintWriter print_writer,boolean is_this_updating) throws Exception
-	{
-		populateFruit(match, print_writer, true);
-
-	}
-	
 	public Object ProcessGraphicOption(String whatToProcess, MatchAllData match, CricketService cricketService,
-			PrintWriter print_writer, List<Scene> scenes, String valueToProcess) throws Exception{
-		switch (whatToProcess.toUpperCase()) {
-		case "PROMPT_GRAPHICS-OPTIONS":
-			return JSONArray.fromObject(cricketService.getInfobarStats()).toString();
+		PrintWriter print_writer, List<Scene> scenes, String valueToProcess) throws Exception{
 		
+		switch (whatToProcess.toUpperCase()) {
 		case "POPULATE-FRUIT": 
-			switch (session_selected_broadcaster.toUpperCase()) {
-			case "DOAD_FRUIT":
-				switch(whatToProcess.toUpperCase()) {
-				case "POPULATE-FRUIT":
-					//scenes.get(0).setScene_path(valueToProcess.split(",")[0]);
-					//scenes.get(0).scene_load(print_writer,session_selected_broadcaster);
-					break;
-				default:
-					scenes.get(1).setScene_path(valueToProcess.split(",")[0]);
-					scenes.get(1).scene_load(print_writer,session_selected_broadcaster);
-					break;
-				}
-				
-				switch (whatToProcess.toUpperCase()) {
-				
-				case "POPULATE-FRUIT":		System.out.println("h1");
-
-					populateInfobar(print_writer, valueToProcess.split(",")[0],match, session_selected_broadcaster);
-					break;
-				}
-			}
+			populateFruit(match, print_writer);
 		case "ANIMATE-IN-FRUIT": case "ANIMATE-OUT": case "CLEAR-ALL": 
 			switch (session_selected_broadcaster.toUpperCase()) {
 			case "DOAD_FRUIT":
 				switch (whatToProcess.toUpperCase()) {
-				
 				case "ANIMATE-IN-FRUIT":
 					processAnimation(print_writer, "In", "START", session_selected_broadcaster,1);
-					infobar.setInfobar_on_screen(true);
 					which_graphics_onscreen = "INFOBAR";
 					break;
 				
@@ -102,33 +67,32 @@ public class DOAD_FRUIT extends Scene{
 			}
 		}
 		return null;
-}
-	public void populateInfobar(PrintWriter print_writer,String viz_scene, MatchAllData match, String session_selected_broadcaster) throws Exception 
-	{
-		populateFruit(match, print_writer, false);
 	}
-	public void populateFruit( MatchAllData match,PrintWriter print_writer,boolean is_this_updating) {
+	
+	public void populateFruit(MatchAllData match, PrintWriter print_writer) {
+		
 		BattingCard this_bc;
-		List<String> Ovr = new ArrayList<String>();
-		boolean player_found = false;
+		List<Integer> data_int = new ArrayList<Integer>();
+		List<String> data_str = new ArrayList<String>();
 		
-		if(is_this_updating == false) {
-			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectHomePlayerNumber " + 
-					"0" + ";");
-			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayerNumber " + 
-					"0" + ";");
-		}
-		
-			List<String> arr = CricketFunctions.getScoreTypeData(CricketUtil.TEAM, match, Arrays.asList(1, 2), 0, ",");
-			List<List<String>> splitList = arr.stream().map(s -> Arrays.asList(s.split(","))).collect(Collectors.toList());
-			List<String> arr1 =CricketFunctions.getFirstPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
-			List<String> arr2 =CricketFunctions.getSecPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
-			List<String> arr3 =CricketFunctions.getThirdPowerPlayScore(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
-			String preview_bowler=CricketFunctions.previousBowler(match, match.getEventFile().getEvents());	
-			// CricketFunctions.compareInningData(match, "-", 1, match.getEventFile().getEvents())
-			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue1 " + match.getMatch().getInning().get(0).getTotalFours() + ";");
-			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue2 " + match.getMatch().getInning().get(0).getTotalSixes() + ";");
+		//List<String> arr = CricketFunctions.getScoreTypeData(CricketUtil.TEAM, match, Arrays.asList(1, 2), 0, ",");
+		//List<List<String>> splitList = arr.stream().map(s -> Arrays.asList(s.split(","))).collect(Collectors.toList());
+		//List<String> arr1 =CricketFunctions.getFirstPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
+		//List<String> arr2 =CricketFunctions.getSecPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
+		//List<String> arr3 =CricketFunctions.getThirdPowerPlayScore(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
+		//String preview_bowler=CricketFunctions.previousBowler(match, match.getEventFile().getEvents());	
+		// CricketFunctions.compareInningData(match, "-", 1, match.getEventFile().getEvents())
+
+		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue1 " + match.getMatch().getInning().get(0).getTotalFours() + ";");
+		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue2 " + match.getMatch().getInning().get(0).getTotalSixes() + ";");
+			
 		for(Inning inn : match.getMatch().getInning()) {
+			
+			if(inn.getInningNumber() == 1) {
+				
+				
+				
+			}
 			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
 				
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeTeamName " + 
@@ -151,7 +115,7 @@ public class DOAD_FRUIT extends Scene{
 			    	}else {
 			    		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "1" + ";");
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPowerPlay " + 
-								CricketFunctions.processPowerPlay(CricketUtil.MINI,match) + ";");
+							CricketFunctions.processPowerPlay(CricketUtil.MINI,match) + ";");
 			    	}
 	    			
 	    		}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) 
@@ -172,15 +136,18 @@ public class DOAD_FRUIT extends Scene{
 	    		}
 				
 /******************************************* Team total and comparision ***********************************************/
-				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBattingTeamName " + inn.getBatting_team().getTeamName4().toUpperCase() + ";");
+				
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBattingTeamName " 
+					+ inn.getBatting_team().getTeamName4().toUpperCase() + ";");
 				if(inn.getTotalWickets() >= 10) {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTotalScore " + inn.getTotalRuns() + ";");
 				}
 				else{
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTotalScore " + inn.getTotalRuns() + "-" + inn.getTotalWickets() + ";");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTotalScore " + inn.getTotalRuns() 
+						+ "-" + inn.getTotalWickets() + ";");
 				}
-				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers " + CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls())+ ";");
-				
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers " 
+						+ CricketFunctions.OverBalls(inn.getTotalOvers(), inn.getTotalBalls())+ ";");
 				
 				if(inn.getTotalPenalties() > 0) {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPenalty " + "1" + ";");
@@ -195,13 +162,94 @@ public class DOAD_FRUIT extends Scene{
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLegByelValue " + inn.getTotalLegByes() + ";");
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPenaltyValue " + inn.getTotalPenalties() + ";");
 			
-			/**************  comparision  ******************  */
-				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue4 " + splitList.get(0).get(0) + ";");
-				String lastFewOverData=CricketFunctions.lastFewOversData(CricketUtil.BOUNDARY, match.getEventFile().getEvents(),inn.getInningNumber());
+				// Dots, Ones, Twos, etc.
+				data_str = new ArrayList<String>();
+				for(int i = 1; i <= 6; i++) {
+					data_str.add(""); 
+				}
+				
+				data_int = new ArrayList<Integer>();
+				data_int.add(0); // Balls since last boundary
+				
+				if(match.getEventFile().getEvents() != null && match.getEventFile().getEvents().size() > 0) {
+					for(int i = match.getEventFile().getEvents().size()-1; i >=0; i--) {
+						if(match.getEventFile().getEvents().get(i).getEventInningNumber() == inn.getInningNumber()) {
+							
+							/*Balls since last boundary*/
+							if (match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) 
+				    			  || match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR)) {
+				    		  	data_int.set(data_int.size() - 1, 0);
+				  	        }
+							switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()) {
+				  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
+				  	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
+				    		  	data_int.set(data_int.size() - 1, data_int.get(data_int.size() - 1) + 1);
+								break;
+				  	        case CricketUtil.LOG_ANY_BALL: 
+				  	        	if (((match.getEventFile().getEvents().get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) 
+				  	        		|| (match.getEventFile().getEvents().get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
+					  	        	&& (match.getEventFile().getEvents().get(i).getEventWasABoundary() != null) 
+					  	        	&& (match.getEventFile().getEvents().get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+					    		  	data_int.set(data_int.size() - 1, 0);
+				  	        	} else {
+					    		  	data_int.set(data_int.size() - 1, data_int.get(data_int.size() - 1) + 1);
+				  	        	}
+								break;
+							}
+							
+							/* Comparison */
+							switch (match.getEventFile().getEvents().get(i).getEventType()) {
+							case CricketUtil.ONE:
+								data_str.set(0, String.valueOf(Integer.valueOf(data_str.get(0)) + 1));
+					        	break;
+					        case CricketUtil.TWO: 
+								data_str.set(1, String.valueOf(Integer.valueOf(data_str.get(1)) + 1));
+					        	break;
+					        case CricketUtil.THREE: 
+								data_str.set(2, String.valueOf(Integer.valueOf(data_str.get(2)) + 1));
+					        	break;
+					        case CricketUtil.FOUR: 
+								data_str.set(3, String.valueOf(Integer.valueOf(data_str.get(3)) + 1));
+					        	break;
+					        case CricketUtil.FIVE: 
+								data_str.set(4, String.valueOf(Integer.valueOf(data_str.get(4)) + 1));
+					        	break;
+					        case CricketUtil.SIX: 
+								data_str.set(5, String.valueOf(Integer.valueOf(data_str.get(5)) + 1));
+					        	break;
+					        case CricketUtil.DOT: 
+					        case CricketUtil.LOG_WICKET:
+								data_str.set(6, String.valueOf(Integer.valueOf(data_str.get(6)) + 1));
+					        	break;
+					        case CricketUtil.LOG_ANY_BALL:
+								if(match.getEventFile().getEvents().get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+									if ((match.getEventFile().getEvents().get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) 
+											&& (match.getEventFile().getEvents().get(i).getEventWasABoundary() != null) && 
+											(match.getEventFile().getEvents().get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+										data_str.set(3, String.valueOf(Integer.valueOf(data_str.get(3)) + 1));
+							        }
+									if ((match.getEventFile().getEvents().get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) 
+											&& (match.getEventFile().getEvents().get(i).getEventWasABoundary() != null) && 
+											(match.getEventFile().getEvents().get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+										data_str.set(5, String.valueOf(Integer.valueOf(data_str.get(5)) + 1));
+										}
+							        }
+								}
+					        	break;
+							}
+						}
+					}
+				
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue4 " + data_str.get(0) + ";");
+				
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSmallFreeText1 " + "BALL" + 
-						CricketFunctions.Plural(Integer.valueOf(lastFewOverData)).toUpperCase() 
-						+ " SINCE LAST BOUNDARY : " + 
-						lastFewOverData + ";");
+						CricketFunctions.Plural(Integer.valueOf(data_int.get(data_int.size()-1))).toUpperCase() 
+						+ " SINCE LAST BOUNDARY : " + data_int.get(data_int.size()-1) + ";");
+			}
+
+			
+			
+			
 				if(inn.getInningNumber() == 1) {
 					if(match.getSetup().getTossWinningTeam() == match.getSetup().getHomeTeamId()) {
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tText " 
@@ -263,17 +311,15 @@ public class DOAD_FRUIT extends Scene{
 					
 				}
 /****************************************** Projected And PhaseBy *************************************************************/
+				
 				if(inn.getInningNumber() == 1 && inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
 					if(inn.getRunRate() != null) {
-						String[] proj_score_rate = new String[CricketFunctions.projectedScore(match).size()];
-					    for (int i = 0; i < CricketFunctions.projectedScore(match).size(); i++) {
-					    	proj_score_rate[i] = CricketFunctions.projectedScore(match).get(i);
-				        }
-					    
+						data_str = CricketFunctions.projectedScore(match);
+						
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType " + "0" + ";");
 						
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tProjectedHead1 " + 
-								"@" + proj_score_rate[0] +" (CRR)" + ";");
+								"@" + data_str.get(0) +" (CRR)" + ";");
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tProjectedValue1 " + 
 								proj_score_rate[1] + ";");
 						
@@ -875,11 +921,12 @@ public class DOAD_FRUIT extends Scene{
 	
 	 	
 	public void initialize_fruit(PrintWriter print_writer, MatchAllData match ,Configuration config) throws IOException {
-		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedHead " + 
-    			"SPEED" + ";");
-	
-		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedUnit " + 
-							"("+config.getSpeedUnit()+")" + ";");
+		
+		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectHomePlayerNumber 0;");
+		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayerNumber 0;");
+		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedHead SPEED;");
+		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedUnit (" + config.getSpeedUnit() + ");");
+		
 		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTounamentName " + match.getSetup().getTournament().toUpperCase() + ";");
 		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMatchNumber " + match.getSetup().getMatchIdent() + ";");
 		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWideHead " + "WD" + ";");
@@ -919,7 +966,8 @@ public class DOAD_FRUIT extends Scene{
 	    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + i + " " + 
 	    			"" + ";");
 	    }
-		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD)) {
+		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)
+			|| match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD)) {
 			
 			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead1 " + 
 					"1-10" + ";");
@@ -928,7 +976,8 @@ public class DOAD_FRUIT extends Scene{
 			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead3 " + 
 					"41-50" + ";");
 			
-		}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
+		}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20)
+			|| match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
 			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead1 " + 
 					"1-6" + ";");
 			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead2 " + 
@@ -968,23 +1017,12 @@ public class DOAD_FRUIT extends Scene{
 		}
 	}
 	
-	
 //	List<String> arr = CricketFunctions.getScoreTypeData(CricketUtil.TEAM, match, Arrays.asList(1, 2), 0, ",");
 //	List<List<String>> splitList = arr.stream().map(s -> Arrays.asList(s.split(","))).collect(Collectors.toList());
 //	List<String> arr1 =CricketFunctions.getFirstPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
 //	List<String> arr2 =CricketFunctions.getSecPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
 //	List<String> arr3 =CricketFunctions.getThirdPowerPlayScore(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
 //	String preview_bowler=CricketFunctions.previousBowler(match, match.getEventFile().getEvents());	
-	// CricketFunctions.compareInningData(match, "-", 1, match.getEventFile().getEvents())
-	
-	
-	
-	
-	
-	
-	public static Map<Integer,List<String>> getScoreTypeData(String whatToProcess, MatchAllData match, List<Integer> inning_numbers, int player_id, String separator) {
-		return null;
-		
-	}
+// CricketFunctions.compareInningData(match, "-", 1, match.getEventFile().getEvents())
 	
 }
