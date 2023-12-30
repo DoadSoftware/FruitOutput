@@ -71,7 +71,8 @@ public class Scene {
 		switch (broadcaster.toUpperCase()) {
 		case "DOAD_FRUIT":	
 			switch(this.which_layer.toUpperCase()) {
-			case "FRONT_LAYER":
+			case "FRONT_LAYER":		System.out.println("DOAD_FRUIT");
+
 				System.out.println(this.which_layer);
 
 				print_writer.println("LAYER1*EVEREST*SINGLE_SCENE LOAD " + this.scene_path + ";");

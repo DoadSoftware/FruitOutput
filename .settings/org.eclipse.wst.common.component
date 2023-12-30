@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-                                                                                                            
+                                                                                                                
+    
     
     
     
@@ -26,7 +27,8 @@
     
     
     <wb-module deploy-name="FruitOutput-1.450">
-                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                
+        
         
         
         
@@ -53,7 +55,8 @@
         
         
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
-                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                
+        
         
         
         
@@ -80,7 +83,8 @@
         
         
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                
+        
         
         
         
@@ -110,7 +114,8 @@
         <dependent-module archiveName="CricketLibrary-1.262.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/CricketLibrary/CricketLibrary">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                
+        
         
         
         
@@ -137,7 +142,8 @@
         
         
         <property name="java-output-path" value="/Cricket Output/target/classes"/>
-                                                                                                                                                                                
+                                                                                                                                                                                        
+        
         
         
         
@@ -159,7 +165,8 @@
         
         
         <property name="context-root" value="FruitOutput"/>
-                                                                                                                                                                                                                    
+                                                                                                                                                                                                                            
+    
     
     
     
@@ -186,7 +193,8 @@
     
     
     </wb-module>
-                                                                                                        
+                                                                                                            
+
 
 
 

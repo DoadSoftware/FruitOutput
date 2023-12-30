@@ -130,17 +130,17 @@ public class IndexController
 			model.addAttribute("session_configuration", session_configuration);
 			model.addAttribute("session_selected_broadcaster", select_broadcaster);
 			model.addAttribute("session_selected_scenes",session_selected_scenes);
-			
+			System.out.println("b1  "+select_broadcaster);
 			switch (select_broadcaster) {
 			case "DOAD_FRUIT":
 				this_fruit = new DOAD_FRUIT();
 				this_fruit.infobar = new Infobar();
-				if(!vizIPAddress.isEmpty()) {
+				//if(!vizIPAddress.isEmpty()) {
 					session_selected_scenes.add(new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
 					session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
 					session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), select_broadcaster);
 					this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,session_configuration);
-				}
+				//}
 				break;
 			}
 			
@@ -166,6 +166,7 @@ public class IndexController
 					throws Exception 
 	{
 		Speed this_speed = new Speed();
+		Review this_review= new Review();
 		
 		switch (whatToProcess.toUpperCase()) {
 		case "GET-CONFIG-DATA":
@@ -182,7 +183,8 @@ public class IndexController
 			return JSONObject.fromObject(session_match).toString();
 		
 		case "READ-MATCH-AND-POPULATE":
-			
+			System.out.println("b2  "+session_configuration.getBroadcaster());
+
 			switch (session_configuration.getBroadcaster()) {
 			case "DOAD_FRUIT": 
 				
@@ -193,8 +195,8 @@ public class IndexController
 							CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 
 					if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
-						this_fruit.updateInfobar(session_selected_scenes.get(0), 
-						session_match,CricketFunctions.processPrintWriter(session_configuration).get(0));
+						this_fruit.updateFruit(session_selected_scenes.get(0), 
+						session_match,CricketFunctions.processPrintWriter(session_configuration).get(0),true);
 					}
 					last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ session_match.getMatch().getMatchFileName()).lastModified();
@@ -208,10 +210,10 @@ public class IndexController
 						this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),lastSpeed);
 						lastSpeed = this_speed;
 					}
-					
-					if(lastReview.getLastTimeStamp() != new File(CricketUtil.REVIEWS).lastModified()) {
+					this_review=CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+					if(this_review != null) {
 						this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
-						lastReview.setLastTimeStamp(new File(CricketUtil.REVIEWS).lastModified());
+						lastReview=this_review;
 					}
 				}
 				break;
@@ -222,6 +224,8 @@ public class IndexController
 			
 			switch (session_configuration.getBroadcaster()) {
 			case "DOAD_FRUIT":
+				System.out.println(session_configuration.getBroadcaster());
+
 				this_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
 					CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess);
 				break;
