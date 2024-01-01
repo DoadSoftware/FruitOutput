@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.cricket.broadcaster.DOAD_FRUIT;
+import com.cricket.containers.Infobar;
 import com.cricket.containers.Scene;
 import com.cricket.model.Configuration;
 import com.cricket.model.Match;
@@ -129,14 +130,14 @@ public class IndexController
 			model.addAttribute("session_configuration", session_configuration);
 			model.addAttribute("session_selected_broadcaster", select_broadcaster);
 			model.addAttribute("session_selected_scenes",session_selected_scenes);
-
 			switch (select_broadcaster) {
 			case "DOAD_FRUIT":
 				this_fruit = new DOAD_FRUIT();
-				session_selected_scenes.add(new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
-				session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
-				session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), select_broadcaster);
-				this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,session_configuration);
+				this_fruit.infobar = new Infobar();
+					session_selected_scenes.add(new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
+					session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
+					session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), select_broadcaster);
+					this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,session_configuration);
 				break;
 			}
 			
@@ -178,8 +179,6 @@ public class IndexController
 			return JSONObject.fromObject(session_match).toString();
 		
 		case "READ-MATCH-AND-POPULATE":
-			
-			System.out.println("b2  "+session_configuration.getBroadcaster());
 
 			switch (session_configuration.getBroadcaster()) {
 			case "DOAD_FRUIT": 
@@ -192,7 +191,7 @@ public class IndexController
 
 					if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
 						this_fruit.updateFruit(session_selected_scenes.get(0), 
-						session_match,CricketFunctions.processPrintWriter(session_configuration).get(0),true);
+						session_match,CricketFunctions.processPrintWriter(session_configuration).get(0));
 					}
 					last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ session_match.getMatch().getMatchFileName()).lastModified();

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>FruitOutput</groupId>
   <artifactId>FruitOutput</artifactId>
-  <version>1.450</version>
+  <version>1.452</version>
   <packaging>war</packaging>
   <name>FruitOutput</name>
   <properties>
