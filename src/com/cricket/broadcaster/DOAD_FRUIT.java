@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
@@ -91,50 +90,156 @@ public class DOAD_FRUIT extends Scene{
 	 *
 	 */	  
 	
-	public void populateFruit( MatchAllData match,PrintWriter print_writer) throws Exception {
-		BattingCard this_bc;BowlingCard this_bowC ;
+	public void populateFruit( MatchAllData match,PrintWriter print_writer) throws Exception 
+	{
+		
+		BattingCard this_bc;
 		List<Integer> data_int = new ArrayList<Integer>();
 		List<String> data_str = new ArrayList<String>();
-		
-			
-			List<String> arr1 =CricketFunctions.getFirstPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
-			List<String> arr2 =CricketFunctions.getSecPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
-			List<String> arr3 =CricketFunctions.getThirdPowerPlayScore(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
+		List<Boolean> data_bool = new ArrayList<Boolean>();
+
+//		List<String> arr1 =CricketFunctions.getFirstPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
+//		List<String> arr2 =CricketFunctions.getSecPowerPlayScores(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
+//		List<String> arr3 =CricketFunctions.getThirdPowerPlayScore(match, Arrays.asList(1, 2), match.getEventFile().getEvents());
 						
-			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue1 " + match.getMatch().getInning().get(0).getTotalFours() + ";");
-			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue2 " + match.getMatch().getInning().get(0).getTotalSixes() + ";");
+		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue1 " + match.getMatch().getInning().get(0).getTotalFours() + ";");
+		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue2 " + match.getMatch().getInning().get(0).getTotalSixes() + ";");
+
+//		data_str = new ArrayList<String>();
+//		for(int i = 0; i < 12; i++) {
+//			data_str.add("");
+//		}
+
+		data_bool = new ArrayList<Boolean>();
+		data_bool.add(false); // Balls since last boundary 
+		
+		data_int = new ArrayList<Integer>();
+		data_int.add(0); // 0 -> Total runs 
+		data_int.add(0); // 1 -> Total wickets
+		data_int.add(0); // 2 -> Last bowler ID
+		data_int.add(0); // 3 -> Balls since last boundary
+		data_int.add(0); // 4 -> 1st Innings dot balls
+		data_int.add(0); // 5 -> 1st Innings dot balls
+		
+		if (match.getEventFile().getEvents() != null && match.getEventFile().getEvents().size() > 0) {
+			for (int i = match.getEventFile().getEvents().size() - 1; i >= 0; i--) {
+				// Inning comparison
+				if(match.getEventFile().getEvents().get(i).getEventInningNumber() == 1) {
+					if (match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(1).getTotalOvers()
+		                && match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getInning().get(1).getTotalBalls()) {
+						switch (match.getEventFile().getEvents().get(i).getEventType()) {
+						case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : 
+						case CricketUtil.DOT: case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.WIDE: 
+						case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+							data_int.set(0, data_int.get(0) + match.getEventFile().getEvents().get(i).getEventRuns());
+							break;
+						case CricketUtil.LOG_WICKET:
+							data_int.set(0, data_int.get(0) + match.getEventFile().getEvents().get(i).getEventRuns());
+							switch (match.getEventFile().getEvents().get(i).getEventHowOut()) {
+							case CricketUtil.RETIRED_HURT: case CricketUtil.ABSENT_HURT: case CricketUtil.CONCUSSED:
+								break;
+							default:
+								data_int.set(1, data_int.get(1) + 1);
+							}
+							break;
+						case CricketUtil.LOG_ANY_BALL:
+							data_int.set(0, data_int.get(0) + match.getEventFile().getEvents().get(i).getEventRuns());
+					        if (match.getEventFile().getEvents().get(i).getEventExtra() != null 
+					        	&& !match.getEventFile().getEvents().get(i).getEventExtra().isEmpty()) {
+								data_int.set(0, data_int.get(0) + match.getEventFile().getEvents().get(i).getEventExtraRuns());
+					        }
+					        if (match.getEventFile().getEvents().get(i).getEventSubExtra() != null 
+								&& !match.getEventFile().getEvents().get(i).getEventSubExtra().isEmpty()) {
+								data_int.set(0, data_int.get(0) + match.getEventFile().getEvents().get(i).getEventSubExtraRuns());
+					        }
+					        if (match.getEventFile().getEvents().get(i).getEventHowOut() != null 
+								&& !match.getEventFile().getEvents().get(i).getEventHowOut().isEmpty()) {
+								data_int.set(1, data_int.get(1) + 1);
+					        }
+							break;
+						}
+					}
+				}
+				// Last bowler
+				if(match.getEventFile().getEvents().get(i).getEventInningNumber() 
+					== match.getMatch().getInning().stream().filter(inn -> inn.getIsCurrentInning()
+					.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null).getInningNumber()) {
+					if (match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+						if(data_int.get(2) == 0) {
+							data_int.set(2, -1 * match.getEventFile().getEvents().get(i).getEventBowlerNo());
+						} else if(data_int.get(2) < 0) {
+							data_int.set(2, match.getEventFile().getEvents().get(i).getEventBowlerNo());
+						}
+					}
+				}
+				// Balls since last boundary
+				if (match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) 
+		    		|| match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR)
+		    		&& match.getEventFile().getEvents().get(i).getEventWasABoundary() != null
+		    		&& match.getEventFile().getEvents().get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+					data_bool.set(0, true);
+				} else {
+					if(data_bool.get(0) == false) {
+						switch (match.getEventFile().getEvents().get(i).getEventType()) {
+						case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: 
+						case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
+							data_int.set(3, data_int.get(3) + 1);
+							break;
+						case CricketUtil.LOG_ANY_BALL:
+							if (match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) 
+						    		|| match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR)
+						    		&& match.getEventFile().getEvents().get(i).getEventWasABoundary() != null
+						    		&& match.getEventFile().getEvents().get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+								data_bool.set(0, true);
+							} else {
+								data_int.set(3, data_int.get(3) + 1);
+							}
+							break;
+						}
+					}
+				}
+				// Both innings DOT ball count
+		        // Sakshi find dot balls count for any ball (wides, no ball)
+		        // data_int.set(5, data_int.get(5) + 1); // 5 -> 1st Innings dot balls
+				if(match.getEventFile().getEvents().get(i).getEventInningNumber() == 1) {
+					
+				}
+			}
+		}
+	
 		for(Inning inn : match.getMatch().getInning()) {
 			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
 				
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeTeamName " + 
-						inn.getBatting_team().getTeamName2() + ";");
+					inn.getBatting_team().getTeamName2() + ";");
+				
 /********************************************************** EVENTS  *********************************************/
-			
-				data_str = new ArrayList<String>();
-				for(int i = 0; i <= 12; i++) {
-					if(i==0||i==1) {
-						data_str.add("0");
-					}else {
-						data_str.add(""); 
-					}
-					
-				}
-				data_int = new ArrayList<Integer>();
-				for(int i = 0; i <= 2; i++) {
-					data_int.add(0); 
-				} 
-				Event_of_fruit(data_str, data_int,inn,match);
-				for(int i=0;i<data_str.size()-1;i++) {
-					System.out.println("index  "+i+"  "+data_str.get(i));
-					
-				}
-				for(int i=0;i<data_int.size()-1;i++) {
-					System.out.println("index  "+i+"  "+data_int.get(i));
-					
-				}
+//				data_str = new ArrayList<String>();
+//				for(int i = 0; i <= 12; i++) {
+//					if(i==0||i==1) {
+//						data_str.add("0");
+//					}else {
+//						data_str.add(""); 
+//					}
+//					
+//				}
+//				data_int = new ArrayList<Integer>();
+//				for(int i = 0; i <= 2; i++) {
+//					data_int.add(0); 
+//				} 
+//				Event_of_fruit(data_str, data_int,inn,match);
+//				for(int i=0;i<data_str.size()-1;i++) {
+//					System.out.println("index  "+i+"  "+data_str.get(i));
+//					
+//				}
+//				for(int i=0;i<data_int.size()-1;i++) {
+//					System.out.println("index  "+i+"  "+data_int.get(i));
+//					
+//				}
 				
 				
 /****************************************** Powerplay ***************************************************************/
+				
 				if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
 					if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
 		    			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "0" + ";");
@@ -312,21 +417,19 @@ public class DOAD_FRUIT extends Scene{
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamName2 " + 
 							match.getMatch().getInning().get(1).getBatting_team().getTeamName4() + ";");
 					
-					
-					
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore1 " + 
-							arr1.get(0) + ";");
+						arr1.get(0) + ";");
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore2 " + 
-							arr2.get(0)+ ";");
+						arr2.get(0)+ ";");
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore3 " + 
-							arr3.get(0) + ";");
+						arr3.get(0) + ";");
 					
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore1 " + 
-							arr1.get(1) + ";");
+						arr1.get(1) + ";");
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore2 " + 
-							arr2.get(1) + ";");
+						arr2.get(1) + ";");
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore3 " + 
-							arr3.get(1) + ";");
+						arr3.get(1) + ";");
 					
 				}
 /****************************************************Current Two Batsmen*******************************/
@@ -909,18 +1012,23 @@ public class DOAD_FRUIT extends Scene{
 		}
 	}
 
-	
 	private void Event_of_fruit(List<String> data_str, List<Integer> data_int, Inning inn,MatchAllData match) {
+		
 		boolean last_boundary=false, bowler=false,last_crnt_ovr = true,last_ovr=true;
+		
 		int total_runs = 0,total_wickets=0;
 		int wicket_count = 0;int run_count=0,ballcount=0,run_c=0,wkt_c=0;
 		int FirstPPtotal_run[] = {0, 0}, FirstPPtotal_wickets[] = {0, 0},SecondPPtotal_run[] = {0, 0}, SecondPPtotal_wickets [] = {0, 0},ThirdPPtotal_run [] = {0, 0}, ThirdPPtotal_wickets[] = {0, 0},ball_count = 0;
         int SecondPPStartOver=0,SecondPPEndOver=0,ThirdPPStartOver=0,ThirdPPEndOver=0;
         List<Integer>inning_numbers=Arrays.asList(1, 2);
-		BowlingCard this_bowC ;data_int.set(1, data_int.get(1) + 0);
+		BowlingCard this_bowC; 
+		data_int.set(1, data_int.get(1) + 0);
+		
 		if (match.getEventFile().getEvents() != null && match.getEventFile().getEvents().size() > 0) {
+			
 		    for (int i = match.getEventFile().getEvents().size() - 1; i >= 0; i--) {
-		        /*********************************************** INNING COMPARISON **********************************************************************/
+		    
+/*********************************************** INNING COMPARISON **********************************************************************/
 		    	
 		    		if(match.getEventFile().getEvents().get(i).getEventInningNumber() == 1) {
 						switch (match.getEventFile().getEvents().get(i).getEventType()) {
@@ -953,15 +1061,16 @@ public class DOAD_FRUIT extends Scene{
 					          }
 					          break;
 						}
-						 if (match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(1).getTotalOvers()
-				                    && match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getInning().get(0).getTotalBalls()) {
+						if (match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(1).getTotalOvers()
+				                    && match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getInning().get(1).getTotalBalls()) {
 							    data_str.set(2, total_runs + "-" + total_wickets);
-							}
+						}
 
 					}
 
-	/****************** Last bowler Id *************************************************************************/
-			if(!bowler) {
+/****************** Last bowler Id *************************************************************************/
+
+		    if(!bowler) {
 				if (match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)&&
 						match.getEventFile().getEvents().get(match.getEventFile().getEvents().size()-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)	) {
 						int endIndex = i - 1;
@@ -975,7 +1084,8 @@ public class DOAD_FRUIT extends Scene{
 						
 					}else  {
 						int endIndex = 0;
-		                while (endIndex < match.getEventFile().getEvents().size() && !match.getEventFile().getEvents().get(endIndex).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+		                while (endIndex < match.getEventFile().getEvents().size() 
+		                	&& !match.getEventFile().getEvents().get(endIndex).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
 		                    endIndex++;
 		                }
 		                if (endIndex < match.getEventFile().getEvents().size()) {
@@ -1159,7 +1269,8 @@ public class DOAD_FRUIT extends Scene{
 					}
 				  }
 /*************************************************** powerplays*****************************************************/			
-			 for (Integer inn_num : inning_numbers) {
+			 
+			for (Integer inn_num : inning_numbers) {
 				 if(match.getEventFile().getEvents().get(i).getEventInningNumber() == inn_num)
                  {
              		switch(match.getEventFile().getEvents().get(i).getEventType()) {
