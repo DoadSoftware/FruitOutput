@@ -119,7 +119,7 @@
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module archiveName="CricketLibrary-1.262.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/CricketLibrary/CricketLibrary">
+        <dependent-module archiveName="CricketLibrary-1.263.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/CricketLibrary/CricketLibrary">
             <dependency-type>uses</dependency-type>
         </dependent-module>
                                                                                                                                                                                                                                                 
