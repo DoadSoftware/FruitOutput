@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.cricket.broadcaster.DOAD_FRUIT;
-import com.cricket.containers.Infobar;
 import com.cricket.containers.Scene;
 import com.cricket.model.Configuration;
 import com.cricket.model.Match;
@@ -133,7 +132,6 @@ public class IndexController
 			switch (select_broadcaster) {
 			case "DOAD_FRUIT":
 				this_fruit = new DOAD_FRUIT();
-				this_fruit.infobar = new Infobar();
 					session_selected_scenes.add(new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
 					session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
 					session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), select_broadcaster);
