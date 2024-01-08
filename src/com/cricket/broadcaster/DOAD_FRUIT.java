@@ -144,7 +144,7 @@ public class DOAD_FRUIT extends Scene{
 						== match.getMatch().getInning().stream().filter(inn -> inn.getIsCurrentInning()
 						.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null).getInningNumber()) {
 					if (match.getEventFile().getEvents().get(match.getEventFile().getEvents().size()-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
-						if (match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+						if (match.getEventFile().getEvents().get(i-3).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
 							if(bowler != true) {
 								lastBwlId = match.getEventFile().getEvents().get(i).getEventBowlerNo();
 								bowler = true;
@@ -450,23 +450,23 @@ public class DOAD_FRUIT extends Scene{
 								      }
 						    		 break;
 							 }
-						}else {
+						}else if(match.getEventFile().getEvents().get(i).getEventBowlerNo() != this_bowC.getPlayerId()&& !match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.NEW_BATSMAN)){
 							this_bowler = true;
 						}
 					}
 				}
 			}
 		}
-		System.out.println("This over "+ this_over);
-		System.out.println("last 30 "+ run_c);
-		System.out.println("wicket_count  run_count "+ wicket_count+"  "+run_count);
-		System.out.println("firstInnDotBalls secondInnDotBalls "+ firstInnDotBalls +"  "+secondInnDotBalls);
-		System.out.println("blsSinceLastBndry "+ blsSinceLastBndry);
-		System.out.println("lastBwlId "+ lastBwlId);
-		System.out.println("firstInnCompTotWkts  firstInnCompTotRuns "+firstInnCompTotRuns+"  "+ firstInnCompTotWkts);
-		for(int i = 0; i <firstInnPPData.size()-1; i++) {
-			System.out.println("powerplay "+firstInnPPData.get(i)+"  "+secondInnPPData.get(i));
-		}
+//		System.out.println("This over "+ this_over);
+//		System.out.println("last 30 "+ run_c);
+//		System.out.println("wicket_count  run_count "+ wicket_count+"  "+run_count);
+//		System.out.println("firstInnDotBalls secondInnDotBalls "+ firstInnDotBalls +"  "+secondInnDotBalls);
+//		System.out.println("blsSinceLastBndry "+ blsSinceLastBndry);
+//		System.out.println("lastBwlId "+ lastBwlId);
+//		System.out.println("firstInnCompTotWkts  firstInnCompTotRuns "+firstInnCompTotRuns+"  "+ firstInnCompTotWkts);
+//		for(int i = 0; i <firstInnPPData.size()-1; i++) {
+//			System.out.println("powerplay "+firstInnPPData.get(i)+"  "+secondInnPPData.get(i));
+//		}
 		for(Inning inn : match.getMatch().getInning()) {
 			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
 				
@@ -987,7 +987,6 @@ public class DOAD_FRUIT extends Scene{
 					}
 					if(lastBwlId!= 0) {
 						if(boc.getPlayerId()==lastBwlId) {
-							previous_bowler = Integer.valueOf(CricketFunctions.previousBowler(match, match.getEventFile().getEvents()).split(",")[5]);
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlerName2 " + boc.getPlayer().getTicker_name() + ";");
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFigure2 " + boc.getWickets() + "-" + boc.getRuns() + ";");
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tOvers2 " + CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls())+ ";");
