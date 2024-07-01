@@ -21,9 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.cricket.broadcaster.DOAD_FRUIT;
+import com.cricket.broadcaster.ISPL_FRUIT;
+import com.cricket.broadcaster.LCT_FRUIT;
 import com.cricket.containers.Scene;
 import com.cricket.model.Configuration;
+import com.cricket.model.Event;
 import com.cricket.model.Match;
 import com.cricket.model.MatchAllData;
 import com.cricket.model.Review;
@@ -45,6 +49,7 @@ public class IndexController
 
 	public static MatchAllData session_match;
 	public static DOAD_FRUIT this_fruit;
+	public static ISPL_FRUIT this_ispl_fruit;
 	public static String expiry_date = "2024-11-30";
 	public static String current_date;
 	public static Speed lastSpeed = new Speed(0);
@@ -80,7 +85,6 @@ public class IndexController
 
 		model.addAttribute("session_configuration",session_configuration);
 		model.addAttribute("session_selected_scenes",session_selected_scenes);
-		
 		return "initialise";
 	}
 
@@ -89,6 +93,7 @@ public class IndexController
 			@RequestParam(value = "configuration_file_name", required = false, defaultValue = "") String configuration_file_name,
 			@RequestParam(value = "select_broadcaster", required = false, defaultValue = "") String select_broadcaster,
 			@RequestParam(value = "speed_select", required = false, defaultValue = "") String speed_select,
+			@RequestParam(value = "select_audio", required = false, defaultValue = "") String select_audio,
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch,
 			@RequestParam(value = "vizIPAddress", required = false, defaultValue = "") String vizIPAddress,
 			@RequestParam(value = "vizPortNumber", required = false, defaultValue = "") int vizPortNumber) 
@@ -111,10 +116,11 @@ public class IndexController
 				+ selectedMatch).lastModified();
 			
 			session_configuration = new Configuration(selectedMatch, select_broadcaster, 
-				speed_select, vizIPAddress, vizPortNumber, "ENGLISH");
+					speed_select,"","", select_audio,vizIPAddress, vizPortNumber,"");
 			
 			JAXBContext.newInstance(Configuration.class).createMarshaller().marshal(session_configuration, 
 					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + configuration_file_name));
+			
 
 			session_match = new MatchAllData();
 			session_match.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + 
@@ -130,12 +136,24 @@ public class IndexController
 			model.addAttribute("session_selected_broadcaster", select_broadcaster);
 			model.addAttribute("session_selected_scenes",session_selected_scenes);
 			switch (select_broadcaster) {
-			case "DOAD_FRUIT":
+			
+			case CricketUtil.DOAD_FRUIT:
 				this_fruit = new DOAD_FRUIT();
-					session_selected_scenes.add(new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
-					session_selected_scenes.add(new Scene("","MIDDLE_LAYER"));
-					session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), select_broadcaster);
-					this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,session_configuration);
+				session_selected_scenes.add(0,new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
+				session_selected_scenes.get(0).scene_load(CricketFunctions
+						.processPrintWriter(session_configuration).get(0), select_broadcaster);
+				this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(
+						session_configuration).get(0), session_match,session_configuration);
+				//CricketFunctions.getInteractive(session_match, "FULL_WRITE");	
+				break;
+			case CricketUtil.ISPL_FRUIT:
+				this_ispl_fruit = new ISPL_FRUIT();
+				session_selected_scenes.add(0,new Scene(CricketUtil.ISPL_FRUIT_SCENE,"FRONT_LAYER")); // Front layer
+				session_selected_scenes.get(0).scene_load(CricketFunctions
+						.processPrintWriter(session_configuration).get(0), select_broadcaster);
+				this_ispl_fruit.initialize_fruit(CricketFunctions.processPrintWriter(
+						session_configuration).get(0), session_match,session_configuration);
+				//CricketFunctions.getInteractive(session_match, "FULL_WRITE");	
 				break;
 			}
 			
@@ -148,7 +166,6 @@ public class IndexController
 			}else {
 				lastReview.setLastTimeStamp(0);
 			}
-			
 			return "output";
 		}
 	}
@@ -179,7 +196,7 @@ public class IndexController
 		case "READ-MATCH-AND-POPULATE":
 
 			switch (session_configuration.getBroadcaster()) {
-			case "DOAD_FRUIT": 
+			case CricketUtil.DOAD_FRUIT: 
 				
 				if(session_match.getMatch() != null && last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY 
 					+ CricketUtil.MATCHES_DIRECTORY + session_match.getMatch().getMatchFileName()).lastModified()) {
@@ -189,7 +206,7 @@ public class IndexController
 
 					if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
 						this_fruit.updateFruit(session_selected_scenes.get(0), 
-						session_match,CricketFunctions.processPrintWriter(session_configuration).get(0));
+						session_match,CricketFunctions.processPrintWriter(session_configuration).get(0),session_configuration);
 					}
 					last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ session_match.getMatch().getMatchFileName()).lastModified();
@@ -210,6 +227,41 @@ public class IndexController
 					}
 				}
 				break;
+			
+			case CricketUtil.ISPL_FRUIT: 
+				
+				if(session_match.getMatch() != null && last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY 
+					+ CricketUtil.MATCHES_DIRECTORY + session_match.getMatch().getMatchFileName()).lastModified()) {
+					
+					session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
+							CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+					
+					CricketFunctions.getInteractive(session_match,"FULL_WRITE");
+
+					if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
+						this_ispl_fruit.updateFruit(session_selected_scenes.get(0), 
+						session_match,CricketFunctions.processPrintWriter(session_configuration).get(0),session_configuration);
+					}
+					last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+						+ session_match.getMatch().getMatchFileName()).lastModified();
+				}
+
+				if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
+					
+					this_speed = CricketFunctions.getCurrentSpeed(CricketUtil.CRICKET_DIRECTORY 
+							+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT, lastSpeed);
+					if(this_speed != null) {
+						this_ispl_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),lastSpeed);
+						lastSpeed = this_speed;
+					}
+					this_review=CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+					if(this_review != null) {
+						this_ispl_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
+						lastReview=this_review;
+					}
+				}
+				break;
+			
 			}
 			return JSONObject.fromObject(session_match).toString();
 
@@ -218,8 +270,14 @@ public class IndexController
 			switch (session_configuration.getBroadcaster()) {
 			case "DOAD_FRUIT":
 				this_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
-					CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess);
+					CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess,session_configuration);
 				break;
+			case CricketUtil.ISPL_FRUIT:
+				//CricketFunctions.getInteractive(session_match, "FULL_WRITE");	
+				this_ispl_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
+						CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess,session_configuration);
+				break;
+			
 			}
 			
 			return JSONObject.fromObject(null).toString();

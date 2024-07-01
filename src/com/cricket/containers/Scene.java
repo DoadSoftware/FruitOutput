@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.cricket.util.CricketUtil;
+
 public class Scene {
 	
 	private String scene_path;
@@ -44,33 +46,12 @@ public class Scene {
 		this.which_layer = which_layer;
 	}
 	
-	public void scene_load(List<PrintWriter> print_writers, String broadcaster) throws InterruptedException
-	{
-		switch (broadcaster.toUpperCase()) {
-		case "DOAD-VIZ-MULTI":
-			for(PrintWriter print_writer : print_writers) {
-				switch(this.which_layer.toUpperCase()) {
-				case "FRONT_LAYER":
-					print_writer.println("-1 RENDERER*FRONT_LAYER SET_OBJECT SCENE*" + this.scene_path + "\0");
-					print_writer.println("-1 RENDERER*FRONT_LAYER*SCENE_DATA INITIALIZE \0");
-					TimeUnit.MILLISECONDS.sleep(500);
-					break;
-				case "MIDDLE_LAYER":
-					print_writer.println("-1 RENDERER SET_OBJECT SCENE*" + this.scene_path + "\0");
-					print_writer.println("-1 RENDERER*SCENE_DATA INITIALIZE \0");
-					TimeUnit.MILLISECONDS.sleep(500);
-					break;
-				}
-			}
-			break;
-		
-		}
-	}	
 	public void scene_load(PrintWriter print_writer, String broadcaster) throws InterruptedException
 	{
 		switch (broadcaster.toUpperCase()) {
-		case "DOAD_FRUIT":	
+		case CricketUtil.DOAD_FRUIT: case CricketUtil.ICC_U19_WorldCup_2024: case CricketUtil.ISPL_FRUIT:
 			switch(this.which_layer.toUpperCase()) {
+			
 			case "FRONT_LAYER":	
 				print_writer.println("LAYER1*EVEREST*SINGLE_SCENE LOAD " + this.scene_path + ";");
 				
@@ -87,6 +68,13 @@ public class Scene {
 				break;
 			}
 			break;
+			
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Scene [scene_path=" + scene_path + ", broadcaster=" + broadcaster + ", which_layer=" + which_layer
+				+ "]";
 	}
 }

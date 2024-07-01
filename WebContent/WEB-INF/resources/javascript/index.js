@@ -20,6 +20,7 @@ function initialiseForm(whatToProcess,dataToProcess)
 		document.getElementById('select_cricket_matches').value = dataToProcess.filename;
 		document.getElementById('select_broadcaster').value = dataToProcess.broadcaster;
 		document.getElementById('speed_select').value = dataToProcess.speedUnit;
+		document.getElementById('select_audio').value = dataToProcess.audio;
 		document.getElementById('vizIPAddress').value = dataToProcess.primaryIpAddress;
 		document.getElementById('vizPortNumber').value = dataToProcess.primaryPortNumber;
 		
@@ -52,8 +53,14 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 	case 'LOGGER_FORM_KEYPRESS':
 		
 		switch (dataToProcess) {
-		case 'DOAD_FRUIT':
+		case 'DOAD_FRUIT': 
 			processCricketProcedures('POPULATE-FRUIT');
+			break;
+		case 'DOAD_TEAM':
+			processCricketProcedures('POPULATE-TEAM');
+			break;
+		case 'DOAD_LOGO':
+			processCricketProcedures('POPULATE-LOGO');
 			break;
 		case 32: //Space Bar
 			processCricketProcedures('CLEAR-ALL');
@@ -101,10 +108,13 @@ function processCricketProcedures(whatToProcess)
 	case 'READ-MATCH-AND-POPULATE':
 		valueToProcess = $('#matchFileTimeStamp').val();
 		break;
-	case 'POPULATE-FRUIT':
+	case 'POPULATE-FRUIT':case'POPULATE-TEAM':case'POPULATE-LOGO':
 		switch ($('#selected_broadcaster').val().toUpperCase()) {
 		case 'DOAD_FRUIT':
 			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum';
+			break;
+		case 'ISPL_FRUIT':
+			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_ISPL_FRUIT/Scenes/Fruit.sum';
 			break;
 		}
 		break;
@@ -126,15 +136,21 @@ function processCricketProcedures(whatToProcess)
 					initialiseForm('TEAMS_SCORE',null);
 				}
 				break;
-			case 'POPULATE-FRUIT':
+			case 'POPULATE-FRUIT':case'POPULATE-TEAM':case 'POPULATE-LOGO':
 				if(confirm('Animate In?') == true){
 					$('#select_graphic_options_div').empty();
 					document.getElementById('select_graphic_options_div').style.display = 'none';
 					$("#captions_div").show();
-					
 		        	switch(whatToProcess) {
 					case 'POPULATE-FRUIT':
+						//alert($('#selected_broadcaster').val());
 						processCricketProcedures('ANIMATE-IN-FRUIT');
+						break;
+					case 'POPULATE-TEAM':
+						processCricketProcedures('ANIMATE-IN-TEAM');
+						break;
+					case 'POPULATE-LOGO':
+						processCricketProcedures('ANIMATE-IN-LOGO');
 						break;
 					}
 				}

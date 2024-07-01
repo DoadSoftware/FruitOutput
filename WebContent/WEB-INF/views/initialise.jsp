@@ -66,6 +66,9 @@
 			      <select id="select_broadcaster" name="select_broadcaster" class="browser-default custom-select custom-select-sm"
 			      		onchange="processUserSelection(this)">
 			      		<option value="DOAD_FRUIT">DOAD_FRUIT</option>
+			      		<option value="ISPL_FRUIT">ISPL FRUIT</option>
+			      		<!-- <option value="LCT_FRUIT">LCT FRUIT</option> -->
+			      		
 			      </select>
 			    </div>
 			  </div>
@@ -76,6 +79,17 @@
 			      		onchange="processUserSelection(this)">
 			      		<option value="KP/H">KP/H</option>
 			      		<option value="MP/H">MP/H</option>
+			      </select>
+			    </div>
+			  </div>
+			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+			    <label for="speed_select" class="col-sm-4 col-form-label text-left"> Audio </label>
+			    <div class="col-sm-6 col-md-6">
+			      <select id="select_audio" name="select_audio" value="${session_configuration.audio}" class="browser-default custom-select custom-select-sm"
+			      		onchange="processUserSelection(this)">
+			      		<option value=""></option>
+			      		<option value="LastBallAudio">Last Ball Audio</option>
+			      		<option value="LastBallEndOverAudio">Without Audio</option>
 			      </select>
 			    </div>
 			  </div>
