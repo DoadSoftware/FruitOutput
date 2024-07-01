@@ -181,7 +181,6 @@ public class DOAD_FRUIT extends Scene{
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET lgMainHomeRole" + i + " " + icon_path  + "LeftHandBatsman"+CricketUtil.PNG_EXTENSION  + ";");
 				}
 				TimeUnit.MILLISECONDS.sleep(5);
-				System.out.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET lgMainHomeRole" + i + " " + icon_path  + "Batsman"+CricketUtil.PNG_EXTENSION  + ";");
 			}else if(hs.getRole().toUpperCase().equalsIgnoreCase("BAT/KEEPER")||hs.getRole().toUpperCase().equalsIgnoreCase("WICKET-KEEPER")) {
 				if(hs.getBattingStyle().equalsIgnoreCase("RHB")) {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET lgMainHomeRole" + i + " " + icon_path  + "Batsman" +CricketUtil.PNG_EXTENSION + ";");
