@@ -181,6 +181,7 @@ public class DOAD_FRUIT extends Scene{
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET lgMainHomeRole" + i + " " + icon_path  + "LeftHandBatsman"+CricketUtil.PNG_EXTENSION  + ";");
 				}
 				TimeUnit.MILLISECONDS.sleep(5);
+				System.out.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET lgMainHomeRole" + i + " " + icon_path  + "Batsman"+CricketUtil.PNG_EXTENSION  + ";");
 			}else if(hs.getRole().toUpperCase().equalsIgnoreCase("BAT/KEEPER")||hs.getRole().toUpperCase().equalsIgnoreCase("WICKET-KEEPER")) {
 				if(hs.getBattingStyle().equalsIgnoreCase("RHB")) {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET lgMainHomeRole" + i + " " + icon_path  + "Batsman" +CricketUtil.PNG_EXTENSION + ";");
@@ -421,18 +422,18 @@ public class DOAD_FRUIT extends Scene{
 						&&( match.getSetup().getTargetOvers()== null|| match.getSetup().getTargetOvers().isEmpty())) {
 					match.getMatch().getInning().get(0).setFirstPowerplayStartOver(1);
 					match.getMatch().getInning().get(0).setSecondPowerplayStartOver(7);
-					match.getMatch().getInning().get(0).setThirdPowerplayStartOver(17);
+					match.getMatch().getInning().get(0).setThirdPowerplayStartOver(16);
 					
 					match.getMatch().getInning().get(0).setFirstPowerplayEndOver(6);
-					match.getMatch().getInning().get(0).setSecondPowerplayEndOver(16);
+					match.getMatch().getInning().get(0).setSecondPowerplayEndOver(15);
 					match.getMatch().getInning().get(0).setThirdPowerplayEndOver(20);
 					
 					match.getMatch().getInning().get(1).setFirstPowerplayStartOver(1);
 					match.getMatch().getInning().get(1).setSecondPowerplayStartOver(7);
-					match.getMatch().getInning().get(1).setThirdPowerplayStartOver(17);
+					match.getMatch().getInning().get(1).setThirdPowerplayStartOver(16);
 					
 					match.getMatch().getInning().get(1).setFirstPowerplayEndOver(6);
-					match.getMatch().getInning().get(1).setSecondPowerplayEndOver(16);
+					match.getMatch().getInning().get(1).setSecondPowerplayEndOver(15);
 					match.getMatch().getInning().get(1).setThirdPowerplayEndOver(20);
 					
 				}
@@ -1249,9 +1250,9 @@ public class DOAD_FRUIT extends Scene{
 			  print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead1 "
 					  + "1-6" + ";"); 
 			  print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead2 "
-					  	+ "7-16" + ";");
+					  	+ "7-15" + ";");
 			  print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead3 "
-					  	+ "17-20" + ";");
+					  	+ "16-20" + ";");
 		
 		 }else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
 			  print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead1 "
