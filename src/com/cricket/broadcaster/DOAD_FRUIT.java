@@ -133,11 +133,11 @@ public class DOAD_FRUIT extends Scene{
 	}
 
 	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeTeamHeader" +  " " + 
-			 " SQUAD ;");
+			 "PLAYING XI ;");
 	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeSubHeader"+ " " + 
 			 " SUBSTITUTES;");
 	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayTeamHeader" + " " + 
-			 "SQUAD ;");
+			 "PLAYING XI ;");
 	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwaySubHeader" + " " + 
 			 "SUBSTITUTES;");
 	
@@ -801,7 +801,33 @@ public class DOAD_FRUIT extends Scene{
 /******************************************************* FALL OF WICKETS AND LAST WICKET *******************************/
 				
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$LastWicketGrp$DataGrp$XPosition$LastWicketValue*CONTAINER SET ACTIVE 1;");
+				if(inn.getInningNumber() == 1 && inn.getFallsOfWickets() != null) {
+					
+				    for (int i = 0; i <= inn.getFallsOfWickets().size() -1; i++)
+				    {
+				    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
+				    			inn.getFallsOfWickets().get(i).getFowRuns() + ";");
+				    }
 				
+			}else if(inn.getInningNumber() == 2) {
+				if(match.getMatch().getInning().get(0).getFallsOfWickets() != null)
+				{
+				    for (int i = 0; i <= match.getMatch().getInning().get(0).getFallsOfWickets().size() -1; i++)
+				    {	
+				    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
+				    			match.getMatch().getInning().get(0).getFallsOfWickets().get(i).getFowRuns() + ";");
+				    }
+				}
+				
+				if(match.getMatch().getInning().get(1).getFallsOfWickets() != null)
+				{
+				    for (int j = 0; j <= match.getMatch().getInning().get(1).getFallsOfWickets().size() -1; j++)
+				    {
+				    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + (j+1) + " " + 
+				    			match.getMatch().getInning().get(1).getFallsOfWickets().get(j).getFowRuns() + ";");
+				    }
+				}
+			}
 				if(inn.getFallsOfWickets() != null && inn.getFallsOfWickets().size() > 0) {
 					this_bc = inn.getBattingCard().stream().filter(batC -> inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() 
 							== batC.getPlayerId()).findAny().orElse(null);
@@ -821,33 +847,7 @@ public class DOAD_FRUIT extends Scene{
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketBalls " 
 									+ this_bc.getBalls() + ";");
 					}
-					if(inn.getInningNumber() == 1 && inn.getFallsOfWickets() != null) {
-						
-						    for (int i = 0; i <= inn.getFallsOfWickets().size() -1; i++)
-						    {
-						    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
-						    			inn.getFallsOfWickets().get(i).getFowRuns() + ";");
-						    }
-						
-					}else if(inn.getInningNumber() == 2) {
-						if(match.getMatch().getInning().get(0).getFallsOfWickets() != null)
-						{
-						    for (int i = 0; i <= match.getMatch().getInning().get(0).getFallsOfWickets().size() -1; i++)
-						    {
-						    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
-						    			match.getMatch().getInning().get(0).getFallsOfWickets().get(i).getFowRuns() + ";");
-						    }
-						}
-						
-						if(match.getMatch().getInning().get(1).getFallsOfWickets() != null)
-						{
-						    for (int j = 0; j <= match.getMatch().getInning().get(1).getFallsOfWickets().size() -1; j++)
-						    {
-						    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + (j+1) + " " + 
-						    			match.getMatch().getInning().get(1).getFallsOfWickets().get(j).getFowRuns() + ";");
-						    }
-						}
-					}
+				
 				}else {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " + "" + ";");
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketScore " + "" + ";");
