@@ -50,7 +50,7 @@ public class IndexController
 	public static MatchAllData session_match;
 	public static DOAD_FRUIT this_fruit;
 	public static ISPL_FRUIT this_ispl_fruit;
-	public static String expiry_date = "2024-11-30";
+	public static String expiry_date = "2025-12-31";
 	public static String current_date;
 	public static Speed lastSpeed = new Speed(0);
 	public static Review lastReview = new Review();
@@ -148,7 +148,7 @@ public class IndexController
 				break;
 			case CricketUtil.ISPL_FRUIT:
 				this_ispl_fruit = new ISPL_FRUIT();
-				session_selected_scenes.add(0,new Scene(CricketUtil.ISPL_FRUIT_SCENE,"FRONT_LAYER")); // Front layer
+				session_selected_scenes.add(0,new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
 				session_selected_scenes.get(0).scene_load(CricketFunctions
 						.processPrintWriter(session_configuration).get(0), select_broadcaster);
 				this_ispl_fruit.initialize_fruit(CricketFunctions.processPrintWriter(

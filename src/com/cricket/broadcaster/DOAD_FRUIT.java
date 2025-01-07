@@ -393,45 +393,7 @@ public class DOAD_FRUIT extends Scene{
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayTeamName " + 
 						inn.getBowling_team().getTeamBadge() + ";");
 /********************************************************** EVENTS  *********************************************/
-				if((match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10))
-						&&( match.getSetup().getTargetOvers()== null|| match.getSetup().getTargetOvers().trim().isEmpty())) {
-					match.getMatch().getInning().get(0).setFirstPowerplayStartOver(1);
-					match.getMatch().getInning().get(0).setSecondPowerplayStartOver(3);
-					match.getMatch().getInning().get(0).setThirdPowerplayStartOver(7);
-					
-					match.getMatch().getInning().get(0).setFirstPowerplayEndOver(2);
-					match.getMatch().getInning().get(0).setSecondPowerplayEndOver(6);
-					match.getMatch().getInning().get(0).setThirdPowerplayEndOver(10);
-					
-					match.getMatch().getInning().get(1).setFirstPowerplayStartOver(1);
-					match.getMatch().getInning().get(1).setSecondPowerplayStartOver(3);
-					match.getMatch().getInning().get(1).setThirdPowerplayStartOver(7);
-					
-					match.getMatch().getInning().get(1).setFirstPowerplayEndOver(2);
-					match.getMatch().getInning().get(1).setSecondPowerplayEndOver(6);
-					match.getMatch().getInning().get(1).setThirdPowerplayEndOver(10);
-					
-				}
-				else if((match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20))
-						&&( match.getSetup().getTargetOvers()== null|| match.getSetup().getTargetOvers().isEmpty())) {
-					match.getMatch().getInning().get(0).setFirstPowerplayStartOver(1);
-					match.getMatch().getInning().get(0).setSecondPowerplayStartOver(7);
-					match.getMatch().getInning().get(0).setThirdPowerplayStartOver(16);
-					
-					match.getMatch().getInning().get(0).setFirstPowerplayEndOver(6);
-					match.getMatch().getInning().get(0).setSecondPowerplayEndOver(15);
-					match.getMatch().getInning().get(0).setThirdPowerplayEndOver(20);
-					
-					match.getMatch().getInning().get(1).setFirstPowerplayStartOver(1);
-					match.getMatch().getInning().get(1).setSecondPowerplayStartOver(7);
-					match.getMatch().getInning().get(1).setThirdPowerplayStartOver(16);
-					
-					match.getMatch().getInning().get(1).setFirstPowerplayEndOver(6);
-					match.getMatch().getInning().get(1).setSecondPowerplayEndOver(15);
-					match.getMatch().getInning().get(1).setThirdPowerplayEndOver(20);
-					
-				}
-				MatchStats  Stats= CricketFunctions.getAllEventsStatsMASTER(match.getMatch(), match.getEventFile().getEvents());
+				MatchStats  Stats= CricketFunctions.getAllEvents(match, match.getEventFile().getEvents());
 /****************************************** Powerplay ***************************************************************/
 				if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
 					if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
@@ -1332,7 +1294,7 @@ public class DOAD_FRUIT extends Scene{
 	}
 	public static String reverseStringWithPreservation(String input) {
        // String[] parts = input.split("\\s*\\|\\s*"); // Split the string by "|"
-		 String[] parts = input.split("\\s*\\,\\s*");
+		 String[] parts = input.split("\\s*\\,\\s*"); // Split the string by ","
         StringBuilder reversedString = new StringBuilder();
 
         for (int i = parts.length - 1; i >= 0; i--) {

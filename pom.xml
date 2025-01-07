@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>FruitOutput</groupId>
   <artifactId>FruitOutput</artifactId>
-  <version>1.499</version>
+  <version>1.501</version>
   <packaging>war</packaging>
   <name>FruitOutput</name>
   <properties>
@@ -17,7 +17,7 @@
 	<groupId>com.cricket</groupId>
 	<artifactId>CricketLibrary</artifactId>
 	<scope>compile</scope>
-	<version>1.388</version>
+	<version>1.433</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
