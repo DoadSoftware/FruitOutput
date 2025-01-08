@@ -97,8 +97,7 @@ public class IndexController
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch,
 			@RequestParam(value = "vizIPAddress", required = false, defaultValue = "") String vizIPAddress,
 			@RequestParam(value = "vizPortNumber", required = false, defaultValue = "") int vizPortNumber) 
-					throws StreamReadException, DatabindException, StreamWriteException, IllegalAccessException, 
-					InvocationTargetException, UnknownHostException, ParseException, JAXBException, IOException, URISyntaxException, InterruptedException 
+					throws Exception 
 	{
 		if(current_date == null || current_date.isEmpty()) {
 			
@@ -153,6 +152,10 @@ public class IndexController
 						.processPrintWriter(session_configuration).get(0), select_broadcaster);
 				this_ispl_fruit.initialize_fruit(CricketFunctions.processPrintWriter(
 						session_configuration).get(0), session_match,session_configuration);
+				
+				this_ispl_fruit.ProcessGraphicOption("ANIMATE-IN-LOGO", session_match, cricketService, 
+						CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes,"",
+						session_configuration);
 				//CricketFunctions.getInteractive(session_match, "FULL_WRITE");	
 				break;
 			}

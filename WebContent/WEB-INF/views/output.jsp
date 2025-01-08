@@ -92,7 +92,7 @@
   			  </div>
   				<div class="Right">
   				<h6><label class="col-sm-3 col-form-label text-left"> Fruit: (Alt + F) </label>
-	  				<c:if test="${(session_selected_broadcaster =='DOAD_FRUIT')}">
+	  				<c:if test="${(session_selected_broadcaster =='DOAD_FRUIT'||session_selected_broadcaster =='ISPL_FRUIT')}">
 	  					<label class="col-sm-3 col-form-label text-left"> Teams: (Alt + T) </label>
 	  					<label class="col-sm-3 col-form-label text-left"> Logo: (Alt + L) </label>	
 	  				</c:if>

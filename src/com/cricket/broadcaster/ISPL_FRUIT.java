@@ -56,14 +56,18 @@ public class ISPL_FRUIT extends Scene{
 		
 		switch (whatToProcess.toUpperCase()) {
 		case "POPULATE-FRUIT": 
-			scenes.get(0).setScene_path("D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_ISPL_FRUIT/Scenes/Fruit.sum");
-			scenes.get(0).scene_load(print_writer,session_selected_broadcaster);
-			initialize_fruit(print_writer, match, config);
+			if(!which_graphics_onscreen.equalsIgnoreCase("FRUIT")||which_graphics_onscreen.isEmpty()) {
+				scenes.get(0).setScene_path("D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_ISPL_FRUIT/Scenes/Fruit.sum");
+				scenes.get(0).scene_load(print_writer,session_selected_broadcaster);
+				initialize_fruit(print_writer, match, config);
+			}
 			populateFruit(match, print_writer,config);
 			break;
 		case "POPULATE-TEAM":case "POPULATE-LOGO":
-			 scenes.get(0).setScene_path("D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum");
-			 scenes.get(0).scene_load(print_writer,session_selected_broadcaster);
+			if(which_graphics_onscreen.equalsIgnoreCase("FRUIT")||which_graphics_onscreen.isEmpty()) {
+				 scenes.get(0).setScene_path("D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum");
+				 scenes.get(0).scene_load(print_writer,session_selected_broadcaster);	
+			}
     		switch (whatToProcess.toUpperCase()) {
     			case "POPULATE-TEAM":
     				populateTeam(match, print_writer,config);
@@ -76,18 +80,24 @@ public class ISPL_FRUIT extends Scene{
 			case "ISPL_FRUIT":
 				switch (whatToProcess.toUpperCase()) {
 				case "ANIMATE-IN-FRUIT":
-					processAnimation(print_writer, "In", "START", session_selected_broadcaster,1);
+					if(!which_graphics_onscreen.equalsIgnoreCase("FRUIT")||which_graphics_onscreen.isEmpty()) {
+						processAnimation(print_writer, "In", "START", session_selected_broadcaster,1);
+					}
 					which_graphics_onscreen = "FRUIT";
 					break;
 				case"ANIMATE-IN-TEAM":
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPage 1;");
-					processAnimation(print_writer, "In", "START", session_selected_broadcaster,1);
-					which_graphics_onscreen = "FRUIT";
+					if(!which_graphics_onscreen.equalsIgnoreCase("TEAM")||which_graphics_onscreen.isEmpty()) {
+						processAnimation(print_writer, "In", "START", session_selected_broadcaster,1);
+					}
+					which_graphics_onscreen = "TEAM";
 					break;
 				case "ANIMATE-IN-LOGO":
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPage 0;");
-					processAnimation(print_writer, "In", "START", session_selected_broadcaster,1);
-					which_graphics_onscreen = "FRUIT";
+					if(!which_graphics_onscreen.equalsIgnoreCase("TEAM")||which_graphics_onscreen.isEmpty()) {
+						processAnimation(print_writer, "In", "START", session_selected_broadcaster,1);
+					}
+					which_graphics_onscreen = "TEAM";
 					break;
 				case "CLEAR-ALL":
 					print_writer.println("LAYER1*EVEREST*SINGLE_SCENE CLEAR;");
@@ -95,7 +105,7 @@ public class ISPL_FRUIT extends Scene{
 					break;
 				case "ANIMATE-OUT":
 					switch(which_graphics_onscreen) {
-					case "FRUIT":
+					case "FRUIT": case "TEAM":
 						processAnimation(print_writer, "Out", "START", session_selected_broadcaster,1);
 						which_graphics_onscreen = "";
 						break;
@@ -1146,8 +1156,7 @@ public class ISPL_FRUIT extends Scene{
 				"0" + ";");
 		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayerNumber " + 
 				"0" + ";");
-		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPage 0;");	
-		processAnimation(print_writer, "In", "START", session_selected_broadcaster,1);
+		
 	}	
 	public void populateSpeed(PrintWriter printWriter, Speed lastSpeed) throws Exception {
 		
