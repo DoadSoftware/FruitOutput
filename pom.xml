@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>FruitOutput</groupId>
   <artifactId>FruitOutput</artifactId>
-  <version>1.501</version>
+  <version>1.504</version>
   <packaging>war</packaging>
   <name>FruitOutput</name>
   <properties>
@@ -14,10 +14,18 @@
 <dependencies>
 
 <dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>javax.servlet-api</artifactId>
+   <version>3.0.1</version>
+   <scope>provided</scope>
+</dependency>
+
+
+<dependency>
 	<groupId>com.cricket</groupId>
 	<artifactId>CricketLibrary</artifactId>
 	<scope>compile</scope>
-	<version>1.433</version>
+	<version>1.441</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
@@ -284,8 +292,9 @@
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-aspects</artifactId>
-    <version>4.1.4.RELEASE</version>
+    <version>6.1.0</version>
 </dependency>
+
 
 <!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
 <dependency>

@@ -981,7 +981,8 @@ public class DOAD_FRUIT extends Scene{
 									"THIS OVER       "+ Stats.getOverData().getTotalRuns()+"  RUN"+ CricketFunctions.Plural(Stats.getOverData().getTotalRuns()).toUpperCase() + ";");
 							
 					if(boc.getStatus().toUpperCase().equalsIgnoreCase("CURRENTBOWLER") || boc.getStatus().toUpperCase().equalsIgnoreCase("LASTBOWLER")) {
-						String str=replaceTermsInString(Stats.getOverData().getThisOverTxt());
+						String str=replaceTermsInString(Stats.getOverData().getThisOverTxt().replace("9BOUNDARY", "9").replace("4BOUNDARY", "4").replace("6BOUNDARY", "6"));
+						
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tThisOverData " + 
 								reverseStringWithPreservation(str) + ";");
 						

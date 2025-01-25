@@ -709,37 +709,37 @@ public class ISPL_FRUIT extends Scene{
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketBalls " 
 									+ this_bc.getBalls() + ";");
 					}
-					if(inn.getInningNumber() == 1 && inn.getFallsOfWickets() != null) {
-						
-						    for (int i = 0; i <= inn.getFallsOfWickets().size() -1; i++)
-						    {
-						    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
-						    			inn.getFallsOfWickets().get(i).getFowRuns() + ";");
-						    }
-						
-					}else if(inn.getInningNumber() == 2) {
-						if(match.getMatch().getInning().get(0).getFallsOfWickets() != null)
-						{
-						    for (int i = 0; i <= match.getMatch().getInning().get(0).getFallsOfWickets().size() -1; i++)
-						    {
-						    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
-						    			match.getMatch().getInning().get(0).getFallsOfWickets().get(i).getFowRuns() + ";");
-						    }
-						}
-						
-						if(match.getMatch().getInning().get(1).getFallsOfWickets() != null)
-						{
-						    for (int j = 0; j <= match.getMatch().getInning().get(1).getFallsOfWickets().size() -1; j++)
-						    {
-						    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + (j+1) + " " + 
-						    			match.getMatch().getInning().get(1).getFallsOfWickets().get(j).getFowRuns() + ";");
-						    }
-						}
-					}
 				}else {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketValue " + "" + ";");
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketScore " + "" + ";");
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tLastWicketBalls " + "" + ";");
+				}
+				if(inn.getInningNumber() == 1 && inn.getFallsOfWickets() != null) {
+					
+				    for (int i = 0; i <= inn.getFallsOfWickets().size() -1; i++)
+				    {
+				    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
+				    			inn.getFallsOfWickets().get(i).getFowRuns() + ";");
+				    }
+				
+				}else if(inn.getInningNumber() == 2) {
+					if(match.getMatch().getInning().get(0).getFallsOfWickets() != null)
+					{
+					    for (int i = 0; i <= match.getMatch().getInning().get(0).getFallsOfWickets().size() -1; i++)
+					    {
+					    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
+					    			match.getMatch().getInning().get(0).getFallsOfWickets().get(i).getFowRuns() + ";");
+					    }
+					}
+					
+					if(match.getMatch().getInning().get(1).getFallsOfWickets() != null)
+					{
+					    for (int j = 0; j <= match.getMatch().getInning().get(1).getFallsOfWickets().size() -1; j++)
+					    {
+					    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + (j+1) + " " + 
+					    			match.getMatch().getInning().get(1).getFallsOfWickets().get(j).getFowRuns() + ";");
+					    }
+					}
 				}
 /**************************************** BATTING CARD  *******************************************************************/
 				if(inn.getFallsOfWickets()!=null) {
@@ -912,7 +912,8 @@ public class ISPL_FRUIT extends Scene{
 							"THIS OVER       "+ Stats.getOverData().getTotalRuns()+"  RUN"+ CricketFunctions.Plural(Stats.getOverData().getTotalRuns()).toUpperCase() + ";");
 				}
 				if(boc.getStatus().toUpperCase().equalsIgnoreCase("CURRENTBOWLER") || boc.getStatus().toUpperCase().equalsIgnoreCase("LASTBOWLER")) {
-					String str=replaceTermsInString(Stats.getOverData().getThisOverTxt());
+					String str=replaceTermsInString(Stats.getOverData().getThisOverTxt().replace("9BOUNDARY", "9").replace("4BOUNDARY", "4").replace("6BOUNDARY", "6"));
+					System.out.println(str);
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tThisOverData " + 
 							reverseStringWithPreservation(str) + ";");
 					
@@ -1161,7 +1162,7 @@ public class ISPL_FRUIT extends Scene{
 	public void populateSpeed(PrintWriter printWriter, Speed lastSpeed) throws Exception {
 		
 		if(lastSpeed != null) {
-			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue " + lastSpeed.getSpeedValue()  + ";");
+			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue " + lastSpeed.getSpeedValue().substring(1)  + ";");
 		}else {
 			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue;");
 		}			      
