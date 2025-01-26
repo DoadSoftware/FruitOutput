@@ -52,7 +52,6 @@ public class ISPL_FRUIT extends Scene{
 	
 	public Object ProcessGraphicOption(String whatToProcess, MatchAllData match, CricketService cricketService,
 			PrintWriter print_writer, List<Scene> scenes, String valueToProcess,Configuration config) throws Exception{
-			
 		
 		switch (whatToProcess.toUpperCase()) {
 		case "POPULATE-FRUIT": 
