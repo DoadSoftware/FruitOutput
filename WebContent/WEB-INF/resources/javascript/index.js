@@ -26,21 +26,41 @@ function initialiseForm(whatToProcess,dataToProcess)
 		
 		break;
 	case 'TEAMS_SCORE':
-		if(session_match.match.inning[0].totalWickets >= 10){
-			document.getElementById('team1Details').innerHTML = session_match.match.inning[0].batting_team.teamName4 
-			+ ' : ' + session_match.match.inning[0].totalRuns;
-		}else {
-			document.getElementById('team1Details').innerHTML = session_match.match.inning[0].batting_team.teamName4 
-				+ ' : ' + session_match.match.inning[0].totalRuns + ' - ' + session_match.match.inning[0].totalWickets;
-		}
-		
-		if(session_match.match.inning[1].totalWickets >= 10){
-			document.getElementById('team2Details').innerHTML = session_match.match.inning[1].batting_team.teamName4 
-			+ ' : ' + session_match.match.inning[1].totalRuns;
-		}else {
-			document.getElementById('team2Details').innerHTML = session_match.match.inning[1].batting_team.teamName4 
-				+ ' : ' + session_match.match.inning[1].totalRuns + ' - ' + session_match.match.inning[1].totalWickets;
-		}
+		 session_match.match.inning.forEach(function(hs){
+			if(hs.inningNumber == 3 || hs.inningNumber == 4){
+				if(session_match.match.inning[2].totalWickets >= 10){
+					document.getElementById('team1Details').innerHTML = session_match.match.inning[2].batting_team.teamName4 
+					+ ' : ' + session_match.match.inning[2].totalRuns;
+				}else {
+					document.getElementById('team1Details').innerHTML = session_match.match.inning[2].batting_team.teamName4 
+						+ ' : ' + session_match.match.inning[2].totalRuns + ' - ' + session_match.match.inning[2].totalWickets;
+				}
+				
+				if(session_match.match.inning[3].totalWickets >= 10){
+					document.getElementById('team2Details').innerHTML = session_match.match.inning[3].batting_team.teamName4 
+					+ ' : ' + session_match.match.inning[3].totalRuns;
+				}else {
+					document.getElementById('team2Details').innerHTML = session_match.match.inning[3].batting_team.teamName4 
+						+ ' : ' + session_match.match.inning[3].totalRuns + ' - ' + session_match.match.inning[3].totalWickets;
+			   }
+			}else if(hs.inningNumber == 1 || hs.inningNumber == 2){
+				if(session_match.match.inning[0].totalWickets >= 10){
+					document.getElementById('team1Details').innerHTML = session_match.match.inning[0].batting_team.teamName4 
+					+ ' : ' + session_match.match.inning[0].totalRuns;
+				}else {
+					document.getElementById('team1Details').innerHTML = session_match.match.inning[0].batting_team.teamName4 
+						+ ' : ' + session_match.match.inning[0].totalRuns + ' - ' + session_match.match.inning[0].totalWickets;
+				}
+				
+				if(session_match.match.inning[1].totalWickets >= 10){
+					document.getElementById('team2Details').innerHTML = session_match.match.inning[1].batting_team.teamName4 
+					+ ' : ' + session_match.match.inning[1].totalRuns;
+				}else {
+					document.getElementById('team2Details').innerHTML = session_match.match.inning[1].batting_team.teamName4 
+						+ ' : ' + session_match.match.inning[1].totalRuns + ' - ' + session_match.match.inning[1].totalWickets;
+			   }
+			}
+		 });
 		break;
 	case 'initialise':
 		processUserSelection($('#select_broadcaster'));
@@ -79,7 +99,7 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 					return false;
 				}				
 			}
-			document.getElementById('which_keypress').value = parseInt(dataToProcess) - 48; // DJ
+			document.getElementById('which_keypress').value = parseInt(dataToProcess) - 48; 
 			document.getElementById('selected_inning').innerHTML = 'Selected Inning: ' + (parseInt(dataToProcess) - 48);
 			break;
 		}
