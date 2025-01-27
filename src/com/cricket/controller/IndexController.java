@@ -3,17 +3,12 @@ package com.cricket.controller;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,7 +22,6 @@ import com.cricket.broadcaster.ISPL_FRUIT;
 import com.cricket.broadcaster.LCT_FRUIT;
 import com.cricket.containers.Scene;
 import com.cricket.model.Configuration;
-import com.cricket.model.Event;
 import com.cricket.model.Match;
 import com.cricket.model.MatchAllData;
 import com.cricket.model.Review;
@@ -35,9 +29,6 @@ import com.cricket.model.Speed;
 import com.cricket.service.CricketService;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sf.json.JSONObject;
 	
@@ -49,6 +40,7 @@ public class IndexController
 
 	public static MatchAllData session_match;
 	public static DOAD_FRUIT this_fruit;
+	public static LCT_FRUIT this_fruit_lct;
 	public static ISPL_FRUIT this_ispl_fruit;
 	public static String expiry_date = "2025-12-31";
 	public static String current_date;
@@ -158,10 +150,29 @@ public class IndexController
 						session_configuration);
 				//CricketFunctions.getInteractive(session_match, "FULL_WRITE");	
 				break;
+			case "LCT_FRUIT":
+				this_fruit_lct = new LCT_FRUIT();
+				session_selected_scenes.add(0,new Scene("D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT_LCT/Scenes/Fruit.sum","FRONT_LAYER")); // Front layer
+				session_selected_scenes.get(0).scene_load(CricketFunctions
+						.processPrintWriter(session_configuration).get(0), select_broadcaster);
+				this_fruit_lct.initialize_fruit(CricketFunctions.processPrintWriter(
+						session_configuration).get(0), session_match,session_configuration);
+				this_fruit_lct.ProcessGraphicOption("ANIMATE-IN-LOGO", session_match, cricketService, 
+						CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes,"",
+						session_configuration);
+				break;
+				
 			}
 			
-			if(new File(CricketUtil.VR_SPPED).exists()) {
-				lastSpeed.setSpeedFileModifiedTime(new File(CricketUtil.VR_SPPED).lastModified());
+			if(select_broadcaster.equalsIgnoreCase(CricketUtil.ISPL_FRUIT)) {
+				if(new File("C:/Sports/Cricket/VE/VR-Speed.txt").exists()) {
+					lastSpeed.setSpeedFileModifiedTime(new File("C:/Sports/Cricket/VE/VR-Speed.txt").lastModified());
+				}	
+			}else {
+				if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT).exists()) {
+					lastSpeed.setSpeedFileModifiedTime(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY 
+							+ CricketUtil.SPEED_TXT).lastModified());
+				}
 			}
 			if(new File(CricketUtil.REVIEWS).exists()) {
 				lastReview.setLastTimeStamp(new File(CricketUtil.REVIEWS).lastModified());
@@ -250,7 +261,7 @@ public class IndexController
 
 				if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
 					
-					this_speed = CricketFunctions.getCurrentSpeed(CricketUtil.VR_SPPED, lastSpeed);
+					this_speed = CricketFunctions.getCurrentSpeed("C:/Sports/Cricket/VE/VR-Speed.txt", lastSpeed);
 					if(this_speed != null) {
 						this_ispl_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
 						lastSpeed = this_speed;
@@ -261,6 +272,36 @@ public class IndexController
 						lastReview=this_review;
 					}
 				}
+				break;
+			case "LCT_FRUIT":
+				if(session_match.getMatch() != null && last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY 
+						+ CricketUtil.MATCHES_DIRECTORY + session_match.getMatch().getMatchFileName()).lastModified()) {
+						
+						session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
+								CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+
+						if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
+							this_fruit_lct.updateFruit(session_selected_scenes.get(0), 
+							session_match,CricketFunctions.processPrintWriter(session_configuration).get(0),session_configuration);
+						}
+						last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+							+ session_match.getMatch().getMatchFileName()).lastModified();
+					}
+
+					if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
+						
+						this_speed = CricketFunctions.getCurrentSpeed(CricketUtil.CRICKET_DIRECTORY 
+								+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT, lastSpeed);
+						if(this_speed != null) {
+							this_fruit_lct.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
+							lastSpeed = this_speed;
+						}
+						this_review=CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+						if(this_review != null) {
+							this_fruit_lct.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
+							lastReview=this_review;
+						}
+					}
 				break;
 			
 			}
@@ -278,6 +319,10 @@ public class IndexController
 				this_ispl_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
 						CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess,session_configuration);
 				break;
+			case "LCT_FRUIT":
+				this_fruit_lct.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
+						CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess,session_configuration);
+					break;
 			
 			}
 			

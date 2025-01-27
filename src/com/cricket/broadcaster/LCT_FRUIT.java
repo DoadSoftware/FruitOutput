@@ -29,7 +29,7 @@ import com.cricket.util.CricketUtil;
 
 public class LCT_FRUIT extends Scene{
 
-	public String session_selected_broadcaster = "DOAD_FRUIT";
+	public String session_selected_broadcaster = "LCT_FRUIT";
 	public String which_graphics_onscreen = "",Summary="";
 	boolean player_found = false;
 	public String icon_path = "C:\\DOAD_In_House_Everest\\Everest_Cricket\\EVEREST_FRUIT\\Icons\\";
@@ -71,7 +71,7 @@ public class LCT_FRUIT extends Scene{
 			 break;
 			case "ANIMATE-IN-FRUIT":case"ANIMATE-IN-TEAM": case "ANIMATE-IN-LOGO":case "ANIMATE-OUT": case "CLEAR-ALL": 
 				switch (session_selected_broadcaster.toUpperCase()) {
-				case "DOAD_FRUIT":
+				case "LCT_FRUIT":
 					switch (whatToProcess.toUpperCase()) {
 					case "ANIMATE-IN-FRUIT":
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPage 2;");			
@@ -1069,7 +1069,7 @@ public class LCT_FRUIT extends Scene{
 	public void processAnimation(PrintWriter print_writer, String animationName,String animationCommand, String which_broadcaster,int which_layer)
 	{
 		switch(which_broadcaster.toUpperCase()) {
-		case "DOAD_FRUIT":
+		case "LCT_FRUIT":
 			switch(which_layer) {
 			case 1:
 				print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*" + animationName + " " + animationCommand + ";");
@@ -1163,7 +1163,7 @@ public class LCT_FRUIT extends Scene{
 	} 	
 	public void populateReview(PrintWriter printWriter, MatchAllData match, Review review) throws Exception {
 		switch (this.session_selected_broadcaster) {
-		case "DOAD_FRUIT":
+		case "LCT_FRUIT":
 			if(review == null) {
 	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " + "SUMMARY " + ";");
 			}else {

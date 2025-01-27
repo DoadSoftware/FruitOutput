@@ -50,6 +50,7 @@ public class Scene {
 	{
 		switch (broadcaster.toUpperCase()) {
 		case CricketUtil.DOAD_FRUIT: case CricketUtil.ICC_U19_WorldCup_2024: case CricketUtil.ISPL_FRUIT:
+		case "LCT_FRUIT":
 			switch(this.which_layer.toUpperCase()) {
 			
 			case "FRONT_LAYER":	

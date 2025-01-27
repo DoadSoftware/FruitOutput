@@ -116,6 +116,9 @@ function processCricketProcedures(whatToProcess)
 		case 'ISPL_FRUIT':
 			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_ISPL_FRUIT/Scenes/Fruit.sum';
 			break;
+		case 'LCT_FRUIT': 
+			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT_LCT/Scenes/Fruit.sum';
+			break;
 		}
 		break;
 	}

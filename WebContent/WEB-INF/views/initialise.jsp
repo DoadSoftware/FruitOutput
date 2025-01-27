@@ -67,7 +67,7 @@
 			      		onchange="processUserSelection(this)">
 			      		<option value="DOAD_FRUIT">DOAD_FRUIT</option>
 			      		<option value="ISPL_FRUIT">ISPL FRUIT</option>
-			      		<!-- <option value="LCT_FRUIT">LCT FRUIT</option> -->
+			      		<option value="LCT_FRUIT">LCT FRUIT</option> 
 			      		
 			      </select>
 			    </div>
