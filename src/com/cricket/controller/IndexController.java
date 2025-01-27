@@ -190,7 +190,7 @@ public class IndexController
 					throws Exception 
 	{
 		Speed this_speed = new Speed();
-		Review this_review= new Review();
+		Review this_review =  new Review();
 		
 		switch (whatToProcess.toUpperCase()) {
 		case "GET-CONFIG-DATA":
@@ -233,10 +233,10 @@ public class IndexController
 						this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
 						lastSpeed = this_speed;
 					}
-					this_review=CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+					this_review = CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
 					if(this_review != null) {
 						this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
-						lastReview=this_review;
+						lastReview = this_review;
 					}
 				}
 				break;
@@ -266,10 +266,10 @@ public class IndexController
 						this_ispl_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
 						lastSpeed = this_speed;
 					}
-					this_review=CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+					this_review = CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
 					if(this_review != null) {
 						this_ispl_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
-						lastReview=this_review;
+						lastReview = this_review;
 					}
 				}
 				break;
@@ -296,10 +296,10 @@ public class IndexController
 							this_fruit_lct.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
 							lastSpeed = this_speed;
 						}
-						this_review=CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+						this_review = CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
 						if(this_review != null) {
 							this_fruit_lct.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
-							lastReview=this_review;
+							lastReview = this_review;
 						}
 					}
 				break;
