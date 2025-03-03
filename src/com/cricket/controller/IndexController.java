@@ -174,11 +174,11 @@ public class IndexController
 							+ CricketUtil.SPEED_TXT).lastModified());
 				}
 			}
-			if(new File(CricketUtil.REVIEWS).exists()) {
-				lastReview.setLastTimeStamp(new File(CricketUtil.REVIEWS).lastModified());
-			}else {
-				lastReview.setLastTimeStamp(0);
-			}
+//			if(new File(CricketUtil.REVIEWS).exists()) {
+//				lastReview.setLastTimeStamp(new File(CricketUtil.REVIEWS).lastModified());
+//			}else {
+//				lastReview.setLastTimeStamp(0);
+//			}
 			return "output";
 		}
 	}
@@ -233,9 +233,9 @@ public class IndexController
 						this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
 						lastSpeed = this_speed;
 					}
-					this_review = CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+					this_review = CricketFunctions.getReviewRemaining(session_match);
 					if(this_review != null) {
-						this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
+						this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,this_review);
 						lastReview = this_review;
 					}
 				}
@@ -266,9 +266,9 @@ public class IndexController
 						this_ispl_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
 						lastSpeed = this_speed;
 					}
-					this_review = CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+					this_review = CricketFunctions.getReviewRemaining(session_match);
 					if(this_review != null) {
-						this_ispl_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
+						this_ispl_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,this_review);
 						lastReview = this_review;
 					}
 				}
@@ -296,9 +296,14 @@ public class IndexController
 							this_fruit_lct.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
 							lastSpeed = this_speed;
 						}
-						this_review = CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+//						this_review = CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
+//						if(this_review != null) {
+//							this_fruit_lct.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
+//							lastReview = this_review;
+//						}
+						this_review = CricketFunctions.getReviewRemaining(session_match);
 						if(this_review != null) {
-							this_fruit_lct.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
+							this_fruit_lct.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,this_review);
 							lastReview = this_review;
 						}
 					}
