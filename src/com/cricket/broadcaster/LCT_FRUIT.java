@@ -392,7 +392,7 @@ public class LCT_FRUIT extends Scene{
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayTeamName " + 
 						inn.getBowling_team().getTeamName2() + ";");
 				
-				MatchStats  Stats= CricketFunctions.getAllEvents(match, match.getEventFile().getEvents());
+				MatchStats  Stats= CricketFunctions.getAllEvents(match,config.getBroadcaster(), match.getEventFile().getEvents());
 
 /****************************************** Powerplay ***************************************************************/
 				if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
@@ -1167,10 +1167,15 @@ public class LCT_FRUIT extends Scene{
 			if(review == null) {
 	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " + "SUMMARY " + ";");
 			}else {
-				
-	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
-	    				String.format("%-10s", match.getMatch().getInning().get(0).getBatting_team().getTeamName4()) + " : " + 
-	    				review.getReviewStatus().split(",")[0] +"   "+ String.format("%-8s", match.getMatch().getInning().get(0).getBowling_team().getTeamName4() + " : " + review.getReviewStatus().split(",")[1]) + ";");
+				Inning inn = match.getMatch().getInning().stream()
+					    .filter(in -> in.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES))
+					    .findFirst()
+					    .orElse(null);
+				 if(inn !=null) {
+					printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
+		    				String.format("%-10s",inn.getBatting_team().getTeamName4()) + " : " + 
+		    				review.getReviewStatus().split(",")[0]+"   " + String.format("%-8s", inn.getBowling_team().getTeamName4() + " : " + review.getReviewStatus().split(",")[1]) + ";");	
+				}
 			}			      
 			break;
 		}
