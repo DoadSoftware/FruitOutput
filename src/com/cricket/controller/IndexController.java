@@ -86,6 +86,7 @@ public class IndexController
 			@RequestParam(value = "select_broadcaster", required = false, defaultValue = "") String select_broadcaster,
 			@RequestParam(value = "speed_select", required = false, defaultValue = "") String speed_select,
 			@RequestParam(value = "select_audio", required = false, defaultValue = "") String select_audio,
+			@RequestParam(value = "select_Client", required = false, defaultValue = "") String select_Client,
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch,
 			@RequestParam(value = "vizIPAddress", required = false, defaultValue = "") String vizIPAddress,
 			@RequestParam(value = "vizPortNumber", required = false, defaultValue = "") int vizPortNumber) 
@@ -108,7 +109,7 @@ public class IndexController
 			
 			session_configuration = new Configuration(selectedMatch, select_broadcaster, 
 					speed_select,"","", select_audio,vizIPAddress, vizPortNumber,"");
-			
+			session_configuration.setSelect_Client(Integer.valueOf(select_Client.trim()));
 			JAXBContext.newInstance(Configuration.class).createMarshaller().marshal(session_configuration, 
 					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + configuration_file_name));
 			
@@ -135,7 +136,6 @@ public class IndexController
 						.processPrintWriter(session_configuration).get(0), select_broadcaster);
 				this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(
 						session_configuration).get(0), session_match,session_configuration);
-				//CricketFunctions.getInteractive(session_match, "FULL_WRITE");	
 				break;
 			case CricketUtil.ISPL_FRUIT:
 				this_ispl_fruit = new ISPL_FRUIT();
@@ -148,7 +148,6 @@ public class IndexController
 				this_ispl_fruit.ProcessGraphicOption("ANIMATE-IN-LOGO", session_match, cricketService, 
 						CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes,"",
 						session_configuration);
-				//CricketFunctions.getInteractive(session_match, "FULL_WRITE");	
 				break;
 			case "LCT_FRUIT":
 				this_fruit_lct = new LCT_FRUIT();
@@ -174,11 +173,6 @@ public class IndexController
 							+ CricketUtil.SPEED_TXT).lastModified());
 				}
 			}
-//			if(new File(CricketUtil.REVIEWS).exists()) {
-//				lastReview.setLastTimeStamp(new File(CricketUtil.REVIEWS).lastModified());
-//			}else {
-//				lastReview.setLastTimeStamp(0);
-//			}
 			return "output";
 		}
 	}
@@ -207,10 +201,12 @@ public class IndexController
 			return JSONObject.fromObject(session_match).toString();
 		
 		case "READ-MATCH-AND-POPULATE":
-
 			switch (session_configuration.getBroadcaster()) {
 			case CricketUtil.DOAD_FRUIT: 
-				
+				if(session_match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)||
+						session_match.getSetup().getMatchType().equalsIgnoreCase("FC")) {
+					this_fruit.Time(CricketFunctions.processPrintWriter(session_configuration).get(0));
+				}
 				if(session_match.getMatch() != null && last_match_time_stamp != new File(CricketUtil.CRICKET_DIRECTORY 
 					+ CricketUtil.MATCHES_DIRECTORY + session_match.getMatch().getMatchFileName()).lastModified()) {
 					
@@ -296,11 +292,6 @@ public class IndexController
 							this_fruit_lct.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
 							lastSpeed = this_speed;
 						}
-//						this_review = CricketFunctions.getCurrentReview(CricketUtil.REVIEWS, lastReview);
-//						if(this_review != null) {
-//							this_fruit_lct.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,lastReview);
-//							lastReview = this_review;
-//						}
 						this_review = CricketFunctions.getReviewRemaining(session_match);
 						if(this_review != null) {
 							this_fruit_lct.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,this_review);
@@ -320,7 +311,6 @@ public class IndexController
 					CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess,session_configuration);
 				break;
 			case CricketUtil.ISPL_FRUIT:
-				//CricketFunctions.getInteractive(session_match, "FULL_WRITE");	
 				this_ispl_fruit.ProcessGraphicOption(whatToProcess, session_match, cricketService, 
 						CricketFunctions.processPrintWriter(session_configuration).get(0), session_selected_scenes, valueToProcess,session_configuration);
 				break;

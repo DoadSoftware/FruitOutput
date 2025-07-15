@@ -23,6 +23,7 @@ function initialiseForm(whatToProcess,dataToProcess)
 		document.getElementById('select_audio').value = dataToProcess.audio;
 		document.getElementById('vizIPAddress').value = dataToProcess.primaryIpAddress;
 		document.getElementById('vizPortNumber').value = dataToProcess.primaryPortNumber;
+		document.getElementById('selectClient').value = dataToProcess.selectClient;
 		
 		break;
 	case 'TEAMS_SCORE':
@@ -131,7 +132,7 @@ function processCricketProcedures(whatToProcess)
 	case 'POPULATE-FRUIT':case'POPULATE-TEAM':case'POPULATE-LOGO':
 		switch ($('#selected_broadcaster').val().toUpperCase()) {
 		case 'DOAD_FRUIT':
-			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum';
+			valueToProcess = 'C:/EVEREST_FRUIT/Scenes/Fruit.sum';
 			break;
 		case 'ISPL_FRUIT':
 			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_ISPL_FRUIT/Scenes/Fruit.sum';

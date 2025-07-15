@@ -93,6 +93,20 @@
 			      </select>
 			    </div>
 			  </div>
+			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+			    <label for="select_Client" class="col-sm-4 col-form-label text-left">Select Client </label>
+			    <div class="col-sm-6 col-md-6">
+			      <select id="select_Client" name="select_Client" value="${session_configuration.select_Client}"class="browser-default custom-select custom-select-sm"
+			      		onchange="processUserSelection(this)">
+			      		<option value="0"></option>
+			      		<option value="1">BCCI</option>
+			      		<option value="2">Absolute Broadcast</option>
+			      		<option value="3">ICC</option> 
+			      		<option value="4">RISE</option>
+			      		<option value="5">WILDTRACK</option> 
+			      </select>
+			    </div>
+			  </div>
 			<div class="row">
 			<table class="table table-bordered table-responsive">
 			  <tbody>

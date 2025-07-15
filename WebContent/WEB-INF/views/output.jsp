@@ -116,6 +116,7 @@
 <input type="hidden" name="selected_broadcaster" id="selected_broadcaster" value="${session_selected_broadcaster}"/>
 <input type="hidden" name="speed_select" id="speed_select" value="${selected_speed}"/>
 <input type="hidden" name="select_audio" id="select_audio" value="${select_audio}"/>
+<input type="hidden" name="select_Client" id="select_Client" value="${select_Client}"/>
 <input type="hidden" name="selected_match_max_overs" id="selected_match_max_overs" value="${session_match.setup.maxOvers}"/>
 <input type="hidden" id="matchFileTimeStamp" name="matchFileTimeStamp" value="${session_match.setup.matchFileTimeStamp}"></input>
 </form:form>

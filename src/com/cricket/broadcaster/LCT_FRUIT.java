@@ -1167,15 +1167,10 @@ public class LCT_FRUIT extends Scene{
 			if(review == null) {
 	    		printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " + "SUMMARY " + ";");
 			}else {
-				Inning inn = match.getMatch().getInning().stream()
-					    .filter(in -> in.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES))
-					    .findFirst()
-					    .orElse(null);
-				 if(inn !=null) {
-					printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
-		    				String.format("%-10s",inn.getBatting_team().getTeamName4()) + " : " + 
-		    				review.getReviewStatus().split(",")[0]+"   " + String.format("%-8s", inn.getBowling_team().getTeamName4() + " : " + review.getReviewStatus().split(",")[1]) + ";");	
-				}
+				String homeTeam = match.getSetup().getHomeTeam().getTeamName4(), awayTeam = match.getSetup().getAwayTeam().getTeamName4();
+				printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
+	    				String.format("%-10s",homeTeam) + " : " + review.getReviewStatus().split(",")[0]+"   " + 
+						String.format("%-8s", awayTeam + " : " + review.getReviewStatus().split(",")[1]) + ";");
 			}			      
 			break;
 		}
