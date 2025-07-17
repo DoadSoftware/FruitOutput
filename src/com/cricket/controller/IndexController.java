@@ -211,7 +211,7 @@ public class IndexController
 					+ CricketUtil.MATCHES_DIRECTORY + session_match.getMatch().getMatchFileName()).lastModified()) {
 					
 					session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-							CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+							CricketUtil.SETUP + "," +CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 
 					if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
 						this_fruit.updateFruit(session_selected_scenes.get(0), 
@@ -243,7 +243,7 @@ public class IndexController
 					+ CricketUtil.MATCHES_DIRECTORY + session_match.getMatch().getMatchFileName()).lastModified()) {
 					
 					session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-							CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+							CricketUtil.SETUP + "," +CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 					
 					//CricketFunctions.getInteractive(session_match,"FULL_WRITE");
 
@@ -274,7 +274,7 @@ public class IndexController
 						+ CricketUtil.MATCHES_DIRECTORY + session_match.getMatch().getMatchFileName()).lastModified()) {
 						
 						session_match = CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ,
-								CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
+								CricketUtil.SETUP + "," +CricketUtil.MATCH + "," + CricketUtil.EVENT, session_match));
 
 						if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
 							this_fruit_lct.updateFruit(session_selected_scenes.get(0), 
