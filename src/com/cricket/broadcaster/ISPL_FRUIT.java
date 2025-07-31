@@ -13,17 +13,17 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import com.cricket.containers.Scene;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
+import com.cricket.model.Inning;
+import com.cricket.model.MatchAllData;
+import com.cricket.model.MatchStats;
 import com.cricket.model.Player;
 import com.cricket.model.Review;
 import com.cricket.model.Speed;
 import com.cricket.service.CricketService;
-import com.cricket.model.Inning;
-import com.cricket.model.MatchAllData;
-import com.cricket.model.MatchStats;
-import com.cricket.containers.Scene;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
 
@@ -56,7 +56,7 @@ public class ISPL_FRUIT extends Scene{
 		switch (whatToProcess.toUpperCase()) {
 		case "POPULATE-FRUIT": 
 			if(!which_graphics_onscreen.equalsIgnoreCase("FRUIT")||which_graphics_onscreen.isEmpty()) {
-				scenes.get(0).setScene_path("D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_ISPL_FRUIT/Scenes/Fruit.sum");
+				scenes.get(0).setScene_path("D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum");
 				scenes.get(0).scene_load(print_writer,session_selected_broadcaster);
 				initialize_fruit(print_writer, match, config);
 			}
@@ -79,6 +79,7 @@ public class ISPL_FRUIT extends Scene{
 			case "ISPL_FRUIT":
 				switch (whatToProcess.toUpperCase()) {
 				case "ANIMATE-IN-FRUIT":
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPage 2;");	
 					if(!which_graphics_onscreen.equalsIgnoreCase("FRUIT")||which_graphics_onscreen.isEmpty()) {
 						processAnimation(print_writer, "In", "START", session_selected_broadcaster,1);
 					}
@@ -540,7 +541,7 @@ public class ISPL_FRUIT extends Scene{
 	
 				if(inn.getInningNumber() == 1) {
 					if(inn.getRunRate() != null) {
-						str = CricketFunctions.projectedScore(match);			    
+						str = CricketFunctions.projectedScore(match);
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType " + "0" + ";");
 						
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tProjectedHead1 " + 
@@ -884,6 +885,8 @@ public class ISPL_FRUIT extends Scene{
 					}
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectHomePlayerNumber " + 
 							inn.getFallsOfWickets().size() + ";");
+				}else {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectHomePlayerNumber 0;"); 	
 				}
 /****************************************Current and last bowlers*******************************************************************/
 				int id = 0;
@@ -956,7 +959,6 @@ public class ISPL_FRUIT extends Scene{
 				}
 				if(boc.getStatus().toUpperCase().equalsIgnoreCase("CURRENTBOWLER") || boc.getStatus().toUpperCase().equalsIgnoreCase("LASTBOWLER")) {
 					String str=replaceTermsInString(Stats.getOverData().getThisOverTxt().replace("9BOUNDARY", "9").replace("4BOUNDARY", "4").replace("6BOUNDARY", "6"));
-					System.out.println(str);
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tThisOverData " + 
 							reverseStringWithPreservation(str) + ";");
 					
@@ -979,98 +981,24 @@ public class ISPL_FRUIT extends Scene{
 					}
 				}
 /**************************************** BOWLING CARD  *******************************************************************/
-					if(inn.getBowlingTeamId() == match.getSetup().getHomeTeamId() && inn.getBowlingCard() != null) {
-							for(int i = 0; i <= inn.getBowlingCard().size() -1 ; i++) {
-								player_found = false;
-								if(player_found == false) {
-									for(Player hs : match.getSetup().getHomeSquad()) {
-										if(inn.getBowlingCard().get(i).getPlayerId() == hs.getPlayerId()) {
-											print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayPlayer" + (i+1) + " " + 
-									    			hs.getTicker_name() + ";");
-											player_found = true;
-										}
-									}
-								}
-								
-								if(player_found == false) {
-									for(Player hos : match.getSetup().getHomeOtherSquad()) {
-										if(inn.getBowlingCard().get(i).getPlayerId() == hos.getPlayerId()){
-											print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayPlayer" + (i+1) + " " + 
-									    			hos.getTicker_name() + ";");
-											player_found = true;
-										}
-									}
-								}
-								
-								if(player_found == false) {
-									for(Player hsub : match.getSetup().getHomeSubstitutes()) {
-										if(inn.getBowlingCard().get(i).getPlayerId() == hsub.getPlayerId()){
-											print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayPlayer" + (i+1) + " " + 
-													hsub.getTicker_name() + ";");
-											player_found = true;
-										}
-									}
-								}
-							if(inn.getBowlingCard().get(i).getPlayerId() == boc.getPlayerId()){
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayer" + (i+1) + " 1" + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayStriker3 0" + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vAwaySelectStriker" + (i+1) + " 0" + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayScore" + (i+1) + " " + 
-										 boc.getWickets() + "-" + boc.getRuns() + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayBalls" + (i+1) + " " + 
-										CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()) + ";");
-							}
-							}
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayerNumber " + 
-									inn.getBowlingCard().size() + ";");
-						}else if(inn.getBowlingTeamId() == match.getSetup().getAwayTeamId()&& inn.getBowlingCard() != null) {
-							
-							if(inn.getBowlingCard() != null){
-								for(int i = 0; i <= inn.getBowlingCard().size() -1 ; i++) {
-									player_found = false;
-									if(player_found == false) {
-										for(Player hs : match.getSetup().getAwaySquad()) {
-											if(inn.getBowlingCard().get(i).getPlayerId() == hs.getPlayerId()) {
-												print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayPlayer" + (i+1) + " " + 
-										    			hs.getTicker_name() + ";");
-												player_found = true;
-											}
-										}
-									}
-									
-									if(player_found == false) {
-										for(Player hos : match.getSetup().getAwayOtherSquad()) {
-											if(inn.getBowlingCard().get(i).getPlayerId() == hos.getPlayerId()){
-												print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayPlayer" + (i+1) + " " + 
-										    			hos.getTicker_name() + ";");
-												player_found = true;
-											}
-										}
-									}
-									
-									if(player_found == false) {
-										for(Player hsub : match.getSetup().getAwaySubstitutes()) {
-											if(inn.getBowlingCard().get(i).getPlayerId() == hsub.getPlayerId()){
-												print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayPlayer" + (i+1) + " " + 
-														hsub.getTicker_name() + ";");
-												player_found = true;
-											}
-										}
-									}
-								if(inn.getBowlingCard().get(i).getPlayerId() == boc.getPlayerId()){
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayer" + (i+1) + " 1" + ";");
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayStriker3 0" + ";");
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vAwaySelectStriker" + (i+1) + " 0" + ";");
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayScore" + (i+1) + " " + 
-											 boc.getWickets() + "-" + boc.getRuns() + ";");
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayBalls" + (i+1) + " " + 
-											CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()) + ";");
-								}
-								}
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayerNumber " + 
-										inn.getBowlingCard().size() + ";");
-							}
-						}	
+				if(inn.getBowlingCard() != null) {
+					for(int i = 0; i <= inn.getBowlingCard().size() -1 ; i++) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayPlayer" + (i+1) + " " + 
+								inn.getBowlingCard().get(i).getPlayer().getTicker_name() + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayer" + (i+1) + " 1" + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayStriker3 0" + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vAwaySelectStriker" + (i+1) + " 0" + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayScore" + (i+1) + " " + 
+								inn.getBowlingCard().get(i).getWickets() + "-" + inn.getBowlingCard().get(i).getRuns() + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayBalls" + (i+1) + " " + 
+								CricketFunctions.OverBalls(inn.getBowlingCard().get(i).getOvers(), inn.getBowlingCard().get(i).getBalls()) + ";");
+					}
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayerNumber " + 
+						inn.getBowlingCard().size() + ";");
+					
+				   }else {
+					   print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectAwayPlayerNumber 0;"); 
+				   }
 				}
 			}
 				if(config.getAudio().equalsIgnoreCase(CricketUtil.LastBallAudio)) // LastBall 

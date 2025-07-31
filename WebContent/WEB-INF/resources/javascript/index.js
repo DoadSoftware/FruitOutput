@@ -29,21 +29,40 @@ function initialiseForm(whatToProcess,dataToProcess)
 	case 'TEAMS_SCORE':
 		 session_match.match.inning.forEach(function(hs){
 			if(hs.inningNumber == 3 || hs.inningNumber == 4){
-				if(session_match.match.inning[2].totalWickets >= 10){
-					document.getElementById('team1Details').innerHTML = session_match.match.inning[2].batting_team.teamName4 
-					+ ' : ' + session_match.match.inning[2].totalRuns;
-				}else {
-					document.getElementById('team1Details').innerHTML = session_match.match.inning[2].batting_team.teamName4 
-						+ ' : ' + session_match.match.inning[2].totalRuns + ' - ' + session_match.match.inning[2].totalWickets;
-				}
-				
-				if(session_match.match.inning[3].totalWickets >= 10){
-					document.getElementById('team2Details').innerHTML = session_match.match.inning[3].batting_team.teamName4 
-					+ ' : ' + session_match.match.inning[3].totalRuns;
-				}else {
-					document.getElementById('team2Details').innerHTML = session_match.match.inning[3].batting_team.teamName4 
-						+ ' : ' + session_match.match.inning[3].totalRuns + ' - ' + session_match.match.inning[3].totalWickets;
-			   }
+				var team1 ; var team2 ;
+				   if(dataToProcess.match.inning[2].batting_team.teamName1==dataToProcess.match.inning[0].batting_team.teamName1){
+					  team1 = parseInt(dataToProcess.match.inning[0].totalRuns) + 
+				    	 (parseInt(dataToProcess.match.inning[0].totalWickets) < 10 
+				            ? "-" + dataToProcess.match.inning[0].totalWickets 
+				            : "") + " & ";
+				      team2 = parseInt(dataToProcess.match.inning[1].totalRuns) + 
+				    	 (parseInt(dataToProcess.match.inning[1].totalWickets) < 10 
+				            ? "-" + dataToProcess.match.inning[1].totalWickets 
+				            : "") + " & ";
+				   }else{
+					  team2 = parseInt(dataToProcess.match.inning[0].totalRuns) + 
+				    	 (parseInt(dataToProcess.match.inning[0].totalWickets) < 10 
+				            ? "-" + dataToProcess.match.inning[0].totalWickets 
+				            : "") + " & ";
+				      team1 = parseInt(dataToProcess.match.inning[1].totalRuns) + 
+				    	 (parseInt(dataToProcess.match.inning[1].totalWickets) < 10 
+				            ? "-" + dataToProcess.match.inning[1].totalWickets 
+				            : "") + " & ";
+				   }
+				  document.getElementById('team1Details').innerHTML = session_match.match.inning[2].batting_team.teamName4 
+					+ ' : ' + team1 + parseInt(dataToProcess.match.inning[2].totalRuns) + 
+				        (parseInt(dataToProcess.match.inning[2].totalWickets) < 10 
+				            ? "-" + dataToProcess.match.inning[2].totalWickets 
+				            : "") + 
+				        ' [' + parseInt(dataToProcess.match.inning[2].totalOvers) + '.' + parseInt(dataToProcess.match.inning[2].totalBalls) + ']';
+				    
+				document.getElementById('team2Details').innerHTML = session_match.match.inning[3].batting_team.teamName4 
+						+ ' : ' + team2 +  parseInt(dataToProcess.match.inning[3].totalRuns) + 
+				        (parseInt(dataToProcess.match.inning[3].totalWickets) < 10 
+				            ? "-" + dataToProcess.match.inning[3].totalWickets 
+				            : "") + 
+				        ' [' + parseInt(dataToProcess.match.inning[3].totalOvers) + '.' + parseInt(dataToProcess.match.inning[3].totalBalls) + ']';
+				        
 			}else if(hs.inningNumber == 1 || hs.inningNumber == 2){
 				if(session_match.match.inning[0].totalWickets >= 10){
 					document.getElementById('team1Details').innerHTML = session_match.match.inning[0].batting_team.teamName4 
@@ -135,7 +154,7 @@ function processCricketProcedures(whatToProcess)
 			valueToProcess = 'C:/EVEREST_FRUIT/Scenes/Fruit.sum';
 			break;
 		case 'ISPL_FRUIT':
-			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_ISPL_FRUIT/Scenes/Fruit.sum';
+			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum';
 			break;
 		case 'LCT_FRUIT': 
 			valueToProcess = 'D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT_LCT/Scenes/Fruit.sum';
