@@ -417,7 +417,8 @@ public class LCT_FRUIT extends Scene{
 	    		}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) 
 	    			|| match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)
 	    			||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
-	    			if(inn.getFirstPowerplayEndOver()>inn.getTotalOvers()&&inn.getFirstPowerplayEndOver()>1) {
+	    			if(CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1)>inn.getTotalOvers() && 
+	    					CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1)>1) {
 	    				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "1" + ";");
 	    				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPowerPlay " + "P" + ";");
 	    				
@@ -495,7 +496,7 @@ public class LCT_FRUIT extends Scene{
 				{//match.getMatch().getMatchStatus().toUpperCase()
 					//Summary = CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT).toUpperCase();
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tText " 
-							+ CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT, session_selected_broadcaster).toUpperCase()+ ";");
+							+ CricketFunctions.GenerateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT, "",session_selected_broadcaster,true).toUpperCase()+ ";");
 						
 						if(match.getMatch().getInning().get(0).getTotalWickets()==10) {
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tComparisonHomeTeamName " + match.getMatch().getInning().get(0).getBatting_team().getTeamName2()
@@ -585,11 +586,11 @@ public class LCT_FRUIT extends Scene{
 							match.getMatch().getInning().get(1).getBatting_team().getTeamName4() + ";");
 					
 					
-					if(inn.getFirstPowerplayEndOver()>1) {
+					if(CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1)>1) {
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore1 " + 
 								Stats.getHomeFirstPowerPlay().getTotalRuns()+"-"+ Stats.getHomeFirstPowerPlay().getTotalWickets()+ ";");
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead1 " + 
-								((inn.getFirstPowerplayStartOver()-1)*6)+"-"+(inn.getFirstPowerplayEndOver()*6)+ ";");
+								CricketFunctions.getBallCountStartAndEndRange(match, inn).get(0)+"-"+CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1)+ ";");
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore1 " + 
 								Stats.getAwayFirstPowerPlay().getTotalRuns()+"-"+ Stats.getAwayFirstPowerPlay().getTotalWickets() + ";");
 						
@@ -599,13 +600,14 @@ public class LCT_FRUIT extends Scene{
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead1 " + 
 								" " + ";");
 					}
-					if(match.getMatch().getInning().get(0).getSecondPowerplayStartOver()>1) {
+					if(CricketFunctions.getBallCountStartAndEndRange(match, match.getMatch().getInning().get(0)).get(2)>1) {
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore2 " + 
 								Stats.getHomeSecondPowerPlay().getTotalRuns()+"-"+ Stats.getHomeSecondPowerPlay().getTotalWickets()+ ";");					
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore2 " + 
 								"-" + ";");
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead2 " + 
-								(((match.getMatch().getInning().get(0).getSecondPowerplayStartOver()-1)*6)+1)+"-"+(match.getMatch().getInning().get(0).getSecondPowerplayEndOver()*6)+ ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead2 " + CricketFunctions.getBallCountStartAndEndRange(match, 
+								match.getMatch().getInning().get(0)).get(2) + "-" + CricketFunctions.getBallCountStartAndEndRange(match, 
+										match.getMatch().getInning().get(0)).get(3)+ ";");
 						
 					}else {
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore2 ;");	
@@ -613,14 +615,15 @@ public class LCT_FRUIT extends Scene{
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead2 " + 
 								" " + ";");
 					}
-					 if(match.getMatch().getInning().get(1).getSecondPowerplayStartOver()>1) {
+					 if(CricketFunctions.getBallCountStartAndEndRange(match, match.getMatch().getInning().get(1)).get(2)>1) {
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore3 " + 
 								"-" + ";");	
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore3 " + 
 								Stats.getAwaySecondPowerPlay().getTotalRuns()+"-"+ Stats.getAwaySecondPowerPlay().getTotalWickets() + ";");
 						
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead3 " + 
-								(((match.getMatch().getInning().get(1).getSecondPowerplayStartOver()-1)*6)+1)+"-"+(match.getMatch().getInning().get(1).getSecondPowerplayEndOver()*6)+ ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPhaseHead3 " + CricketFunctions.getBallCountStartAndEndRange(match, 
+								match.getMatch().getInning().get(1)).get(2) + "-" + CricketFunctions.getBallCountStartAndEndRange(match, 
+										match.getMatch().getInning().get(1)).get(3)+ ";");
 					}else {
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore3 ;");	
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore3 ;");
@@ -706,7 +709,8 @@ public class LCT_FRUIT extends Scene{
 					
 				}else if(inn.getInningNumber() == 2) {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
-							"RRR: " + CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(match), 0, CricketFunctions.getRequiredBalls(match), 2,match) + ";");
+							"RRR: " + CricketFunctions.generateRunRate(CricketFunctions.GetTargetData(match).getRemaningRuns(), 0, 
+									CricketFunctions.GetTargetData(match).getRemaningBall(), 2,match) + ";");
 				}
 
 /******************************************************* FALL OF WICKETS AND LAST WICKET *******************************/

@@ -87,6 +87,8 @@ public class IndexController
 			@RequestParam(value = "speed_select", required = false, defaultValue = "") String speed_select,
 			@RequestParam(value = "select_audio", required = false, defaultValue = "") String select_audio,
 			@RequestParam(value = "select_Client", required = false, defaultValue = "") String select_Client,
+			@RequestParam(value = "showSpeed", required = false, defaultValue = "") String showSpeed,
+			@RequestParam(value = "showReview", required = false, defaultValue = "") String showReview,
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch,
 			@RequestParam(value = "vizIPAddress", required = false, defaultValue = "") String vizIPAddress,
 			@RequestParam(value = "vizPortNumber", required = false, defaultValue = "") int vizPortNumber) 
@@ -107,8 +109,8 @@ public class IndexController
 			last_match_time_stamp = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 				+ selectedMatch).lastModified();
 			
-			session_configuration = new Configuration(selectedMatch, select_broadcaster, 
-					speed_select,"","", select_audio,vizIPAddress, vizPortNumber,"");
+			session_configuration = new Configuration(selectedMatch, select_broadcaster, speed_select, "", "", 
+					select_audio,vizIPAddress, vizPortNumber,"", showSpeed, showReview);
 			session_configuration.setSelect_Client(Integer.valueOf(select_Client.trim()));
 			JAXBContext.newInstance(Configuration.class).createMarshaller().marshal(session_configuration, 
 					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + configuration_file_name));
@@ -132,10 +134,8 @@ public class IndexController
 			case CricketUtil.DOAD_FRUIT:
 				this_fruit = new DOAD_FRUIT();
 				session_selected_scenes.add(0,new Scene(CricketUtil.Doad_Fruit_scene,"FRONT_LAYER")); // Front layer
-				session_selected_scenes.get(0).scene_load(CricketFunctions
-						.processPrintWriter(session_configuration).get(0), select_broadcaster);
-				this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(
-						session_configuration).get(0), session_match,session_configuration);
+				session_selected_scenes.get(0).scene_load(CricketFunctions.processPrintWriter(session_configuration).get(0), select_broadcaster);
+				this_fruit.initialize_fruit(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,session_configuration);
 				break;
 			case CricketUtil.ISPL_FRUIT:
 				this_ispl_fruit = new ISPL_FRUIT();
@@ -222,13 +222,13 @@ public class IndexController
 				}
 
 				if(!session_configuration.getPrimaryIpAddress().isEmpty()) {
-					
 					this_speed = CricketFunctions.getCurrentSpeed(CricketUtil.CRICKET_DIRECTORY 
 							+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT, lastSpeed);
 					if(this_speed != null) {
 						this_fruit.populateSpeed(CricketFunctions.processPrintWriter(session_configuration).get(0),this_speed);
 						lastSpeed = this_speed;
 					}
+
 					this_review = CricketFunctions.getReviewRemaining(session_match);
 					if(this_review != null) {
 						this_fruit.populateReview(CricketFunctions.processPrintWriter(session_configuration).get(0), session_match,this_review);

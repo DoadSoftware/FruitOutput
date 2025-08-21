@@ -422,7 +422,8 @@ public class ISPL_FRUIT extends Scene{
 	    		}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) 
 	    			|| match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)
 	    			||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
-	    			if(inn.getFirstPowerplayEndOver()>inn.getTotalOvers()) {
+	    			if(CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1) > 
+	    				(inn.getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver()) + inn.getTotalBalls())) {
 	    				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "1" + ";");
 	    				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPowerPlay " + "P" + ";");
 	    				
@@ -497,7 +498,7 @@ public class ISPL_FRUIT extends Scene{
 
 				}else if(inn.getInningNumber() == 2) {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tText " 
-							+ CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT, session_selected_broadcaster).toUpperCase() + ";");
+							+ CricketFunctions.GenerateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT, "",session_selected_broadcaster,true).toUpperCase() + ";");
 						
 						if(match.getMatch().getInning().get(0).getTotalWickets()==10) {
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tComparisonHomeTeamName " + match.getMatch().getInning().get(0).getBatting_team().getTeamName2()
@@ -727,7 +728,8 @@ public class ISPL_FRUIT extends Scene{
 					
 				}else if(inn.getInningNumber() == 2) {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
-							"RRR: " + CricketFunctions.generateRunRate(CricketFunctions.getRequiredRuns(match), 0, CricketFunctions.getRequiredBalls(match), 2,match) + ";");
+							"RRR: " + CricketFunctions.generateRunRate(CricketFunctions.GetTargetData(match).getRemaningRuns(), 0, 
+									CricketFunctions.GetTargetData(match).getRemaningBall(), 2,match) + ";");
 				}
 
 /******************************************************* FALL OF WICKETS AND LAST WICKET *******************************/

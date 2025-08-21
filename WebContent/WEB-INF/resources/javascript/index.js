@@ -24,7 +24,8 @@ function initialiseForm(whatToProcess,dataToProcess)
 		document.getElementById('vizIPAddress').value = dataToProcess.primaryIpAddress;
 		document.getElementById('vizPortNumber').value = dataToProcess.primaryPortNumber;
 		document.getElementById('selectClient').value = dataToProcess.selectClient;
-		
+		document.getElementById('showSpeed').value = dataToProcess.showSpeed;
+		document.getElementById('showReview').value = dataToProcess.showReview;
 		break;
 	case 'TEAMS_SCORE':
 		 session_match.match.inning.forEach(function(hs){

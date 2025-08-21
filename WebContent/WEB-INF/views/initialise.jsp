@@ -72,8 +72,18 @@
 			      </select>
 			    </div>
 			  </div>
+			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+				    <label for="showSpeed" class="col-sm-4 col-form-label text-left"> Select Speed </label>
+				    <div class="col-sm-6 col-md-6">
+				        <select id="showSpeed" name="showSpeed" class="browser-default custom-select custom-select-sm"
+				                onchange="processUserSelection(this)">
+				            <option value="WITH" ${session_configuration.showSpeed == 'WITH' ? 'selected' : ''}>WITH</option>
+				            <option value="WITHOUT" ${session_configuration.showSpeed == 'WITHOUT' ? 'selected' : ''}>WITHOUT</option>
+				        </select>
+				    </div>
+				</div>
 			   <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-			    <label for="speed_select" class="col-sm-4 col-form-label text-left"> Select Speed </label>
+			    <label for="speed_select" class="col-sm-4 col-form-label text-left"> Select Speed Type</label>
 			    <div class="col-sm-6 col-md-6">
 			      <select id="speed_select" name="speed_select" value="${session_configuration.speedUnit}" class="browser-default custom-select custom-select-sm"
 			      		onchange="processUserSelection(this)">
@@ -82,6 +92,16 @@
 			      </select>
 			    </div>
 			  </div>
+			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+			    <label for="showReview" class="col-sm-4 col-form-label text-left"> Select Review </label>
+			    <div class="col-sm-6 col-md-6">
+			        <select id="showReview" name="showReview" class="browser-default custom-select custom-select-sm"
+			                onchange="processUserSelection(this)">
+			            <option value="WITH" ${session_configuration.showReview == 'WITH' ? 'selected' : ''}>WITH</option>
+			            <option value="WITHOUT" ${session_configuration.showReview == 'WITHOUT' ? 'selected' : ''}>WITHOUT</option>
+			        </select>
+			    </div>
+				</div>
 			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 			    <label for="speed_select" class="col-sm-4 col-form-label text-left"> Audio </label>
 			    <div class="col-sm-6 col-md-6">
