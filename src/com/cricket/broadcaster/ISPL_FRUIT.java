@@ -165,18 +165,25 @@ public class ISPL_FRUIT extends Scene{
 				i = i+1;
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomePlayer" + i + " " + 
 		    			hs.getFull_name() + ";");
-				if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.CAPTAIN)) {
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeCaptain" + i +
-							" "+ " (C)" + ";");
-				}else if(hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER")) {
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeCaptain" + i +
-							" "+ " (C & WK)" + ";");
-				}else if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)) {
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeCaptain" + i +
-							" "+ " (WK)" + ";");
+				
+				if(hs.getCaptainWicketKeeper() != null) {
+					if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.CAPTAIN)) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeCaptain" + i +
+								" "+ " (C)" + ";");
+					}else if(hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER")) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeCaptain" + i +
+								" "+ " (C & WK)" + ";");
+					}else if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)) {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeCaptain" + i +
+								" "+ " (WK)" + ";");
+					}else {
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeCaptain" + i + " ;");
+					}
 				}else {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeCaptain" + i + " ;");
 				}
+				
+				
 				//subs 0
 				if(match.getSetup().getHomeSubstitutes().size()<=0) {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainHomeRole" + i + " " + 
@@ -276,15 +283,20 @@ public class ISPL_FRUIT extends Scene{
 	    			hs.getFull_name() + ";");
 			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayRole" + (ai+1) + " " + 
 					 hs.getRole().toUpperCase().replace("-", "").toUpperCase() + ";");
-			if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.CAPTAIN)) {
-				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayCaptain" + (ai+1) +
-						" "+ " (C)" + ";");
-			}else if(hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER")) {
-				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayCaptain" + (ai+1) +
-						" "+ " (C & WK)" + ";");
-			}else if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)) {
-				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayCaptain" + (ai+1) +
-						" "+ " (WK)" + ";");
+			
+			if(hs.getCaptainWicketKeeper() != null) {
+				if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.CAPTAIN)) {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayCaptain" + (ai+1) +
+							" "+ " (C)" + ";");
+				}else if(hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER")) {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayCaptain" + (ai+1) +
+							" "+ " (C & WK)" + ";");
+				}else if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)) {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayCaptain" + (ai+1) +
+							" "+ " (WK)" + ";");
+				}else {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayCaptain" + (ai+1) + " ;");
+				}
 			}else {
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMainAwayCaptain" + (ai+1) + " ;");
 			}
@@ -432,9 +444,11 @@ public class ISPL_FRUIT extends Scene{
 	    			}
 	    			
 	    		}else {
-	    			if(!match.getSetup().getTargetOvers().isEmpty() && Double.valueOf(match.getSetup().getTargetOvers()) == 1) {
-				    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "0" + ";");
-				    }
+	    			if(match.getSetup().getTargetOvers() != null ) {
+	    				if(Double.valueOf(match.getSetup().getTargetOvers()) == 1) {
+					    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "0" + ";");
+					    }
+	    			}
 	    		}
 				
 /******************************************* Team total and comparision ***********************************************/
