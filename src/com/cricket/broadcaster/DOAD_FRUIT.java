@@ -538,20 +538,15 @@ public class DOAD_FRUIT extends Scene{
 							
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tProEqua " + "2" + ";");
 							
-							String teamName ="";
-							if (Stream.of(match.getSetup().getHomeTeam().getTeamName1(),match.getSetup().getHomeTeam().getTeamName2(),
-							        match.getSetup().getHomeTeam().getTeamName3(),match.getSetup().getHomeTeam().getTeamName4())
-							    .filter(Objects::nonNull).map(String::toUpperCase)
-							    .anyMatch(name -> match.getMatch().getMatchStatus().toUpperCase().contains(name))) {
-									teamName = match.getSetup().getHomeTeam().getTeamName1();
+							if(match.getMatch().getMatchStatus().contains("Match tied")) {
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTname \n\n\n\n\n\n" + 
+										match.getMatch().getMatchStatus().toUpperCase() + ";");
 							}else {
-								teamName = match.getSetup().getAwayTeam().getTeamName1();
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTname \n\n\n" + match.getMatch().getMatchStatus().split("win")[0] 
+										+"\n\n\n\n\n\n\n\n" + "WIN " + match.getMatch().getMatchStatus().split("win")[1].toUpperCase() + ";");
 							}
 							
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$REWORK$Projected\\Equation\\Result$Result$NeedRuns*CONTAINER SET ACTIVE 0;");
-							
-							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTname \n\n\n" + teamName +"\n\n\n\n\n\n\n\n"+
-									match.getMatch().getMatchStatus().replace(teamName,"").toUpperCase() + ";");
 						}else {
 							
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tProEqua " + "1" + ";");
