@@ -386,12 +386,13 @@ public class DOAD_FRUIT extends Scene{
 /************************************************  phasewise ********************************************************************  */						
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 1;");
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamName1 " + 
+								inn.getBowling_team().getTeamName4() + ";");
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamName2 " + 
 								inn.getBatting_team().getTeamName4() + ";");
 						
-						if((match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)||
+						if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)||
 							match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20)||
-							match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10))
-								&&( match.getSetup().getTargetOvers()== null|| match.getSetup().getTargetOvers().isEmpty())) {
+							match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$PhaseScoreHead*CONTAINER SET ACTIVE 1 ;");
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$Header*CONTAINER SET ACTIVE 1 ;");
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore1 " + 
@@ -408,8 +409,7 @@ public class DOAD_FRUIT extends Scene{
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore3 " + 
 									Stats.getAwayThirdPowerPlay().getTotalRuns()+"-"+Stats.getAwayThirdPowerPlay().getTotalWickets() + ";");
 						}
-						else if((match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)&&
-								(match.getSetup().getTargetOvers()== null|| match.getSetup().getTargetOvers().isEmpty()))) {
+						else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$PhaseScoreHead*CONTAINER SET ACTIVE 1 ;");
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$Header*CONTAINER SET ACTIVE 1 ;");
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1PhaseScore1 " + 
