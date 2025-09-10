@@ -141,8 +141,7 @@ public class DOAD_FRUIT extends Scene{
 	    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTounamentName " 
 	               + setup.getTournament().toUpperCase() + ";");
 	    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMatchNumber " 
-	               + setup.getMatchIdent() + " : " 
-	               + setup.getHomeTeam().getTeamName4() + " vs " 
+	               + setup.getMatchIdent() + " : " + setup.getHomeTeam().getTeamName4() + " vs " 
 	               + setup.getAwayTeam().getTeamName4() + ";");
 	    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectTeamStyle 0;");
 	    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTossResult " + CricketFunctions.generateTossResult(match, 
@@ -184,36 +183,29 @@ public class DOAD_FRUIT extends Scene{
 	              + teamPrefix + "Role" + (i + 1) + " "  + squad.get(i).getRole().replace("-", "").toUpperCase() + ";");
 	        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2"
 		              + "$" + teamPrefix + "Grp$" + teamPrefix + "PlayerGrp$PlayerGrp" + (i + 1)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
-	        writeCaptainTag(PrintWriter, squad.get(i), teamPrefix, (i + 1));
-	        setPlayerIcon(PrintWriter, squad.get(i), "lgMain" + teamPrefix + "Role" + (i + 1));
+	        setCaptainTagAndPlayerIcon(PrintWriter, squad.get(i), teamPrefix, (i + 1), "lgMain" + teamPrefix + "Role" + (i + 1));
 	        Thread.sleep(5);
 	    }
 	    if(subs != null && !subs.isEmpty()) {
 	    	for (int i = 0; i < subs.size(); i++) {
 		        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
 		              + teamPrefix + "SubPlayer" + (i + 1) + " " + subs.get(i).getFull_name() + ";");
-		        setPlayerIcon(PrintWriter, subs.get(i), "lgMain" + teamPrefix + "SubRole" + (i + 1));
+		        setCaptainTagAndPlayerIcon(PrintWriter, squad.get(i), teamPrefix, (i + 1), "lgMain" + teamPrefix + "SubRole" + (i + 1));
 		        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2"
 			              + "$" + teamPrefix + "Grp$" + teamPrefix + "SubPlayerGrp$PlayerGrp" + (i + 1)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
 		        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2"
 		              + "$" + teamPrefix + "Grp$" + teamPrefix + "SubPlayerGrp$PlayerGrp" + (i + 1) + "*CONTAINER SET ACTIVE 1 ;");
 		    }
 		    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET "+select_tag+" "+ subs.size() + ";");
+	    }else {
+	    	PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET "+select_tag+" "+ "0" + ";");
 	    }
 	}
 
-	private void writeCaptainTag(PrintWriter PrintWriter, Player ply, String tp, int idx) {
-	    String role = ply.getCaptainWicketKeeper();
-	    String suffix = "";
-	    if (CricketUtil.CAPTAIN.equalsIgnoreCase(role)) suffix = " (C)";
-	    else if ("CAPTAIN_WICKET_KEEPER".equalsIgnoreCase(role)) suffix = " (C & WK)";
-	    else if (CricketUtil.WICKET_KEEPER.equalsIgnoreCase(role)) suffix = " (WK)";
-	    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
-	               + tp + "Captain" + idx + suffix + ";");
-	}
-
-	private void setPlayerIcon(PrintWriter PrintWriter, Player ply, String tag) {
-	    String icon = "";
+	private void setCaptainTagAndPlayerIcon(PrintWriter PrintWriter, Player ply, String tp, int idx, String tag) {
+	    String cap = ply.getCaptainWicketKeeper();
+	    String suffix = "", icon = "";
+	    
 	    String role = ply.getRole().toUpperCase();
 	    String bat = ply.getBattingStyle(), bowl = ply.getBowlingStyle();
 
@@ -224,10 +216,20 @@ public class DOAD_FRUIT extends Scene{
 	    } else if (role.contains("BOWL")) {
 	        icon = getBowlerIcon(bowl, false);
 	    }
-
+	    
+	    if(CricketUtil.CAPTAIN.equalsIgnoreCase(cap)) {
+	    	suffix = " (C)";
+	    	icon = "";
+	    }else if("CAPTAIN_WICKET_KEEPER".equalsIgnoreCase(cap)) {
+	    	suffix = " (C)";
+	    	icon = "Keeper";
+	    }else if(CricketUtil.WICKET_KEEPER.equalsIgnoreCase(cap)) {
+	    	suffix = "";
+	    	icon = "Keeper";
+	    }
+	    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + tp + "Captain" + idx + suffix + ";");
 	    if (!icon.isEmpty()) {
-	    	PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET " 
-	                   + tag + " " + icon_path + icon + CricketUtil.PNG_EXTENSION + ";");
+	    	PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET " + tag + " " + icon_path + icon + CricketUtil.PNG_EXTENSION + ";");
 	    }
 	}
 
@@ -592,10 +594,17 @@ public class DOAD_FRUIT extends Scene{
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFowTeamName2 " + 
 						inn.getBatting_team().getTeamName4() + ";");
 				if(inn.getFallsOfWickets() != null && inn.getFallsOfWickets().size() > 0) {
-					 for (int j = 0; j <= inn.getFallsOfWickets().size() -1; j++){
-				    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + (j+1) + " " + 
-				    			inn.getFallsOfWickets().get(j).getFowRuns() + ";");
-				     }	
+					for (int j = 0; j <= inn.getFallsOfWickets().size() -1; j++){
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + (j+1) + " " + 
+								inn.getFallsOfWickets().get(j).getFowRuns() + ";");
+					}
+					
+					if(inn.getFallsOfWickets().size() < 10) {
+						for (int i = inn.getFallsOfWickets().size() + 1; i <= 10; i++){
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + i + " " + "" + ";");
+						}
+					}
+					
 					this_bc = inn.getBattingCard().stream().filter(batC -> inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() 
 							== batC.getPlayerId()).findAny().orElse(null);
 					

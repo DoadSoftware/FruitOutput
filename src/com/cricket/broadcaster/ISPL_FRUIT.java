@@ -792,7 +792,11 @@ public class ISPL_FRUIT extends Scene{
 				    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
 				    			inn.getFallsOfWickets().get(i).getFowRuns() + ";");
 				    }
-				
+				    if(inn.getFallsOfWickets().size() < 10) {
+				    	for(int j = inn.getFallsOfWickets().size() + 1; j <= 10; j++) {
+					    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + j + " " + "" + ";");
+					    }
+				    }
 				}else if(inn.getInningNumber() == 2) {
 					if(match.getMatch().getInning().get(0).getFallsOfWickets() != null)
 					{
@@ -800,6 +804,11 @@ public class ISPL_FRUIT extends Scene{
 					    {
 					    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + (i+1) + " " + 
 					    			match.getMatch().getInning().get(0).getFallsOfWickets().get(i).getFowRuns() + ";");
+					    }
+					    if(match.getMatch().getInning().get(0).getFallsOfWickets().size() < 10) {
+					    	for(int j = match.getMatch().getInning().get(0).getFallsOfWickets().size()+1; j <= 10; j++) {
+						    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Fow" + j + " " + "" + ";");
+						    }
 					    }
 					}
 					
@@ -809,6 +818,11 @@ public class ISPL_FRUIT extends Scene{
 					    {
 					    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + (j+1) + " " + 
 					    			match.getMatch().getInning().get(1).getFallsOfWickets().get(j).getFowRuns() + ";");
+					    }
+					    if(match.getMatch().getInning().get(1).getFallsOfWickets().size() < 10) {
+					    	for(int j = match.getMatch().getInning().get(1).getFallsOfWickets().size()+1; j <= 10; j++) {
+						    	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + j + " " + "" + ";");
+						    }
 					    }
 					}
 				}
