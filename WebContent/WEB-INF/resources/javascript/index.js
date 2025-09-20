@@ -16,6 +16,8 @@ function initialiseForm(whatToProcess,dataToProcess)
 {
 	switch (whatToProcess) {
 	case 'UPDATE-CONFIG':
+		console.log(dataToProcess.showSubs);
+	
 		document.getElementById('configuration_file_name').value = $('#select_configuration_file option:selected').val();
 		document.getElementById('select_cricket_matches').value = dataToProcess.filename;
 		document.getElementById('select_broadcaster').value = dataToProcess.broadcaster;
@@ -26,6 +28,7 @@ function initialiseForm(whatToProcess,dataToProcess)
 		document.getElementById('selectClient').value = dataToProcess.selectClient;
 		document.getElementById('showSpeed').value = dataToProcess.showSpeed;
 		document.getElementById('showReview').value = dataToProcess.showReview;
+		document.getElementById('showSubs').value = dataToProcess.showSubs;
 		break;
 	case 'TEAMS_SCORE':
 		 session_match.match.inning.forEach(function(hs){

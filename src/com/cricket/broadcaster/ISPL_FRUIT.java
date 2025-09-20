@@ -445,6 +445,7 @@ public class ISPL_FRUIT extends Scene{
 	    		}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) 
 	    			|| match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)
 	    			||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
+	    			
 	    			if(CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1) > 
 	    				(inn.getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver()) + inn.getTotalBalls())) {
 	    				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectPowerplay " + "1" + ";");

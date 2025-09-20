@@ -102,6 +102,16 @@
 			        </select>
 			    </div>
 				</div>
+			 <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+			    <label for="showSubs" class="col-sm-4 col-form-label text-left"> Select Subs </label>
+			    <div class="col-sm-6 col-md-6">
+			        <select id="showSubs" name="showSubs" class="browser-default custom-select custom-select-sm"
+			                onchange="processUserSelection(this)">
+			            <option value="WITH" ${session_configuration.showSubs == 'WITH' ? 'selected' : ''}>WITH</option>
+			            <option value="WITHOUT" ${session_configuration.showSubs == 'WITHOUT' ? 'selected' : ''}>WITHOUT</option>
+			        </select>
+			    </div>
+				</div>
 			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 			    <label for="speed_select" class="col-sm-4 col-form-label text-left"> Audio </label>
 			    <div class="col-sm-6 col-md-6">

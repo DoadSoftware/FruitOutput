@@ -89,6 +89,7 @@ public class IndexController
 			@RequestParam(value = "select_Client", required = false, defaultValue = "") String select_Client,
 			@RequestParam(value = "showSpeed", required = false, defaultValue = "") String showSpeed,
 			@RequestParam(value = "showReview", required = false, defaultValue = "") String showReview,
+			@RequestParam(value = "showSubs", required = false, defaultValue = "") String showSubs,
 			@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch,
 			@RequestParam(value = "vizIPAddress", required = false, defaultValue = "") String vizIPAddress,
 			@RequestParam(value = "vizPortNumber", required = false, defaultValue = "") int vizPortNumber) 
@@ -110,7 +111,7 @@ public class IndexController
 				+ selectedMatch).lastModified();
 			
 			session_configuration = new Configuration(selectedMatch, select_broadcaster, speed_select, "", "", 
-					select_audio,vizIPAddress, vizPortNumber,"", showSpeed, showReview);
+					select_audio,vizIPAddress, vizPortNumber,"", showSpeed, showReview, showSubs);
 			session_configuration.setSelect_Client(Integer.valueOf(select_Client.trim()));
 			JAXBContext.newInstance(Configuration.class).createMarshaller().marshal(session_configuration, 
 					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + configuration_file_name));
