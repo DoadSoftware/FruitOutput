@@ -28,6 +28,7 @@ import com.cricket.service.CricketService;
 import com.cricket.model.Inning;
 import com.cricket.model.MatchAllData;
 import com.cricket.model.MatchStats;
+import com.cricket.model.MatchStats.VariousStats;
 import com.cricket.containers.Scene;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
@@ -594,19 +595,11 @@ public class DOAD_FRUIT extends Scene{
 				}	
 
 /******************************************Run rate**********************************/
-				
-				if(inn.getInningNumber() == 1||inn.getInningNumber() == 3) {
-					if(inn.getRunRate() != null) {
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
-								"CRR : " + inn.getRunRate() + ";");
-					}else {
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + 
-								"CRR : " + "-" + ";");
-					}
-					
-				}else if(inn.getInningNumber() == 2||inn.getInningNumber() == 4) {
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + "RRR: " + CricketFunctions.generateRunRate(CricketFunctions.
-							GetTargetData(match).getRemaningRuns(), 0, CricketFunctions.GetTargetData(match).getRemaningBall(), 2,match) + ";");
+
+				if(inn.getRunRate() != null) {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + "CRR : " + inn.getRunRate() + ";");
+				}else {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tRunRate " + "CRR : " + "-" + ";");
 				}
 
 /******************************************************* FALL OF WICKETS AND LAST WICKET *******************************/
@@ -846,6 +839,16 @@ public class DOAD_FRUIT extends Scene{
 						}
 						
 /****************************************************Current Two Batsmen*******************************/
+						
+				if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBattingCardType 1;");
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET t_mins " + "DOTS" + ";");
+				}else {
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectBattingCardType 0;");
+				}
+				
+				VariousStats batter1 = null, batter2 = null;
+							
 				if(inn.getPartnerships() != null && inn.getPartnerships().size() > 0) {
 					
 					this_bc = inn.getBattingCard().stream().filter(batcard -> batcard.getPlayerId() 
@@ -871,7 +874,11 @@ public class DOAD_FRUIT extends Scene{
 					}else {
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate1 " + "-" + ";");
 					}
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMinutes1 " + this_bc.getSeconds()/60 + ";");
+					
+					batter1 = Stats.getPlayerStats().stream().filter(bat -> bat.getId() == inn.getPartnerships().get(inn.getPartnerships().size() - 1).getFirstBatterNo()
+								&& bat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)).findAny().orElse(null);
+					
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMinutes1 " + (batter1 != null ? batter1.getTotalDots() : 0) + ";");
 					
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipContribution1 " + 
 							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getFirstBatterRuns() + "(" + 
@@ -903,7 +910,11 @@ public class DOAD_FRUIT extends Scene{
 					}else {
 						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tStrikeRate2 " + "-" + ";");
 					}
-					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMinutes2 " + this_bc1.getSeconds()/60 + ";");
+					
+					batter2 = Stats.getPlayerStats().stream().filter(bat -> bat.getId() == inn.getPartnerships().get(inn.getPartnerships().size() - 1).getSecondBatterNo()
+							&& bat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)).findAny().orElse(null);
+					
+					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMinutes2 " + (batter2 != null ? batter2.getTotalDots() : 0) + ";");
 
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tPartnershipRus " + 
 							inn.getPartnerships().get(inn.getPartnerships().size() - 1).getTotalRuns() + ";");
@@ -1036,79 +1047,79 @@ public class DOAD_FRUIT extends Scene{
 					case "NINE":
 						if(batPlayerNum==1) {
 			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect1 2;");
-				        	print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
+//				        	print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
 			        	}else {
 			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect2 2;");
-			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
+//			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
 			        	}
 			            break;
 			        case "FOUR":
 			        	if(batPlayerNum==1) {
 			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect1 0;");
-			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
+//			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
 			        	}else if(batPlayerNum==2) {
 			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect2 0;");
-			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
+//			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
 			        	}
 			            break;
 			        case "SIX":
 			        	if(batPlayerNum==1) {
 			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect1 1;");
-			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
+//			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
 			        	}else {
 			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect2 1;");
-			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
+//			        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
 			        	}
 			            break;
 			        case "WICKET": case "ON-A-HI-TRICK": case "HI-TRICK":
 			        	if(Stats.getOverData().getTotalWickets()>0) {
 			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlersGrpSelector " + "1" + ";");
 			        		if(config.getShowSpeed().equalsIgnoreCase("WITHOUT")) {
-			        			processAnimation(print_writer, "BowlerWithoutSpeed", "START", session_selected_broadcaster,1);
+//			        			processAnimation(print_writer, "BowlerWithoutSpeed", "START", session_selected_broadcaster,1);
 			        		}else {
-			        			processAnimation(print_writer, "Bowler", "START", session_selected_broadcaster,1);	
+//			        			processAnimation(print_writer, "Bowler", "START", session_selected_broadcaster,1);	
 			        		}
 			        	}
 			        	TimeUnit.MILLISECONDS.sleep(4000);
 			        	switch (director_Type.trim()) {
 			        	case "ON-A-HI-TRICK":
-			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlersGrpSelector " + "2" + ";");
+//			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlersGrpSelector " + "2" + ";");
 			        		break;
 			        	case "HI-TRICK":
-			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlersGrpSelector " + "3" + ";");
+//			        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlersGrpSelector " + "3" + ";");
 			        		break;
 			        	}
 			        	if(config.getShowSpeed().equalsIgnoreCase("WITHOUT")) {
-		        			processAnimation(print_writer, "BowlerWithoutSpeed", "START", session_selected_broadcaster,1);
+//		        			processAnimation(print_writer, "BowlerWithoutSpeed", "START", session_selected_broadcaster,1);
 		        		}else {
-		        			processAnimation(print_writer, "Bowler", "START", session_selected_broadcaster,1);	
+//		        			processAnimation(print_writer, "Bowler", "START", session_selected_broadcaster,1);	
 		        		}
 			            break;
 			        case "FREE-HIT": case "FREE-HIT_6": case "FREE-HIT_4":
 			        	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tBowlersGrpSelector " + "0" + ";");
 			        	if(config.getShowSpeed().equalsIgnoreCase("WITHOUT")) {
-		        			processAnimation(print_writer, "BowlerWithoutSpeed", "START", session_selected_broadcaster,1);
+//		        			processAnimation(print_writer, "BowlerWithoutSpeed", "START", session_selected_broadcaster,1);
 		        		}else {
-		        			processAnimation(print_writer, "Bowler", "START", session_selected_broadcaster,1);	
+//		        			processAnimation(print_writer, "Bowler", "START", session_selected_broadcaster,1);	
 		        		}
 			        	
 			        	switch (director_Type.trim()) {
 			        	case "FREE-HIT_4":
 				        	if(batPlayerNum==1) {
 				        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect1 0;");
-				        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
+//				        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
 				        	}else if(batPlayerNum==2) {
 				        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect2 0;");
-				        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
+//				        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
 				        	}
 				            break;
 			        	case "FREE-HIT_6":
 				        	if(batPlayerNum==1) {
 				        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect1 1;");
-				        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
+//				        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter1 START;");
 				        	}else {
 				        		print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tWipeSelect2 1;");
-				        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
+//				        		print_writer.println("LAYER1*EVEREST*STAGE*DIRECTOR*Batter2 START;");
 				        	}
 				            break;
 			        	}

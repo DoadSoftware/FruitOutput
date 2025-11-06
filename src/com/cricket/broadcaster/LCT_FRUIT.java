@@ -496,7 +496,7 @@ public class LCT_FRUIT extends Scene{
 				{//match.getMatch().getMatchStatus().toUpperCase()
 					//Summary = CricketFunctions.generateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT).toUpperCase();
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tText " 
-							+ CricketFunctions.GenerateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT, "",session_selected_broadcaster,true).toUpperCase()+ ";");
+							+ CricketFunctions.GenerateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT, "",session_selected_broadcaster,false).getTargetOrResult().toUpperCase()+ ";");
 						
 						if(match.getMatch().getInning().get(0).getTotalWickets()==10) {
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tComparisonHomeTeamName " + match.getMatch().getInning().get(0).getBatting_team().getTeamName2()

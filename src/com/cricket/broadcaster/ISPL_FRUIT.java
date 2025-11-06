@@ -524,7 +524,7 @@ public class ISPL_FRUIT extends Scene{
 
 				}else if(inn.getInningNumber() == 2) {
 					print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tText " 
-							+ CricketFunctions.GenerateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT, "",session_selected_broadcaster,true).toUpperCase() + ";");
+							+ CricketFunctions.GenerateMatchSummaryStatus(inn.getInningNumber(), match, CricketUtil.SHORT, "",session_selected_broadcaster,false).getTargetOrResult().toUpperCase() + ";");
 						
 						if(match.getMatch().getInning().get(0).getTotalWickets()==10) {
 							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tComparisonHomeTeamName " + match.getMatch().getInning().get(0).getBatting_team().getTeamName2()
