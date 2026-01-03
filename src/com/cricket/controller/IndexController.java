@@ -42,7 +42,7 @@ public class IndexController
 	public static DOAD_FRUIT this_fruit;
 	public static LCT_FRUIT this_fruit_lct;
 	public static ISPL_FRUIT this_ispl_fruit;
-	public static String expiry_date = "2025-12-31";
+	public static String expiry_date = "2026-12-31";
 	public static String current_date;
 	public static Speed lastSpeed = new Speed(" ",0);
 	public static Review lastReview = new Review();
