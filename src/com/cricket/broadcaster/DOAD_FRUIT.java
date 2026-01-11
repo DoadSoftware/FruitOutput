@@ -21,6 +21,7 @@ import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
 import com.cricket.model.DaySession;
+import com.cricket.model.Event;
 import com.cricket.model.Player;
 import com.cricket.model.Review;
 import com.cricket.model.Setup;
@@ -41,7 +42,7 @@ public class DOAD_FRUIT extends Scene{
 	public String icon_path = "C:\\EVEREST_FRUIT\\Icons\\";
 	boolean player_found = false;
 	int previousOver=-1,previousBall=-1;
-	int cPlayer =0,bowlerid=0;
+	int cPlayer =0,bowlerid=0,cr_over_num=0,fow_runs=0;
 	String director_Type = "";
 	int batPlayerNum=1;
 	boolean played = false;
@@ -208,6 +209,7 @@ public class DOAD_FRUIT extends Scene{
 	        setCaptainTagAndPlayerIcon(PrintWriter, squad.get(i), teamPrefix, (i + 1), "lgMain" + teamPrefix + "Role" + (i + 1));
 	        Thread.sleep(5);
 	    }
+		
 	    if(subs != null && !subs.isEmpty()) {
 	    	for (int i = 0; i < subs.size(); i++) {
 	    		if(!subs.get(i).getZone().equalsIgnoreCase("U19")) {
@@ -232,16 +234,16 @@ public class DOAD_FRUIT extends Scene{
 			        case "UNDER 19": zoneText = "U19"; break;
 			        default: zoneText = subs.get(l-1).getZone() ; break;
 				    }
-				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
-				              + teamPrefix + "SubPlayer" + (l) + " " + subs.get(l-1).getFull_name() + "(" + zoneText + ");");
-				        setCaptainTagAndPlayerIcon(PrintWriter, squad.get(l-1), teamPrefix, (l), "lgMain" + teamPrefix + "SubRole" + (l));
-				        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2"
-					              + "$" + teamPrefix + "Grp$" + teamPrefix + "SubPlayerGrp$PlayerGrp" + (l)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
-				        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2"
-				              + "$" + teamPrefix + "Grp$" + teamPrefix + "SubPlayerGrp$PlayerGrp" + (l) + "*CONTAINER SET ACTIVE 1 ;");
+				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + teamPrefix + "SubPlayer" + (l) 
+				    		+ " " + subs.get(l-1).getFull_name() + "(" + zoneText + ");");
+				    setCaptainTagAndPlayerIcon(PrintWriter, squad.get(l-1), teamPrefix, (l), "lgMain" + teamPrefix + "SubRole" + (l));
+				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2" + "$" + teamPrefix + "Grp$" 
+				    		+ teamPrefix + "SubPlayerGrp$PlayerGrp" + (l)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
+				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2" + "$" + teamPrefix + "Grp$" 
+				    		+ teamPrefix + "SubPlayerGrp$PlayerGrp" + (l) + "*CONTAINER SET ACTIVE 1 ;");
 	    		}
 		    }
-		    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET "+select_tag+" "+ subs.size() + ";");
+		    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET "+select_tag+" "+ l + ";");
 	    }else {
 	    	PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET "+select_tag+" "+ "0" + ";");
 	    }
@@ -786,12 +788,32 @@ public class DOAD_FRUIT extends Scene{
 				}
 				
 /******************************************************* FALL OF WICKETS AND LAST WICKET *******************************/
-				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFowTeamName2 " + 
-						inn.getBatting_team().getTeamName4() + ";");
+				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tFowTeamName2 " + inn.getBatting_team().getTeamName4() + ";");
+				
+				if(match.getSetup().getSpecialMatchRules() != null && !match.getSetup().getSpecialMatchRules().isEmpty() 
+			  			&& match.getSetup().getSpecialMatchRules().equalsIgnoreCase("ISPL")) {
+					if ((match.getEventFile().getEvents() != null) && (match.getEventFile().getEvents().size() > 0)) {
+						cr_over_num = match.getEventFile().getEvents().stream().filter(e -> e.getEventInningNumber() == inn.getInningNumber())
+						        .filter(e -> "challenge".equalsIgnoreCase(e.getEventExtra())).map(Event::getEventOverNo).findFirst().orElse(0);
+					}
+				}
+				
 				if(inn.getFallsOfWickets() != null && inn.getFallsOfWickets().size() > 0) {
 					for (int j = 0; j <= inn.getFallsOfWickets().size() -1; j++){
-						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + (j+1) + " " + 
-								inn.getFallsOfWickets().get(j).getFowRuns() + ";");
+						if(cr_over_num < inn.getFallsOfWickets().get(j).getFowOvers()) {
+							if(inn.getSpecialRuns() != null && !inn.getSpecialRuns().isEmpty()) {
+								if(inn.getSpecialRuns().startsWith("+")) {
+									fow_runs = (inn.getFallsOfWickets().get(j).getFowRuns() + Integer.valueOf(inn.getSpecialRuns().replace("+", "")));
+								}else if(inn.getSpecialRuns().startsWith("-")) {
+									fow_runs = (inn.getFallsOfWickets().get(j).getFowRuns() - Integer.valueOf(inn.getSpecialRuns().replace("-", "")));
+								}
+							}else {
+								fow_runs = inn.getFallsOfWickets().get(j).getFowRuns();
+							}
+						}else {
+							fow_runs = inn.getFallsOfWickets().get(j).getFowRuns();
+						}
+						print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Fow" + (j+1) + " " + fow_runs + ";");
 					}
 					
 					if(inn.getFallsOfWickets().size() < 10) {

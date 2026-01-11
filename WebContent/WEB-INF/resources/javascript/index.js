@@ -62,18 +62,20 @@ function initialiseForm(whatToProcess,dataToProcess)
 				
 				if(session_match.match.inning[0].totalWickets >= 10){
 					document.getElementById('team1Details').innerHTML = session_match.match.inning[0].batting_team.teamName4 
-					+ ' : ' + session_match.match.inning[0].totalRuns;
+					+ ' : ' + ChallengeScoreRUNS(session_match, session_match.match.inning[0]);
 				}else {
 					document.getElementById('team1Details').innerHTML = session_match.match.inning[0].batting_team.teamName4 
-						+ ' : ' + session_match.match.inning[0].totalRuns + ' - ' + session_match.match.inning[0].totalWickets;
+						+ ' : ' + ChallengeScoreRUNS(session_match, session_match.match.inning[0]) + ' - ' 
+						+ session_match.match.inning[0].totalWickets;
 				}
 				
 				if(session_match.match.inning[1].totalWickets >= 10){
 					document.getElementById('team2Details').innerHTML = session_match.match.inning[1].batting_team.teamName4 
-					+ ' : ' + session_match.match.inning[1].totalRuns;
+					+ ' : ' + ChallengeScoreRUNS(session_match, session_match.match.inning[1]);
 				}else {
 					document.getElementById('team2Details').innerHTML = session_match.match.inning[1].batting_team.teamName4 
-						+ ' : ' + session_match.match.inning[1].totalRuns + ' - ' + session_match.match.inning[1].totalWickets;
+						+ ' : ' + ChallengeScoreRUNS(session_match, session_match.match.inning[1]) + ' - ' 
+						+ session_match.match.inning[1].totalWickets;
 			   }
 			}
 		 });
@@ -132,6 +134,28 @@ function processUserSelection(whichInput)
       	document.initialise_form.submit();
 		break;
 	}
+}
+function ChallengeScoreRUNS(match, inn) {
+    let InningRun = 0;
+    
+    for (var i = match.eventFile.events.length - 1; i >= 0; i--) {
+	  if (match.eventFile.events[i].eventExtra != null && match.eventFile.events[i].eventExtra.toUpperCase() == 'CHALLENGE' && 
+	  		match.eventFile.events[i].eventInningNumber == inn.inningNumber && inn.totalOvers >= parseInt(match.eventFile.events[i].eventOverNo + 1)) {
+		if(inn.specialRuns != null) {
+			if (inn.specialRuns.startsWith('+')) {
+				InningRun = parseInt(inn.totalRuns + parseInt(inn.specialRuns.replace('+', '')));
+			}else if (inn.specialRuns.startsWith('-')) {
+				InningRun = parseInt(inn.totalRuns - parseInt(inn.specialRuns.replace('-', '')));
+			}
+		}else {
+			InningRun = parseInt(inn.totalRuns);
+		}
+    	break;
+	  }else {
+		InningRun = parseInt(inn.totalRuns);
+		}
+	} 
+    return InningRun;
 }
 function processCricketProcedures(whatToProcess)
 {
