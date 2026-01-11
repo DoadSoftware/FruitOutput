@@ -171,9 +171,31 @@ public class DOAD_FRUIT extends Scene{
 	}
 
 	private void SetPlayers(PrintWriter PrintWriter, List<Player> squad, List<Player> subs, String teamPrefix,String select_tag) throws InterruptedException {
-	    for (int i = 0; i < squad.size(); i++) {
+	    int l = 0;
+		for (int i = 0; i < squad.size(); i++) {
+			String zoneText = "";
+		    switch (squad.get(i).getZone().toUpperCase()) {
+		        case "NORTH ZONE": zoneText = "NZ"; break;
+		        case "EAST ZONE": zoneText = "EZ"; break;
+		        case "SOUTH ZONE": zoneText = "SZ"; break;
+		        case "WEST ZONE": zoneText = "WZ"; break;
+		        case "CENTRAL ZONE": zoneText = "CZ"; break;
+		        case "UNDER 19": zoneText = "U19"; break;
+		        default: zoneText = squad.get(i).getZone() ; break;
+		    }
+		    
+		    switch (squad.get(i).getZone().toUpperCase()) {
+	        case "NORTH": zoneText = "NZ"; break;
+	        case "EAST": zoneText = "EZ"; break;
+	        case "SOUTH": zoneText = "SZ"; break;
+	        case "WEST": zoneText = "WZ"; break;
+	        case "CENTRAL": zoneText = "CZ"; break;
+	        case "UNDER 19": zoneText = "U19"; break;
+	        default: zoneText = squad.get(i).getZone() ; break;
+		    }
+			
 	        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
-	              + teamPrefix + "Player" + (i + 1) + " " + squad.get(i).getFull_name() + ";");
+	              + teamPrefix + "Player" + (i + 1) + " " + squad.get(i).getFull_name() + "(" + zoneText + ");");
 	        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
 	              + teamPrefix + "Role" + (i + 1) + " "  + squad.get(i).getRole().replace("-", "").toUpperCase() + ";");
 	        
@@ -188,13 +210,36 @@ public class DOAD_FRUIT extends Scene{
 	    }
 	    if(subs != null && !subs.isEmpty()) {
 	    	for (int i = 0; i < subs.size(); i++) {
-		        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
-		              + teamPrefix + "SubPlayer" + (i + 1) + " " + subs.get(i).getFull_name() + ";");
-		        setCaptainTagAndPlayerIcon(PrintWriter, squad.get(i), teamPrefix, (i + 1), "lgMain" + teamPrefix + "SubRole" + (i + 1));
-		        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2"
-			              + "$" + teamPrefix + "Grp$" + teamPrefix + "SubPlayerGrp$PlayerGrp" + (i + 1)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
-		        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2"
-		              + "$" + teamPrefix + "Grp$" + teamPrefix + "SubPlayerGrp$PlayerGrp" + (i + 1) + "*CONTAINER SET ACTIVE 1 ;");
+	    		if(!subs.get(i).getZone().equalsIgnoreCase("U19")) {
+	    			l++;
+					String zoneText = "";
+				    switch (subs.get(l-1).getZone().toUpperCase()) {
+				        case "NORTH ZONE": zoneText = "NZ"; break;
+				        case "EAST ZONE": zoneText = "EZ"; break;
+				        case "SOUTH ZONE": zoneText = "SZ"; break;
+				        case "WEST ZONE": zoneText = "WZ"; break;
+				        case "CENTRAL ZONE": zoneText = "CZ"; break;
+				        case "UNDER 19": zoneText = "U19"; break;
+				        default: zoneText = subs.get(l-1).getZone() ; break;
+				    }
+				    
+				    switch (subs.get(l-1).getZone().toUpperCase()) {
+			        case "NORTH": zoneText = "NZ"; break;
+			        case "EAST": zoneText = "EZ"; break;
+			        case "SOUTH": zoneText = "SZ"; break;
+			        case "WEST": zoneText = "WZ"; break;
+			        case "CENTRAL": zoneText = "CZ"; break;
+			        case "UNDER 19": zoneText = "U19"; break;
+			        default: zoneText = subs.get(l-1).getZone() ; break;
+				    }
+				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
+				              + teamPrefix + "SubPlayer" + (l) + " " + subs.get(l-1).getFull_name() + "(" + zoneText + ");");
+				        setCaptainTagAndPlayerIcon(PrintWriter, squad.get(l-1), teamPrefix, (l), "lgMain" + teamPrefix + "SubRole" + (l));
+				        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2"
+					              + "$" + teamPrefix + "Grp$" + teamPrefix + "SubPlayerGrp$PlayerGrp" + (l)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
+				        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2"
+				              + "$" + teamPrefix + "Grp$" + teamPrefix + "SubPlayerGrp$PlayerGrp" + (l) + "*CONTAINER SET ACTIVE 1 ;");
+	    		}
 		    }
 		    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET "+select_tag+" "+ subs.size() + ";");
 	    }else {
