@@ -196,9 +196,21 @@ public class DOAD_FRUIT extends Scene{
 		    }
 			
 	        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
-	              + teamPrefix + "Player" + (i + 1) + " " + squad.get(i).getFull_name() + "(" + zoneText + ");");
-	        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
-	              + teamPrefix + "Role" + (i + 1) + " "  + squad.get(i).getRole().replace("-", "").toUpperCase() + ";");
+	              + teamPrefix + "Player" + (i + 1) + " " + squad.get(i).getFull_name() + " (" + zoneText + ");");
+//	        setCaptainTagAndPlayerIcon(PrintWriter, squad.get(i), teamPrefix, (i + 1), "tMain" + teamPrefix + "Captain" + (i + 1));
+	        
+	        if(squad.get(i).getCaptainWicketKeeper() != null && !squad.get(i).getCaptainWicketKeeper().isEmpty()) {
+	        	if(CricketUtil.CAPTAIN.equalsIgnoreCase(squad.get(i).getCaptainWicketKeeper())) {
+	        		PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
+	      	              + teamPrefix + "Captain" + (i + 1) + " (C)"  + ";");
+	    	    }else if("CAPTAIN_WICKET_KEEPER".equalsIgnoreCase(squad.get(i).getCaptainWicketKeeper())) {
+	    	    	PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
+		      	              + teamPrefix + "Captain" + (i + 1) + " (C)"  + ";");
+	    	    }else {
+	    	    	PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
+		      	              + teamPrefix + "Captain" + (i + 1) + " "  + ";");
+	    	    }
+	        }
 	        
 	        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2$" + teamPrefix + "Grp$" 
 	              + teamPrefix + "PlayerGrp$PlayerGrp" + (i + 1) + "$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
@@ -215,28 +227,28 @@ public class DOAD_FRUIT extends Scene{
 	    		if(!subs.get(i).getZone().equalsIgnoreCase("U19")) {
 	    			l++;
 					String zoneText = "";
-				    switch (subs.get(l-1).getZone().toUpperCase()) {
+				    switch (subs.get(i).getZone().toUpperCase()) {
 				        case "NORTH ZONE": zoneText = "NZ"; break;
 				        case "EAST ZONE": zoneText = "EZ"; break;
 				        case "SOUTH ZONE": zoneText = "SZ"; break;
 				        case "WEST ZONE": zoneText = "WZ"; break;
 				        case "CENTRAL ZONE": zoneText = "CZ"; break;
 				        case "UNDER 19": zoneText = "U19"; break;
-				        default: zoneText = subs.get(l-1).getZone() ; break;
+				        default: zoneText = subs.get(i).getZone() ; break;
 				    }
 				    
-				    switch (subs.get(l-1).getZone().toUpperCase()) {
+				    switch (subs.get(i).getZone().toUpperCase()) {
 			        case "NORTH": zoneText = "NZ"; break;
 			        case "EAST": zoneText = "EZ"; break;
 			        case "SOUTH": zoneText = "SZ"; break;
 			        case "WEST": zoneText = "WZ"; break;
 			        case "CENTRAL": zoneText = "CZ"; break;
 			        case "UNDER 19": zoneText = "U19"; break;
-			        default: zoneText = subs.get(l-1).getZone() ; break;
+			        default: zoneText = subs.get(i).getZone() ; break;
 				    }
 				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + teamPrefix + "SubPlayer" + (l) 
-				    		+ " " + subs.get(l-1).getFull_name() + "(" + zoneText + ");");
-				    setCaptainTagAndPlayerIcon(PrintWriter, squad.get(l-1), teamPrefix, (l), "lgMain" + teamPrefix + "SubRole" + (l));
+				    		+ " " + subs.get(i).getFull_name() + " (" + zoneText + ");");
+				    setCaptainTagAndPlayerIcon(PrintWriter, subs.get(i), teamPrefix, (l), "lgMain" + teamPrefix + "SubRole" + (l));
 				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2" + "$" + teamPrefix + "Grp$" 
 				    		+ teamPrefix + "SubPlayerGrp$PlayerGrp" + (l)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
 				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2" + "$" + teamPrefix + "Grp$" 
@@ -273,7 +285,9 @@ public class DOAD_FRUIT extends Scene{
 	    	suffix = "";
 	    	icon = "Keeper";
 	    }
-	    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + tp + "Captain" + idx + suffix + ";");
+	    if(!tag.contains("Sub")) {
+	    	PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + tp + "Captain" + idx + suffix + ";");
+	    }
 	    if (!icon.isEmpty()) {
 	    	PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET " + tag + " " + icon_path + icon + CricketUtil.PNG_EXTENSION + ";");
 	    }
@@ -528,24 +542,24 @@ public class DOAD_FRUIT extends Scene{
 								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp*CONTAINER SET ACTIVE 1 ;");
 							  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$ISPL_GRP*CONTAINER SET ACTIVE 0 ;");
 							
-							  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 0;");
+							  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 2;");
 							  	/************************************************  TARGET ********************************************************************  */
 					        
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHardData " +  CricketFunctions.GetTargetData(match).getTargetRuns() + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET TossTeam1 " + "TARGET"  + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET TossResult1 " + "" + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$Toss Result$Hard Data*CONTAINER SET ACTIVE 0;");
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET Target1 " +  CricketFunctions.GetTargetData(match).getTargetRuns() + ";");
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET TossTeam1 " + "TARGET"  + ";");
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET TossResult1 " + "" + ";");
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$Toss Result$Hard Data*CONTAINER SET ACTIVE 0;");
 							}
 							
 						}else {
 							if(CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1) > ((inn.getTotalOvers()*6)+inn.getTotalBalls())) {
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 0;");
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 2;");
 								/************************************************  TARGET ********************************************************************  */
 					        
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHardData " +  CricketFunctions.GetTargetData(match).getTargetRuns() + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET TossTeam1 " + "TARGET"  + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET TossResult1 " + "" + ";");
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$Toss Result$Hard Data*CONTAINER SET ACTIVE 0;");
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET Target1 " +  CricketFunctions.GetTargetData(match).getTargetRuns() + ";");
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET TossTeam1 " + "TARGET"  + ";");
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET TossResult1 " + "" + ";");
+//								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$Toss Result$Hard Data*CONTAINER SET ACTIVE 0;");
 							}else {
 								/************************************************  phasewise ********************************************************************  */						
 								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 1;");
