@@ -32,6 +32,7 @@ import com.cricket.model.MatchAllData;
 import com.cricket.model.MatchStats;
 import com.cricket.model.MatchStats.VariousStats;
 import com.cricket.containers.Scene;
+import com.cricket.controller.IndexController;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
 
@@ -1625,6 +1626,12 @@ public class DOAD_FRUIT extends Scene{
 		if(lastSpeed != null) {
 			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue " + 
 					(lastSpeed.getSpeedValue().contains(".") ? lastSpeed.getSpeedValue() : lastSpeed.getSpeedValue() + ".0") + ";");
+			
+			printWriter.println("LAYER1*EVEREST*STAGE*DIRECTOR*Speed SHOW 0.0;");
+			TimeUnit.MILLISECONDS.sleep(200);
+			
+			printWriter.println("LAYER1*EVEREST*STAGE*DIRECTOR*Speed START;");
+			
 		}else {
 			printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tSpeedValue;");
 		}			      
