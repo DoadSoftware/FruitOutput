@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -449,7 +450,7 @@ public class DOAD_FRUIT extends Scene{
 							  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$ISPL_GRP*CONTAINER SET ACTIVE 1 ;");
 							  	
 							  	for(int i=1;i<=specialOversDetails.size();i++) {
-							  		if(specialOversDetails.get(i-1).split(",").length > 5) {
+							  		if(specialOversDetails.get(i-1).split(",").length > 6) {
 							  			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHeader" + i + " 50-50 OVER;");
 							  		}else {
 							  			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHeader" + i + " ISPL OVER;");
@@ -526,9 +527,7 @@ public class DOAD_FRUIT extends Scene{
 							  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$ISPL_GRP*CONTAINER SET ACTIVE 1 ;");
 							  	
 							  	for(int i=1;i<=specialOversDetails.size();i++) {
-							  		System.out.println("specialOversDetails.get(i-1).split(\",\").length - " + specialOversDetails.get(i-1).split(",").length);
-							  		
-							  		if(specialOversDetails.get(i-1).split(",").length > 5) {
+							  		if(specialOversDetails.get(i-1).split(",").length > 6) {
 							  			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHeader" + i + " 50-50 OVER;");
 							  		}else {
 							  			print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHeader" + i + " ISPL OVER;");
@@ -902,6 +901,7 @@ public class DOAD_FRUIT extends Scene{
 /**************************************** BATTING CARD  *******************************************************************/
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader1 " + inn.getBatting_team().getTeamName1() + ";");
 				
+				Collections.sort(inn.getBattingCard());
 			    for (int i = 0; i < inn.getBattingCard().size(); i++) {
 			        BattingCard bc = inn.getBattingCard().get(i);
 			        	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomePlayer" + (i + 1) + " " + 
