@@ -16,8 +16,6 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-
 import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
@@ -33,7 +31,6 @@ import com.cricket.model.MatchAllData;
 import com.cricket.model.MatchStats;
 import com.cricket.model.MatchStats.VariousStats;
 import com.cricket.containers.Scene;
-import com.cricket.controller.IndexController;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
 
@@ -1640,8 +1637,7 @@ public class DOAD_FRUIT extends Scene{
 		switch (this.session_selected_broadcaster) {
 		case "DOAD_FRUIT":
 			if(review == null) {
-				if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)||
-						match.getSetup().getMatchType().equalsIgnoreCase("FC")) {
+				if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || match.getSetup().getMatchType().equalsIgnoreCase("FC")) {
 					printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Review ;");
 			        printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Review ;");
 				}else {
@@ -1650,18 +1646,26 @@ public class DOAD_FRUIT extends Scene{
 				}			
 			}else {
 				String homeTeam = match.getSetup().getHomeTeam().getTeamName4(), awayTeam = match.getSetup().getAwayTeam().getTeamName4();
-//				printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamsHeader " +  "REVIEWS REMAINING :-" + 
-//	    				String.format("%-10s",homeTeam) + " : " + review.getReviewStatus().split(",")[0]+"   " + 
-//						String.format("%-8s", awayTeam + " : " + review.getReviewStatus().split(",")[1]) + ";");
-				if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)||
-						match.getSetup().getMatchType().equalsIgnoreCase("FC")) {
-					printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Review " + 
-							homeTeam +":"+ review.getReviewStatus().split(",")[0]+ " ;");
-			        printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Review " + 
-			        		awayTeam +":"+ review.getReviewStatus().split(",")[1] + " ;");
-				}else {
-					printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue5 " + review.getReviewStatus().split(",")[0]+ ";");
-					printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayStatValue5 " + review.getReviewStatus().split(",")[1] + ";");
+
+				if(match.getMatch().getInning().get(0).getBattingTeamId() == match.getSetup().getHomeTeamId()) {
+					if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)|| match.getSetup().getMatchType().equalsIgnoreCase("FC")) {
+						printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Review " + 
+								homeTeam +":"+ review.getReviewStatus().split(",")[0]+ " ;");
+				        printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Review " + 
+				        		awayTeam +":"+ review.getReviewStatus().split(",")[1] + " ;");
+					}else {
+						printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue5 " + review.getReviewStatus().split(",")[0]+ ";");
+						printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayStatValue5 " + review.getReviewStatus().split(",")[1] + ";");
+					}
+				}else if(match.getMatch().getInning().get(0).getBattingTeamId() == match.getSetup().getAwayTeamId()) {
+					if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)|| match.getSetup().getMatchType().equalsIgnoreCase("FC")) {
+						printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam1Review " + awayTeam + ":"+ review.getReviewStatus().split(",")[1]+ " ;");
+				        printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2Review " + 
+				        		homeTeam  +":"+ review.getReviewStatus().split(",")[0] + " ;");
+					}else {
+						printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHomeStatValue5 " + review.getReviewStatus().split(",")[1]+ ";");
+						printWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tAwayStatValue5 " + review.getReviewStatus().split(",")[0] + ";");
+					}
 				}
 			}
 			break;
