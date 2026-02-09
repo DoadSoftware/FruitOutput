@@ -174,28 +174,33 @@ public class DOAD_FRUIT extends Scene{
 	    int l = 0;
 		for (int i = 0; i < squad.size(); i++) {
 			String zoneText = "";
-		    switch (squad.get(i).getZone().toUpperCase()) {
-		        case "NORTH ZONE": zoneText = "NZ"; break;
-		        case "EAST ZONE": zoneText = "EZ"; break;
-		        case "SOUTH ZONE": zoneText = "SZ"; break;
-		        case "WEST ZONE": zoneText = "WZ"; break;
-		        case "CENTRAL ZONE": zoneText = "CZ"; break;
-		        case "UNDER 19": zoneText = "U19"; break;
+			if(squad.get(i).getZone() != null) {
+				switch (squad.get(i).getZone().toUpperCase()) {
+		        case "NORTH ZONE": zoneText = "(NZ)"; break;
+		        case "EAST ZONE": zoneText = "(EZ)"; break;
+		        case "SOUTH ZONE": zoneText = "(SZ)"; break;
+		        case "WEST ZONE": zoneText = "(WZ)"; break;
+		        case "CENTRAL ZONE": zoneText = "(CZ)"; break;
+		        case "UNDER 19": zoneText = "(U19)"; break;
 		        default: zoneText = squad.get(i).getZone() ; break;
 		    }
 		    
-		    switch (squad.get(i).getZone().toUpperCase()) {
-	        case "NORTH": zoneText = "NZ"; break;
-	        case "EAST": zoneText = "EZ"; break;
-	        case "SOUTH": zoneText = "SZ"; break;
-	        case "WEST": zoneText = "WZ"; break;
-	        case "CENTRAL": zoneText = "CZ"; break;
-	        case "UNDER 19": zoneText = "U19"; break;
-	        default: zoneText = squad.get(i).getZone() ; break;
-		    }
+				switch (squad.get(i).getZone().toUpperCase()) {
+		        case "NORTH": zoneText = "(NZ)"; break;
+		        case "EAST": zoneText = "(EZ)"; break;
+		        case "SOUTH": zoneText = "(SZ)"; break;
+		        case "WEST": zoneText = "(WZ)"; break;
+		        case "CENTRAL": zoneText = "(CZ)"; break;
+		        case "UNDER 19": zoneText = "(U19)"; break;
+		        default: zoneText = squad.get(i).getZone() ; break;
+				}
+			}else {
+				zoneText = "";
+			}
+		    
 			
 	        PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" 
-	              + teamPrefix + "Player" + (i + 1) + " " + squad.get(i).getFull_name() + " (" + zoneText + ");");
+	              + teamPrefix + "Player" + (i + 1) + " " + squad.get(i).getFull_name() + zoneText + ";");
 //	        setCaptainTagAndPlayerIcon(PrintWriter, squad.get(i), teamPrefix, (i + 1), "tMain" + teamPrefix + "Captain" + (i + 1));
 	        
 	        if(squad.get(i).getCaptainWicketKeeper() != null && !squad.get(i).getCaptainWicketKeeper().isEmpty()) {
@@ -223,36 +228,47 @@ public class DOAD_FRUIT extends Scene{
 		
 	    if(subs != null && !subs.isEmpty()) {
 	    	for (int i = 0; i < subs.size(); i++) {
-	    		if(!subs.get(i).getZone().equalsIgnoreCase("U19")) {
-	    			l++;
-					String zoneText = "";
-				    switch (subs.get(i).getZone().toUpperCase()) {
-				        case "NORTH ZONE": zoneText = "NZ"; break;
-				        case "EAST ZONE": zoneText = "EZ"; break;
-				        case "SOUTH ZONE": zoneText = "SZ"; break;
-				        case "WEST ZONE": zoneText = "WZ"; break;
-				        case "CENTRAL ZONE": zoneText = "CZ"; break;
-				        case "UNDER 19": zoneText = "U19"; break;
+	    		if(squad.get(i).getZone() != null) {
+	    			if(!subs.get(i).getZone().equalsIgnoreCase("U19")) {
+		    			l++;
+						String zoneText = "";
+					    switch (subs.get(i).getZone().toUpperCase()) {
+					        case "NORTH ZONE": zoneText = "(NZ)"; break;
+					        case "EAST ZONE": zoneText = "(EZ)"; break;
+					        case "SOUTH ZONE": zoneText = "(SZ)"; break;
+					        case "WEST ZONE": zoneText = "(WZ)"; break;
+					        case "CENTRAL ZONE": zoneText = "(CZ)"; break;
+					        case "UNDER 19": zoneText = "(U19)"; break;
+					        default: zoneText = subs.get(i).getZone() ; break;
+					    }
+					    
+					    switch (subs.get(i).getZone().toUpperCase()) {
+				        case "NORTH": zoneText = "(NZ)"; break;
+				        case "EAST": zoneText = "(EZ)"; break;
+				        case "SOUTH": zoneText = "(SZ)"; break;
+				        case "WEST": zoneText = "(WZ)"; break;
+				        case "CENTRAL": zoneText = "(CZ)"; break;
+				        case "UNDER 19": zoneText = "(U19)"; break;
 				        default: zoneText = subs.get(i).getZone() ; break;
-				    }
-				    
-				    switch (subs.get(i).getZone().toUpperCase()) {
-			        case "NORTH": zoneText = "NZ"; break;
-			        case "EAST": zoneText = "EZ"; break;
-			        case "SOUTH": zoneText = "SZ"; break;
-			        case "WEST": zoneText = "WZ"; break;
-			        case "CENTRAL": zoneText = "CZ"; break;
-			        case "UNDER 19": zoneText = "U19"; break;
-			        default: zoneText = subs.get(i).getZone() ; break;
-				    }
-				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + teamPrefix + "SubPlayer" + (l) 
-				    		+ " " + subs.get(i).getFull_name() + " (" + zoneText + ");");
+					    }
+					    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + teamPrefix + "SubPlayer" + (l) 
+					    		+ " " + subs.get(i).getFull_name() + " (" + zoneText + ");");
+					    setCaptainTagAndPlayerIcon(PrintWriter, subs.get(i), teamPrefix, (l), "lgMain" + teamPrefix + "SubRole" + (l));
+					    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2" + "$" + teamPrefix + "Grp$" 
+					    		+ teamPrefix + "SubPlayerGrp$PlayerGrp" + (l)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
+					    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2" + "$" + teamPrefix + "Grp$" 
+					    		+ teamPrefix + "SubPlayerGrp$PlayerGrp" + (l) + "*CONTAINER SET ACTIVE 1 ;");
+		    		}
+	    		}else {
+	    			PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + teamPrefix + "SubPlayer" + (l) 
+				    		+ " " + subs.get(i).getFull_name() + ");");
 				    setCaptainTagAndPlayerIcon(PrintWriter, subs.get(i), teamPrefix, (l), "lgMain" + teamPrefix + "SubRole" + (l));
 				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2" + "$" + teamPrefix + "Grp$" 
 				    		+ teamPrefix + "SubPlayerGrp$PlayerGrp" + (l)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
 				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2" + "$" + teamPrefix + "Grp$" 
 				    		+ teamPrefix + "SubPlayerGrp$PlayerGrp" + (l) + "*CONTAINER SET ACTIVE 1 ;");
 	    		}
+	    		
 		    }
 		    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET "+select_tag+" "+ l + ";");
 	    }else {
