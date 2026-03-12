@@ -226,7 +226,6 @@ public class DOAD_FRUIT extends Scene{
 	        Thread.sleep(5);
 	    }
 		
-		System.out.println("Size = " + subs.size());
 	    if(subs != null && !subs.isEmpty()) {
 	    	for (int i = 0; i < subs.size(); i++) {
 	    		if(squad.get(i).getZone() != null) {
@@ -262,7 +261,6 @@ public class DOAD_FRUIT extends Scene{
 		    		}
 	    		}else {
 	    			l++;
-	    			System.out.println(subs.get(i).getFull_name());
 	    			PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + teamPrefix + "SubPlayer" + (l) 
 				    		+ " " + subs.get(i).getFull_name() + ";");
 				    setCaptainTagAndPlayerIcon(PrintWriter, subs.get(i), teamPrefix, (l), "lgMain" + teamPrefix + "SubRole" + (l));
