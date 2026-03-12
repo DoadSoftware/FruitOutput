@@ -499,7 +499,7 @@ public class DOAD_FRUIT extends Scene{
 								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHardData " + "WON THE TOSS AND" + ";");
 								
 							}else {
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 1;");
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 2;");
 								
 			/************************************************  phasewise ********************************************************************  */
 								
@@ -567,7 +567,7 @@ public class DOAD_FRUIT extends Scene{
 							
 						}else {
 							if(CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1) > ((inn.getTotalOvers()*6)+inn.getTotalBalls())) {
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 2;");
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 1;");
 								/************************************************  TARGET ********************************************************************  */
 					        
 								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET Target1 " +  CricketFunctions.GetTargetData(match).getTargetRuns() + ";");
@@ -576,7 +576,7 @@ public class DOAD_FRUIT extends Scene{
 //								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$Toss Result$Hard Data*CONTAINER SET ACTIVE 0;");
 							}else {
 								/************************************************  phasewise ********************************************************************  */						
-								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 1;");
+								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 2;");
 								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamName1 " + inn.getBowling_team().getTeamName4() + ";");
 								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamName2 " + inn.getBatting_team().getTeamName4() + ";");
 								
