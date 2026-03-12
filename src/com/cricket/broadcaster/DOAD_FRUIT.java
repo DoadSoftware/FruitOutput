@@ -226,6 +226,7 @@ public class DOAD_FRUIT extends Scene{
 	        Thread.sleep(5);
 	    }
 		
+		System.out.println("Size = " + subs.size());
 	    if(subs != null && !subs.isEmpty()) {
 	    	for (int i = 0; i < subs.size(); i++) {
 	    		if(squad.get(i).getZone() != null) {
@@ -260,8 +261,10 @@ public class DOAD_FRUIT extends Scene{
 					    		+ teamPrefix + "SubPlayerGrp$PlayerGrp" + (l) + "*CONTAINER SET ACTIVE 1 ;");
 		    		}
 	    		}else {
+	    			l++;
+	    			System.out.println(subs.get(i).getFull_name());
 	    			PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tMain" + teamPrefix + "SubPlayer" + (l) 
-				    		+ " " + subs.get(i).getFull_name() + ");");
+				    		+ " " + subs.get(i).getFull_name() + ";");
 				    setCaptainTagAndPlayerIcon(PrintWriter, subs.get(i), teamPrefix, (l), "lgMain" + teamPrefix + "SubRole" + (l));
 				    PrintWriter.println("LAYER1*EVEREST*TREEVIEW*Main$All$Slect_Page$TeamPage$TeamsGrp$Style2" + "$" + teamPrefix + "Grp$" 
 				    		+ teamPrefix + "SubPlayerGrp$PlayerGrp" + (l)+"$IconGrp$IconBase" + "*CONTAINER SET ACTIVE 0 ;");
