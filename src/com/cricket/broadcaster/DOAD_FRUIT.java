@@ -489,6 +489,8 @@ public class DOAD_FRUIT extends Scene{
 								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tHardData " + "WON THE TIP-TOP AND" + ";");
 							}
 						}else {
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp*CONTAINER SET ACTIVE 1 ;");
+							
 							if(CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1) > ((inn.getTotalOvers()*6)+inn.getTotalBalls())) {
 								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 0;");
 			/************************************************  TOSS ********************************************************************  */
@@ -566,6 +568,9 @@ public class DOAD_FRUIT extends Scene{
 							}
 							
 						}else {
+							
+							print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp*CONTAINER SET ACTIVE 1 ;");
+							
 							if(CricketFunctions.getBallCountStartAndEndRange(match, inn).get(1) > ((inn.getTotalOvers()*6)+inn.getTotalBalls())) {
 								print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET vSelectDataType 1;");
 								/************************************************  TARGET ********************************************************************  */
@@ -618,8 +623,8 @@ public class DOAD_FRUIT extends Scene{
 								}else {
 									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamName2 ;");
 									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamName1 ;");
-								  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$PhaseScoreHead*CONTAINER SET ACTIVE 0 ;");
-									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$Header*CONTAINER SET ACTIVE 0 ;");
+//								  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$PhaseScoreHead*CONTAINER SET ACTIVE 0 ;");
+//									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$Header*CONTAINER SET ACTIVE 0 ;");
 									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore1 ;");
 									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore2 ;");
 									print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore3 ;");
@@ -1579,8 +1584,8 @@ public class DOAD_FRUIT extends Scene{
 		  }else {
 			  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamName2 ;");
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeamName1 ;");
-			  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$PhaseScoreHead*CONTAINER SET ACTIVE 0 ;");
-				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$Header*CONTAINER SET ACTIVE 0 ;");
+//			  	print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$PhaseScoreHead*CONTAINER SET ACTIVE 0 ;");
+//				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main$All$InningsDataGrp$PhaseScoreAll$Header*CONTAINER SET ACTIVE 0 ;");
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore1 ;");
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore2 ;");
 				print_writer.println("LAYER1*EVEREST*TREEVIEW*Main*FUNCTION*TAG_CONTROL SET tTeam2PhaseScore3 ;");
